@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "type": "standart"
+  },
+  {
+    "id": 1,
+    "type": "vip"
+  },
+  {
+    "id": 2,
+    "type": "disabled"
+  }
+]
