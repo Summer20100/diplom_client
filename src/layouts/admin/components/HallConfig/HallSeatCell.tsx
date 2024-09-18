@@ -4,6 +4,7 @@ import Popup from '../Popup';
 import HallSeatType from "./HallSeatType"
 import { useSeatType } from "../../../store/seats"
 import { useHallSeats } from "../../../store/hallsSeats"
+import { usePopup } from '../../../store/popup';
 
 interface IHallChears {
   id_seat: number,
@@ -13,81 +14,71 @@ interface IHallChears {
   seat_number: number,
   chair_type: string,
   price: number,
+};
+
+interface ISeatInfo {
+  id_seat: number,
+  hall_id: number,
+  chair_type: string
 }
 
-
 export const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
-  const [seatInfo, setSeatInfo] = useState<IHallChears>()
+  const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
   const [chairType, setChairType] = useState<string>('')
   const { seats: seatType } = useSeatType()
   const { getHallChairsById, hallsSeatsById, getHallChairInfo } = useHallSeats();
 
+  const { getHallSeat, updateHallSeat, hallsSeat, popupHallConfigOpen, popupHallConfigClose, popupIsOpen, popupIsClose } = usePopup();
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   
   const openPopup = () => {
-    getHallChairInfo(seat);
-    setIsPopupOpen(true);
+    getHallSeat(seat);
+    popupHallConfigOpen();
   };
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const info = (seat: IHallChears) => {
-    console.log(seat)
-    setSeatInfo(seat)
-  }
-
-  // console.log(chairType)
 
   const [changedInfo, setChangedInfo] = useState<IHallChears>({} as IHallChears)
 
-  
+  const typeOfChair: string = "conf-step__chair conf-step__chair_" + seat.chair_type;
 
-  const updatedCearsInfo = (chairType: string) => {
-    getHallChairsById(seat.hall_id)
-    const newPosition = hallsSeatsById.filter(chair => chair.id_seat === seat.id_seat)
-    const newNewPosition = newPosition.map(chair => ({ 
-        ...chair, 
-        chair_type: chairType
-    }));
-
-    // setChangedInfo({ ...seat, chair_type: chairType });
-    // console.log("newPosition >>>>", newPosition)
-    // console.log("newNewPosition >>>>", newNewPosition)
-
-    const updatedHallsSeats = hallsSeatsById.map(chair => {
-      if (chair.id_seat === seat.id_seat) {
-        return { ...chair, chair_type: chairType };
-      }
-      return chair;
-    })
-
-    console.log("updatedHallsSeats >>>>", updatedHallsSeats)
-    
-    // getHallChairsById(seat.hall_id)
-    // return [{ ...seat }, { chair_type: chairType }]
+  const inf = (chair_type: string ) => {
+    if (hallsSeat) {
+      setSeatInfo({
+        id_seat: hallsSeat.id_seat,
+        hall_id: seat.hall_id,
+        chair_type
+      });
+    }
   }
 
-  // console.log(hallsSeatsById)
+  // const updatedCearsInfo = (seatInfo: ISeatInfo) => {
+  //   console.log(seatInfo)
+  // }
 
   return (
     <>
       <Popup
-        isOpen={isPopupOpen}
-        onClose={closePopup}
+        isOpen={popupIsOpen}
         title="ТИПЫ КРЕСЕЛ"
         posterImage="poster-image.jpg"
       >
         <p className="conf-step__paragraph">Выберите тип кресла:</p>
         <div className="conf-step__legend conf-step__legend-popup">
-          {
-            seatType.map(seat => <HallSeatType key={seat.id} type={seat.type} chairType={updatedCearsInfo} />)
-          }
+        {
+          seatType && seatType.map(seat => (
+            <HallSeatType key={seat.id} type={seat.type} chairType={() => inf(seat.type)} />
+          ))
+        }
         </div>
-        <button onClick={() => { updatedCearsInfo(chairType); closePopup() }} className="conf-step__button conf-step__button-accent popup__btn">Выбрать</button>
+        <button onClick={(ev) => {
+          ev.preventDefault(); 
+          if(seatInfo !== undefined) {
+            updateHallSeat(seatInfo);
+          } 
+        }} className="conf-step__button conf-step__button-accent popup__btn">Выбрать</button>
       </Popup>
 
-      <span className="conf-step__chair conf-step__chair_disabled" onClick={openPopup}> </span>
+      <span className={ typeOfChair } onClick={openPopup}> </span>
     </>
   );
 };

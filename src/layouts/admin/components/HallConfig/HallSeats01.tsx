@@ -23,8 +23,6 @@ export const HallSeats01: FC<IHallSeats> = ({ rows, seats, id, hall_title }) => 
 
   const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats()
   
-  console.log(hallsSeatsById)
-  
   useEffect(() => {
     fetchDataHallSeats();
     fetchDataSeatType();

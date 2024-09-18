@@ -23,7 +23,7 @@ const HallConfig: FC = () => {
   const { halls, fetchDataHallSeats } = useHallStore()
   const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats()
   const { seats: seatType } = useSeatType()
-
+  
   const [rows, setRows] = useState<number>(10);
   const [seats, setSeats] = useState<number>(8);
 
@@ -35,12 +35,12 @@ const HallConfig: FC = () => {
   const [newHall, setNewHall] = useState<IHallConfig[] | undefined>([])
 
   const active = (hall: IHall) => {
-    console.log(hall)
+    // console.log(hall)
     setActiveHall(hall)
     getHallChairsById(hall.id)
   }
 
-  console.log(hallsSeatsById)
+  // console.log(hallsSeatsById)
   
   const createHall = (activeHall: IHall, rows: number, seats: number) => {
     const seat: IHallConfig[] = [];

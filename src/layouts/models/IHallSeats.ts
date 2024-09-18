@@ -5,10 +5,12 @@ export interface IHallSeats {
   id_seat?: number | undefined;
   row?: number | undefined;
   rows?: number | undefined;
+  row_number?: number | undefined;
   seats?: number | undefined;
   seat?: number | null;
+  seat_number?: number | null;
   seatNumber?: number;
-  type?: string;
+  chair_type?: string;
   price?: number | undefined;
   seating?: ISeating[];
 }

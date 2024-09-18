@@ -22,11 +22,11 @@ export function Admin() {
     <body>
       <Header title={true} subtitle={true} />
       <main className="conf-steps">
-        <HallManage />
+        {/* <HallManage /> */}
         <HallConfig />
-        <PriceConfig />
+        {/* <PriceConfig />
         <SessionsGrid />
-        <OpenSales />
+        <OpenSales /> */}
       </main>
     </body>
   );
