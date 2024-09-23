@@ -34,8 +34,6 @@ export const useHallSeats = create<State & Actions>((set) => ({
   delHallSeats: null,
   fetchDataHallSeats: async () => {
     try {
-      // const response = await axios.get('src/layouts/store/hallSeats.json');
-      // const response = await axios.get('http://localhost:5000/api/hallchairs');
       const response = await axios.get('https://diplom-server-post.onrender.com/api/hallchairs');
       if (response.status === 200) {
         set({ hallsSeats: response.data });
@@ -46,10 +44,6 @@ export const useHallSeats = create<State & Actions>((set) => ({
       console.error(error);
     }
   },
-
-  // addHallSeats: async (hallSeats: IHallChears[]) => {
-  //   await axios.post('https://diplom-server-post.onrender.com/api/hallchairs', hallSeats);
-  // },
 
   addHallSeats: async (hallSeats: IHallChears[]) => {
     set({ fetchAddHallSeats: false });

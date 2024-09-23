@@ -17,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   <BrowserRouter>
     <Routes>
+      <Route path="/" element={<Admin />} />
       <Route path="admin" element={<Admin />} />
       <Route path="login" element={<Login />} />
       <Route path="client/*" element={<Client />} >

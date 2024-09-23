@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import Header from '../Header';
 import HallSeats from './HallSeats';
-import HallSeats01 from './HallSeats01';
 import { useHallStore } from "../../../store/halls"
 import { useSeatType } from "../../../store/seats"
 import { useHallSeats } from "../../../store/hallsSeats"
@@ -20,9 +19,9 @@ interface IHallConfig {
 }
 
 const HallConfig: FC = () => {
-  const { halls, fetchDataHallSeats } = useHallStore()
-  const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats()
-  const { seats: seatType } = useSeatType()
+  const { halls, fetchDataHallSeats } = useHallStore();
+  const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats();
+  const { seats: seatType } = useSeatType();
   
   const [rows, setRows] = useState<number>(10);
   const [seats, setSeats] = useState<number>(8);
@@ -40,7 +39,9 @@ const HallConfig: FC = () => {
     getHallChairsById(hall.id)
   }
 
-  // console.log(hallsSeatsById)
+  useEffect(() => {
+    fetchDataHallSeats()
+  }, [hallsSeatsById])
   
   const createHall = (activeHall: IHall, rows: number, seats: number) => {
     const seat: IHallConfig[] = [];
@@ -80,7 +81,7 @@ const HallConfig: FC = () => {
 
   useEffect(()=> {
     getHallChairsById(activeHall?.id ?? 0)
-  },[newHall, fetchAddHallSeats])
+  },[newHall, fetchAddHallSeats ])
 
   const chairType = (type: string) => {
     console.log(type)
@@ -148,13 +149,13 @@ const HallConfig: FC = () => {
             <p className="conf-step__hint">Чтобы изменить вид кресла, нажмите по нему левой кнопкой мыши</p>
           </div>
           { hallsSeatsById.length > 0
-            ? <HallSeats01 
+            ? <HallSeats 
                 rows={Math.max(...hallsSeatsById.map(seat => seat.row_number))} 
                 seats={hallsSeatsById.length/(Math.max(...hallsSeatsById.map(seat => seat.row_number)))} 
                 id={activeHall?.id || 0}
                 hall_title={activeHall?.hall_title || ''}
               />
-            : <HallSeats01 rows={rows} seats={seats} id={activeHall?.id || 0} hall_title={activeHall?.hall_title || ''} />
+            : <HallSeats rows={rows} seats={seats} id={activeHall?.id || 0} hall_title={activeHall?.hall_title || ''} />
           }
 
           <fieldset className="conf-step__buttons text-center">

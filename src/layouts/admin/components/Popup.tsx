@@ -10,7 +10,6 @@ interface PopupProps {
 
 const Popup: React.FC<PopupProps> = ({ isOpen, title, posterImage, children }) => {
   const { popupHallConfigClose, popupIsClose, hallsSeat, popupIsOpen } = usePopup();
-  console.log(hallsSeat)
   return (
     <div className={`popup ${isOpen ? 'active' : ''}`}>
       <div className="popup__content">

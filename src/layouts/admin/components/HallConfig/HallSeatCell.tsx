@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { IHallSeats } from '../../../models/IHallSeats'
 import Popup from '../Popup';
 import HallSeatType from "./HallSeatType"
@@ -22,10 +22,10 @@ interface ISeatInfo {
   chair_type: string
 }
 
-export const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
+const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
   const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
-  const [chairType, setChairType] = useState<string>('')
-  const { seats: seatType } = useSeatType()
+  const [chairType, setChairType] = useState<string>('');
+  const { seats: seatType } = useSeatType();
   const { getHallChairsById, hallsSeatsById, getHallChairInfo } = useHallSeats();
 
   const { getHallSeat, updateHallSeat, hallsSeat, popupHallConfigOpen, popupHallConfigClose, popupIsOpen, popupIsClose } = usePopup();
@@ -34,10 +34,10 @@ export const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
   
   const openPopup = () => {
     getHallSeat(seat);
-    popupHallConfigOpen();
+    popupHallConfigOpen('popupHallConfig');
   };
 
-  const [changedInfo, setChangedInfo] = useState<IHallChears>({} as IHallChears)
+  const [changedInfo, setChangedInfo] = useState<IHallChears>({} as IHallChears);
 
   const typeOfChair: string = "conf-step__chair conf-step__chair_" + seat.chair_type;
 
@@ -49,11 +49,7 @@ export const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
         chair_type
       });
     }
-  }
-
-  // const updatedCearsInfo = (seatInfo: ISeatInfo) => {
-  //   console.log(seatInfo)
-  // }
+  };
 
   return (
     <>
@@ -74,6 +70,7 @@ export const SeatCell: React.FC<{ seat: IHallChears }> = ({ seat }) => {
           ev.preventDefault(); 
           if(seatInfo !== undefined) {
             updateHallSeat(seatInfo);
+            popupHallConfigClose();
           } 
         }} className="conf-step__button conf-step__button-accent popup__btn">Выбрать</button>
       </Popup>
