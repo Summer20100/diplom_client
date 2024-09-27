@@ -21,6 +21,7 @@ interface IHallChearsForUpdate {
 type State = {
   hallsSeat: IHallChears | null;
   namePopup: string;
+  message: string;
   infoHallChearsForUpdate: IHallChearsForUpdate | null;
   popupIsOpen: boolean;
   popupIsClose: boolean;
@@ -29,13 +30,14 @@ type State = {
 type Actions = {
   getHallSeat: (hallsSeat: IHallChears) => Promise<void>;
   updateHallSeat: (infoHallChearsForUpdate: IHallChearsForUpdate) => Promise<void>;
-  popupHallConfigOpen: (name: string) => void;
-  popupHallConfigClose: () => void;
+  popupConfigOpen: (name: string) => void;
+  popupConfigClose: () => void;
 };
 
 export const usePopup = create<State & Actions>((set) => ({
   hallsSeat: null,
   namePopup: '',
+  message: '',
   infoHallChearsForUpdate: null,
   popupIsOpen: false,
   popupIsClose: false,
@@ -51,18 +53,18 @@ export const usePopup = create<State & Actions>((set) => ({
         chair_type: type,
       });
       if (response.status === 200) {
-        console.log(response.data.message)
+        set({ message: response.data.message + " hall_id:" + id + " seat:" + seat + " type:" + type });
       }
     } catch (error: any) {
       console.error(error);
     }
   },
   
-  popupHallConfigOpen: (name: string) => {
+  popupConfigOpen: (name: string) => {
     set({ popupIsOpen: true, popupIsClose: false,  namePopup: name });
   },
 
-  popupHallConfigClose: () => {
+  popupConfigClose: () => {
     set({ popupIsOpen: false, popupIsClose: true, namePopup: '' });
   },
 }));

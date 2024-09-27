@@ -34,11 +34,15 @@ const HallConfig: FC = () => {
   const [newHall, setNewHall] = useState<IHallConfig[] | undefined>([])
 
   const active = (hall: IHall) => {
-    // console.log(hall)
     setActiveHall(hall)
     getHallChairsById(hall.id)
   }
-
+  
+  if (halls.length > 0 && !activeHall) {
+    setActiveHall(halls[0]); 
+    getHallChairsById(halls[0].id)
+  }
+  
   useEffect(() => {
     fetchDataHallSeats()
   }, [hallsSeatsById])
@@ -62,6 +66,8 @@ const HallConfig: FC = () => {
         id_seat += 1;
       }
     }
+
+    console.log(hallsSeatsById)
 
     if (hallsSeatsById.length > 0) {
       if (seat.length === hallsSeatsById.length && id === hallsSeatsById[0].hall_id) {
@@ -101,6 +107,7 @@ const HallConfig: FC = () => {
                   name={hall.hall_title}
                   hall={hall}
                   activeHall={active}
+                  isActive={activeHall?.id === hall.id}
                 />
               ))
             }
@@ -159,8 +166,17 @@ const HallConfig: FC = () => {
           }
 
           <fieldset className="conf-step__buttons text-center">
-            <button className="conf-step__button conf-step__button-regular">Отмена</button>
-            <input onClick={() => createHall(activeHall as IHallSeats, rows, seats)} type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
+            <button 
+              className="conf-step__button conf-step__button-regular"
+              disabled = { hallsSeatsById.length !== 0 }
+            >Отмена</button>
+            <input 
+              onClick={() => createHall(activeHall as IHallSeats, rows, seats)} 
+              type="submit" 
+              value="Сохранить" 
+              className="conf-step__button conf-step__button-accent"
+              disabled = { hallsSeatsById.length !== 0 }
+            />
           </fieldset>
         </div>
       </section>

@@ -56,14 +56,14 @@ export const HallSeats: FC<IHallSeats> = ({ rows, seats, id, hall_title }) => {
     } else {
       createHall(id, hall_title, rows, seats);
     }
-  }, [id, hall_title, rows, seats])
+  }, [id, hall_title, rows, seats, hallsSeatsById])
 
   const row = newHall.reduce((acc: { [key: number]: IHallChears[] }, seat) => {
     acc[seat.row_number || 1] = acc[seat.row_number || 1] || [];
     acc[seat.row_number || 1].push(seat);
     return acc;
   }, {});
-
+  
   return (
     <div className="conf-step__hall">
       <div className="conf-step__hall-wrapper">

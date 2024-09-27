@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { usePopup } from '../../store/popup';
 
 interface PopupProps {
-  isOpen: boolean;
   title: string;
   posterImage: string;
   children: React.ReactNode;
 }
 
-const Popup: React.FC<PopupProps> = ({ isOpen, title, posterImage, children }) => {
-  const { popupHallConfigClose, popupIsClose, hallsSeat, popupIsOpen } = usePopup();
+const Popup: React.FC<PopupProps> = ({ title, posterImage, children }) => {
+  const { popupConfigClose, popupIsOpen } = usePopup();
+  const popupRef = useRef<HTMLDivElement | null>(null); 
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        popupConfigClose();
+      }
+    };
+
+    if (popupIsOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [popupIsOpen, popupConfigClose]);
+
   return (
-    <div className={`popup ${isOpen ? 'active' : ''}`}>
-      <div className="popup__content">
+    <div className={`popup ${popupIsOpen ? 'active' : ''}`}>
+      <div className="popup__content" ref={popupRef}>
         <div className="popup__header">
           <h2 className="popup__title">{title}</h2>
-          <button className="popup__dismiss" onClick={popupHallConfigClose}>
+          <button className="popup__dismiss" onClick={popupConfigClose}>
             <img src="./img/admin/close-icon.png" alt="Close" />
           </button>
         </div>

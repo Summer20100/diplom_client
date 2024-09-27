@@ -261,6 +261,11 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
 .conf-step__legend .conf-step__chair:not(:first-of-type) {
     margin-left: 20px; }
 
+
+.conf-step__chair:active {
+  border-color: red;
+}
+
 .conf-step__hint {
   margin-top: 10px; }
 
@@ -508,7 +513,14 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 100; 
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it is above other elements */
+
+
 }
 .popup__title {
   font-size: 2.2rem;
@@ -527,10 +539,10 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   margin-left: 5px;
 }
 .popup.active {
-  position: absolute;
+  /* position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 1; */
   display: block;
   background: rgba(0, 0, 0, 0.7);
   -webkit-animation: 0.5s ease-out 0s 1 darken;
@@ -541,6 +553,7 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   -webkit-animation: 0.5s ease-out 0s 1 slideFromTop;
           animation: 0.5s ease-out 0s 1 slideFromTop; 
 }
+
 .popup__container {
   position: relative;
   width: 100%; 
@@ -584,8 +597,12 @@ input[type='radio'], input[type='submit'], button, .conf-step__header, select {
   color: #008000;
 }
 
-.conf-step__button:disabled {
+.conf-step__button:disabled,
+.conf-step__button:disabled:hover
+{
   background-color: #888888;
+  cursor: not-allowed;
+  color: #FFFFFF;
 }
 
 textarea.conf-step__input {

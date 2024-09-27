@@ -12,6 +12,12 @@ interface IHallChears {
   price: number,
 }
 
+interface IPrice {
+  type: string;
+  price: number;
+  id: number
+}
+
 type State = {
   hallsSeats: IHallChears[],
   hallsSeatsById: IHallChears[],
@@ -25,6 +31,7 @@ type Actions = {
   getHallChairsById: (id: number) => Promise<IHallChears[]>,
   deleteHallSeats: (id: number) => Promise<void>,
   getHallChairInfo: ({ }: IHallChears) => void,
+  updatePriceHallSeats: (price: IPrice[]) => Promise<void>,
 }
 
 export const useHallSeats = create<State & Actions>((set) => ({
@@ -56,6 +63,28 @@ export const useHallSeats = create<State & Actions>((set) => ({
     }
   },
 
+  updatePriceHallSeats: async (priceForUpdate: IPrice[]) => {
+    try {
+      const updatePromises = priceForUpdate.map(async (newPrice) => {
+        const { id, price, type } = newPrice;
+        try {
+          const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?type=${type}`, { price });
+          if (response.status === 200) {
+            console.log(`Price updated successfully for hall_id: ${id}`);
+          } else {
+            console.error(`Failed to update price for hall_id: ${id}, status: ${response.status}`);
+          }
+        } catch (error) {
+          console.error(`Error updating price for hall_id: ${id}: `, error);
+        }
+      });
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Error in price updating: ", error);
+    }
+  },
+
+
   getHallChairsById: async (id: number) => {
     try {
       const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
@@ -72,7 +101,6 @@ export const useHallSeats = create<State & Actions>((set) => ({
       return [];
     }
   },
-
 
   deleteHallSeats: async (id: number) => {
     try {

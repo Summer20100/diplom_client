@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 interface IHallSeatType {
   type: string;
@@ -6,7 +6,15 @@ interface IHallSeatType {
 }
 
 const HallSeatType: FC<IHallSeatType> = ({ type, chairType }) => {
-  let classSeat = `conf-step__chair conf-step__chair_${type}`;
+  const [isActive, setIsActive] = useState(false);
+
+  const handleClick = () => {
+    setIsActive(!isActive);
+    chairType(type);
+  };
+
+  let classSeat = `conf-step__chair conf-step__chair_${type} ${isActive ? 'active' : ''}`;
+  
   let seatName = '';
   if (type === 'disabled') {
     seatName = ' - заблокированные (нет кресла)'
@@ -18,7 +26,7 @@ const HallSeatType: FC<IHallSeatType> = ({ type, chairType }) => {
 
   return (
     <>
-      <span className={classSeat} onClick={() => chairType(type)}></span>{seatName}
+      <span className={classSeat} onClick={handleClick}></span>{seatName}
     </>
   )
 }

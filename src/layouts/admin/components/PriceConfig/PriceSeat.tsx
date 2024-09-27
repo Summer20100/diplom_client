@@ -1,18 +1,20 @@
-import { FC, useState } from 'react';
-import { useSeatType } from "../../../store/seats"
+import { FC, useState, useEffect } from 'react';
 
 interface IPriceSeat {
   type: string;
-  priceHandler: (type: string, price: number) => void
+  priceHandler: (type: string, price: number) => void;
+  clearPrice: number;
 }
 
-const PriceSeat: FC<IPriceSeat> = ({ type, priceHandler }) => {
-  const { seats: seatTypes } = useSeatType()
-  
-  const [price, setPrice] = useState<number>()
-  // const [typeSeat, setTypeSeat] = useState<string>()
-
+const PriceSeat: FC<IPriceSeat> = ({ type, priceHandler, clearPrice }) => {  
+  const [price, setPrice] = useState<number | ''>(0);
   const typeSeat: string = `conf-step__chair conf-step__chair_${type}`
+
+  useEffect(() => {
+    if ( clearPrice === 0 ) {
+      setPrice('')
+    }
+  }, [clearPrice]);
   
   return (
     <>

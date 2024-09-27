@@ -1,13 +1,21 @@
 import { FC } from 'react';
 import Header from './Header';
+import { usePopup } from './../../store/popup'
 
 const SessionsGrid: FC = () => {
+  const { popupConfigOpen } = usePopup();
+
+  const openPopup = () => {
+    popupConfigOpen('popupSessionsGrid');
+  };
+
+  
   return (
     <section className="conf-step">
       <Header title={true} h2="Сетка сеансов" />
       <div className="conf-step__wrapper">
         <p className="conf-step__paragraph">
-          <button className="conf-step__button conf-step__button-accent">Добавить фильм</button>
+          <button className="conf-step__button conf-step__button-accent" onClick={openPopup} >Добавить фильм</button>
         </p>
         <div className="conf-step__movies">
           <div className="conf-step__movie">

@@ -10,58 +10,60 @@ import PriceSeat from "./PriceSeat"
 interface IPrice {
   type: string;
   price: number;
+  id: number
 }
 
 const PriceConfig: FC = () => {
   const { halls } = useHallStore()
-  const { hallsSeats, fetchDataHallSeats } = useHallSeats()
   const { seats } = useSeatType()
+  const { updatePriceHallSeats, fetchDataHallSeats, getHallChairsById } = useHallSeats();
 
   useEffect(() => {
     fetchDataHallSeats()
   }, [])
   const [activeHall, setActiveHall] = useState<IHallSeats>()
   const [price, setPrice] = useState<IPrice[]>([])
-  const [changeSeatPrice, setChangeSeatPrice] = useState<IHallSeats[]>([])
 
   const active = (hall: IHallSeats) => {
     setActiveHall(hall)
   }
 
   const priceSeat = (type: string, price: number) => {
-    setPrice(prev => {
-      const existingSeat = prev.find(el => el.type === type);
-      if (existingSeat) {
-        return prev.map(el => (el.type === type ? { type, price } : el));
-      } else {
-        return [...prev, { type, price }];
-      }
-    });
+    if ( activeHall ) {
+      const { id } = activeHall;
+      setPrice(prev => {
+        const existingSeat = prev.find(el => el.type === type);
+        if (existingSeat) {
+          return prev.map(el => (el.type === type ? { type, price, id } : el));
+        } else {
+          return [...prev, { type, price, id }];
+        }
+      });
+    }
   };
 
   const priceHandler = (type: string, price: number) => {
     priceSeat(type, price)
   }
-
-  const updateSeatPrices = (price: IPrice[], activeHall: IHallSeats) => {
-    const { id } = activeHall;
-    const updatedHallsSeats = hallsSeats.map(hallsSeat => {
-      if (hallsSeat.id === id) {
-        const updatedPrice = price.find(el => el.type === hallsSeat.type)?.price;
-        if (updatedPrice !== undefined) {
-          return { ...hallsSeat, price: updatedPrice };
-        }
-      }
-      return hallsSeat;
-    });
-    setChangeSeatPrice(updatedHallsSeats);
+  
+  const [clear, setClear] = useState<number>(1)
+  
+  const updateSeatPrices = () => {
+    updatePriceHallSeats(price);
+    setClear(0)
   };
+  
+  useEffect(() => {
+    if (activeHall) {
+      getHallChairsById(activeHall.id);
+    }
+  }, [activeHall]);
 
   useEffect(() => {
-    if (price && activeHall) {
-      updateSeatPrices(price, activeHall);
+    if (price) {
+      setClear(1)
     }
-  }, [price, activeHall]);
+  }, [price]);
 
   return (
     <section className="conf-step">
@@ -76,6 +78,7 @@ const PriceConfig: FC = () => {
                 name={hall.hall_title}
                 hall={hall}
                 activeHall={active}
+                isActive={activeHall?.id === hall.id}
               />
             ))
           }
@@ -83,12 +86,20 @@ const PriceConfig: FC = () => {
         <p className="conf-step__paragraph">Установите цены для типов кресел:</p>
         {
           seats.map(seat => 
-            <PriceSeat key={ seat.id } type={ seat.type } priceHandler={priceHandler} />
+            <PriceSeat key={ seat.id } type={ seat.type } priceHandler={priceHandler} clearPrice={clear}/>
           )
         }
         <fieldset className="conf-step__buttons text-center">
-          <button className="conf-step__button conf-step__button-regular">Отмена</button>
-          <input type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
+          <button 
+            className="conf-step__button conf-step__button-regular"
+            onClick={() => setClear(0)}
+          >Отмена</button>
+          <input 
+            type="submit" 
+            value="Сохранить" 
+            className="conf-step__button conf-step__button-accent" 
+            onClick={updateSeatPrices}
+          />
         </fieldset>
       </div>
     </section>
