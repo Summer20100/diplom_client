@@ -15,7 +15,6 @@ interface IHallChears {
   price: number,
 }
 
-
 export const HallSeats: FC<IHallSeats> = ({ rows, seats, id, hall_title }) => {
   const [newHall, setNewHall] = useState<IHallChears[]>([])
   const { halls, fetchDataHallSeats } = useHallStore()
