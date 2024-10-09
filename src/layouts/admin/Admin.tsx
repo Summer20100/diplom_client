@@ -2,7 +2,7 @@ import conf from '../configurations/conf';
 import HallManage from './components/HallManage/HallManage';
 import HallConfig from './components/HallConfig/HallConfig';
 import PriceConfig from './components/PriceConfig/PriceConfig';
-import SessionsGrid from './components/SessionsGrid';
+import SessionsGrid from './components/SessionsGrid/SessionsGrid';
 import OpenSales from './components/OpenSales';
 import HallSeatType from './components/HallConfig/HallSeatType';
 import Header from './components/Header';
@@ -10,6 +10,7 @@ import { usePopup } from '../store/popup';
 import { useHallStore } from '../store/halls';
 import { useSeatType } from '../store/seats';
 import { useHallSeats } from '../store/hallsSeats'; 
+import { useSessions } from '../store/sessions';
 import { useState, useEffect, FC } from 'react';
 import Popup from './components/Popup';
 
@@ -34,10 +35,12 @@ interface IFilmInfo {
 
 export function Admin() {
   const { documentTitle, accordeon } = conf;
-  const { getHallChairsById, hallsSeatsById } = useHallSeats();
+  const { getHallChairsById } = useHallSeats();
   const { seats: seatType } = useSeatType();
-  const { halls, fetchDataHallSeats, deleteHall, delHall, createHall } = useHallStore()
-  const { getHallSeat, updateHallSeat, hallsSeat, message, popupConfigOpen, popupConfigClose, namePopup, popupIsOpen, popupIsClose } = usePopup();
+  const { createHall } = useHallStore()
+  const { updateHallSeat, hallsSeat, message, popupConfigClose, namePopup } = usePopup();
+  const { getSessions, getSessionById, getSessionByIdHall, sessions, sessionById, sessionByIdHall } = useSessions();
+  
   const [input, setInput] = useState<string>('');
   const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
   const [filmInfo, setFilmInfo] = useState<IFilmInfo>({ 
@@ -75,8 +78,6 @@ export function Admin() {
       });
     }
   };
-
-  console.log(filmInfo)
 
   const handleChairType = (type: string) => {
     setSelectedType(type);
@@ -271,9 +272,9 @@ export function Admin() {
 
       <Header title={true} subtitle={true} />
       <main className="conf-steps">
-        <HallManage />
-        <HallConfig />
-        <PriceConfig />
+        {/* <HallManage /> */}
+        {/* <HallConfig /> */}
+        {/* <PriceConfig /> */}
         <SessionsGrid />
         {/* <OpenSales /> */}
       </main>

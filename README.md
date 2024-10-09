@@ -61,3 +61,38 @@ URL: https://diplom-server-post.onrender.com/api/hallchairs/82?type=vip
 Body: { "price": 150 }
 #### DELETE CHEARS OF HALL BY ID
 https://diplom-server-post.onrender.com/api/hallchairs/:id  
+
+
+## FOR SESSIONS
+#### GET ALL SESSIONS
+https://diplom-server-post.onrender.com/api/sessions  
+#### GET SESSION BY ID SESSION
+https://diplom-server-post.onrender.com/api/sessions/:id  
+#### GET ALL SESSION BY ID HALL
+https://diplom-server-post.onrender.com/api/sessions/hall/:id  
+#### POST SESSION
+https://diplom-server-post.onrender.com/api/sessions  
+In request body use array:  
+[  
+  {  
+    "hall_id": hall_id,  
+    "hall_title": hall_title,  
+    "session_date": session_date,  
+    "session_start": session_start,  
+    "session_finish": session_finish  
+  }  
+]  
+#### UPDATE SESSION
+https://diplom-server-post.onrender.com/api/session/:id  
+Use id like req.params.id  
+In request body use object:  
+  {  
+    "hall_id": hall_id,  
+    "hall_title": hall_title,  
+    "session_date": session_date,  
+    "session_start": session_start,  
+    "session_finish": session_finish  
+  }  
+
+#### DELETE SESSION BY ID SESSION
+https://diplom-server-post.onrender.com/api/session/:id  

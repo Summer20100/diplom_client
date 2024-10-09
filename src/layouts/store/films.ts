@@ -7,14 +7,14 @@ type State = {
 }
 
 type Actions = {
-  fetchDataFilms: () => Promise<void>
+  getFilms: () => Promise<void>
 }
 
 export const useFilmsStore = create<State & Actions>((set) => ({
   films: [],
-  fetchDataFilms: async () => {
+  getFilms: async () => {
     try {
-      const response = await axios.get('src/layouts/store/films.json');
+      const response = await axios.get('https://diplom-server-post.onrender.com/api/films');
       if (response.status === 200) {
         set({ films: response.data });
       } else {

@@ -23,10 +23,10 @@ export interface IMovieInfo {
   id: number;
   poster_title: string;
   title: string;
-  image: string;
+  image_url: string;
   synopsis: string;
   duration: number;
   origin: string;
+  release_date: Date
+  session_id: number | null;
 }
-
-

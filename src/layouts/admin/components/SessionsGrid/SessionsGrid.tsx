@@ -1,52 +1,40 @@
-import { FC } from 'react';
-import Header from './Header';
-import { usePopup } from './../../store/popup'
+import { FC, useEffect } from 'react';
+import Header from '../Header';
+import Accordeon from './Accordeon';
+import { usePopup } from '../../../store/popup';
+import { useFilmsStore } from '../../../store/films';
+import Film from './Film';
 
 const SessionsGrid: FC = () => {
+  const { getFilms, films } = useFilmsStore()
   const { popupConfigOpen } = usePopup();
 
   const openPopup = () => {
     popupConfigOpen('popupSessionsGrid');
   };
 
+  useEffect(() => {
+    getFilms();
+  }, [getFilms]);
   
   return (
     <section className="conf-step">
       <Header title={true} h2="Сетка сеансов" />
       <div className="conf-step__wrapper">
+        <Accordeon title="hall_title"/>
+        {/* <Accordeon title="session_date"/> */}
+        {/* <Accordeon title="session_duration"/> */}
+        
         <p className="conf-step__paragraph">
           <button className="conf-step__button conf-step__button-accent" onClick={openPopup} >Добавить фильм</button>
         </p>
+        
         <div className="conf-step__movies">
-          <div className="conf-step__movie">
-            <img className="conf-step__movie-poster" alt="Звёздные войны XXIII: Атака клонированных клонов" src="https://i.postimg.cc/RVJJVk13/XXIII.webp" />
-            <h3 className="conf-step__movie-title">Звёздные войны XXIII: Атака клонированных клонов</h3>
-            <p className="conf-step__movie-duration">130 минут</p>
-          </div>
-
-          <div className="conf-step__movie">
-            <img className="conf-step__movie-poster" alt="Миссия выполнима" src="https://i.postimg.cc/NFSykDtf/image.webp" />
-            <h3 className="conf-step__movie-title">Миссия выполнима</h3>
-            <p className="conf-step__movie-duration">120 минут</p>
-          </div>
-
-          <div className="conf-step__movie">
-            <img className="conf-step__movie-poster" alt="Серая пантера" src="https://i.postimg.cc/rmhRKcY4/image.jpg" />
-            <h3 className="conf-step__movie-title">Серая пантера</h3>
-            <p className="conf-step__movie-duration">90 минут</p>
-          </div>
-
-          <div className="conf-step__movie">
-            <img className="conf-step__movie-poster" alt="Движение вбок" src="https://i.postimg.cc/nVPQxFmb/image.jpg" />
-            <h3 className="conf-step__movie-title">Движение вбок</h3>
-            <p className="conf-step__movie-duration">95 минут</p>
-          </div>
-
-          <div className="conf-step__movie">
-            <img className="conf-step__movie-poster" alt="Кот Да Винчи" src="https://i.postimg.cc/kGB6SZkp/image.jpg" />
-            <h3 className="conf-step__movie-title">Кот Да Винчи</h3>
-            <p className="conf-step__movie-duration">100 минут</p>
-          </div>
+          { films && 
+            films.map((film) => (
+              <Film key={ film.id } {...film} />
+            ))
+          }
         </div>
 
         <div className="conf-step__seances">
