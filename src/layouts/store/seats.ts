@@ -14,7 +14,7 @@ export const useSeatType = create<State & Actions>((set) => ({
   seats: [],
   fetchDataSeatType: async () => {
     try {
-      const response = await axios.get('src/layouts/store/seats.json');
+      const response = await axios.get('https://diplom-server-post.onrender.com/api/chair');
       if (response.status === 200) {
         set({ seats: response.data });
       } else {

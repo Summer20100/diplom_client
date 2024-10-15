@@ -20,13 +20,13 @@ export interface IHall {
 }
 
 export interface IMovieInfo {
-  id: number;
-  poster_title: string;
+  id?: number;
   title: string;
-  image_url: string;
-  synopsis: string;
-  duration: number;
   origin: string;
-  release_date: Date
+  release_date: number | null;
+  poster_title: string;
+  synopsis: string;
+  image_url: string;
+  duration: number | null;
   session_id: number | null;
 }

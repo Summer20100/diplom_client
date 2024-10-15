@@ -1,63 +1,77 @@
-import conf from '../configurations/conf';
-import HallManage from './components/HallManage/HallManage';
-import HallConfig from './components/HallConfig/HallConfig';
-import PriceConfig from './components/PriceConfig/PriceConfig';
-import SessionsGrid from './components/SessionsGrid/SessionsGrid';
-import OpenSales from './components/OpenSales';
-import HallSeatType from './components/HallConfig/HallSeatType';
-import Header from './components/Header';
-import { usePopup } from '../store/popup';
-import { useHallStore } from '../store/halls';
-import { useSeatType } from '../store/seats';
-import { useHallSeats } from '../store/hallsSeats'; 
-import { useSessions } from '../store/sessions';
-import { useState, useEffect, FC } from 'react';
-import Popup from './components/Popup';
+import conf from "../configurations/conf";
+import HallManage from "./components/HallManage/HallManage";
+import HallConfig from "./components/HallConfig/HallConfig";
+import PriceConfig from "./components/PriceConfig/PriceConfig";
+import SessionsManage from "./components/SessionsManage/SessionsManage";
+import SessionsGrid from "./components/SessionsGrid/SessionsGrid";
+import OpenSales from "./components/OpenSales";
+import HallSeatType from "./components/HallConfig/HallSeatType";
+import Header from "./components/Header";
+import { usePopup } from "../store/popup";
+import { useHallStore } from "../store/halls";
+import { useSeatType } from "../store/seats";
+import { useFilmsStore } from "../store/films";
+import { useHallSeats } from "../store/hallsSeats";
+import { useSessions } from "../store/sessions";
+import { useState, useEffect, FC } from "react";
+import { IMovieInfo } from "../models/IMovieDate";
+import Popup from "./components/Popup";
 
-import './CSS/normalize.css';
-import './CSS/styles.css';
+import "./CSS/normalize.css";
+import "./CSS/styles.css";
 
 interface ISeatInfo {
-  id_seat: number,
-  hall_id: number,
-  chair_type: string
+  id_seat: number;
+  hall_id: number;
+  chair_type: string;
 }
 
 interface IFilmInfo {
-  title: string,
-  origin: string,
-  releaseDate: string,
-  poster_title: string,
-  synopsis: string,
-  imageURL: string,
-  duration: number
+  title: string;
+  origin: string;
+  release_date: Date;
+  poster_title: string;
+  synopsis: string;
+  image_url: string;
+  duration: number;
 }
 
 export function Admin() {
   const { documentTitle, accordeon } = conf;
   const { getHallChairsById } = useHallSeats();
   const { seats: seatType } = useSeatType();
-  const { createHall } = useHallStore()
-  const { updateHallSeat, hallsSeat, message, popupConfigClose, namePopup } = usePopup();
-  const { getSessions, getSessionById, getSessionByIdHall, sessions, sessionById, sessionByIdHall } = useSessions();
-  
-  const [input, setInput] = useState<string>('');
+  const { createHall } = useHallStore();
+  const { updateHallSeat, hallsSeat, message, popupConfigClose, namePopup } =
+    usePopup();
+  const { createFilm } = useFilmsStore();
+  const {
+    getSessions,
+    getSessionById,
+    getSessionByIdHall,
+    sessions,
+    sessionById,
+    sessionByIdHall,
+  } = useSessions();
+
+  const [input, setInput] = useState<string>("");
   const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
-  const [filmInfo, setFilmInfo] = useState<IFilmInfo>({ 
-    title: '',
-    poster_title: '',
-    origin: '',
-    releaseDate: '',
-    synopsis: '',
-    imageURL: '',
-    duration: 0,
+  const [filmInfo, setFilmInfo] = useState<IMovieInfo>({
+    title: "",
+    origin: "",
+    release_date: null,
+    poster_title: "",
+    synopsis: "",
+    image_url: "",
+    duration: null,
+    session_id: null,
   });
-  const [selectedType, setSelectedType] = useState<string>('standart');
+
+  const [selectedType, setSelectedType] = useState<string>("standart");
 
   useEffect(() => {
-    documentTitle('ИдёмВКино');
-    accordeon('conf-step__header');
-  }, [])
+    documentTitle("ИдёмВКино");
+    accordeon("conf-step__header");
+  }, []);
 
   useEffect(() => {
     getHallChairsById(seatInfo?.hall_id ?? 0);
@@ -66,15 +80,32 @@ export function Admin() {
   const addHall = (hall_title: Object, ev: any) => {
     createHall(hall_title);
     ev.preventDefault();
-    popupConfigClose()
-  }
+    popupConfigClose();
+    setInput("");
+  };
 
-  const inf = (chair_type: string ) => {
+  const addFilm = (film: IMovieInfo, ev: any) => {
+    createFilm(film);
+    ev.preventDefault();
+    popupConfigClose();
+    setFilmInfo({
+      title: "",
+      origin: "",
+      release_date: null,
+      poster_title: "",
+      synopsis: "",
+      image_url: "",
+      duration: null,
+      session_id: null,
+    });
+  };
+
+  const inf = (chair_type: string) => {
     if (hallsSeat) {
       setSeatInfo({
         id_seat: hallsSeat.id_seat,
         hall_id: hallsSeat.hall_id,
-        chair_type
+        chair_type,
       });
     }
   };
@@ -85,69 +116,76 @@ export function Admin() {
 
   return (
     <body>
-      { namePopup === 'popupHallManage' && 
-        <Popup
-          title="СОЗДАТЬ НОВЫЙ ЗАЛ"
-          posterImage="poster-image.jpg"
-        >
+      {namePopup === "popupHallManage" && (
+        <Popup title="СОЗДАТЬ НОВЫЙ ЗАЛ" posterImage="poster-image.jpg">
           <p className="conf-step__paragraph">Введите название нового зала:</p>
           <div className="popup__input-block">
             <input
-              placeholder='Название зала...'
+              placeholder="Название зала..."
               onChange={(e) => setInput(e.target.value)}
               value={input}
               type="text"
               className="conf-step__input popup__input"
             />
-            <button onClick={(ev: any) => { addHall({hall_title: input}, ev) }} className="conf-step__button conf-step__button-accent popup__btn">Создать зал</button>
+            <button
+              onClick={(ev: any) => {
+                addHall({ hall_title: input }, ev);
+              }}
+              className="conf-step__button conf-step__button-accent popup__btn"
+            >
+              Создать зал
+            </button>
           </div>
         </Popup>
-      }
+      )}
 
-      { namePopup === 'popupHallConfig' && 
-        <Popup
-          title="ТИПЫ КРЕСЕЛ"
-          posterImage="poster-image.jpg"
-        >
+      {namePopup === "popupHallConfig" && (
+        <Popup title="ТИПЫ КРЕСЕЛ" posterImage="poster-image.jpg">
           <p className="conf-step__paragraph">Выберите тип кресла:</p>
-          
+
           <div className="conf-step__legend conf-step__legend-popup">
-          {
-            seatType && seatType.map(seat => (
-              <HallSeatType 
-                key={seat.id} 
-                type={seat.type} 
-                chairType={() => (inf(seat.type), handleChairType)} 
-                isActive={selectedType === seat.type}
-              />
-            ))
-          }
+            {seatType &&
+              seatType.map((seat) => (
+                <HallSeatType
+                  key={seat.id}
+                  type={seat.type}
+                  chairType={() => (inf(seat.type), handleChairType)}
+                  isActive={selectedType === seat.type}
+                />
+              ))}
           </div>
 
-          <button onClick={(ev) => {
-            ev.preventDefault(); 
-            if(seatInfo !== undefined) {
-              updateHallSeat(seatInfo);
-              getHallChairsById(seatInfo.hall_id)
-              popupConfigClose();
-            } 
-          }} className="conf-step__button conf-step__button-accent popup__btn">Выбрать</button>
+          <button
+            onClick={(ev) => {
+              ev.preventDefault();
+              if (seatInfo !== undefined) {
+                updateHallSeat(seatInfo);
+                getHallChairsById(seatInfo.hall_id);
+                popupConfigClose();
+              }
+            }}
+            className="conf-step__button conf-step__button-accent popup__btn"
+          >
+            Выбрать
+          </button>
         </Popup>
-      }
+      )}
 
-      { namePopup === 'popupSessionsGrid' && 
-        <Popup
-          title="СОЗДАТЬ НОВЫЙ ФИЛЬМ"
-          posterImage="poster-image.jpg"
-        >
+      {namePopup === "popupSessionsAddFilm" && (
+        <Popup title="СОЗДАТЬ НОВЫЙ ФИЛЬМ" posterImage="poster-image.jpg">
           <div className="label-margin">
             <label>
               <p className="conf-step__paragraph">Введите название фильма:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder='Страна создания...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, title: e.target.value }))}
-                  value={ filmInfo.title }
+                  placeholder="Страна создания..."
+                  onChange={(e) =>
+                    setFilmInfo((prev: IMovieInfo) => ({
+                      ...prev,
+                      title: e.target.value,
+                    }))
+                  }
+                  value={filmInfo.title}
                   type="text"
                   className="conf-step__input popup__input"
                 />
@@ -156,12 +194,19 @@ export function Admin() {
           </div>
           <div className="label-margin">
             <label>
-              <p className="conf-step__paragraph">Введите название постера к фильму:</p>
+              <p className="conf-step__paragraph">
+                Введите название постера к фильму:
+              </p>
               <div className="popup__input-block">
                 <input
-                  placeholder='Страна создания...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, poster_title: e.target.value }))}
-                  value={ filmInfo.poster_title }
+                  placeholder="Страна создания..."
+                  onChange={(e) =>
+                    setFilmInfo((prev: IMovieInfo) => ({
+                      ...prev,
+                      poster_title: e.target.value,
+                    }))
+                  }
+                  value={filmInfo.poster_title}
                   type="text"
                   className="conf-step__input popup__input"
                 />
@@ -173,9 +218,14 @@ export function Admin() {
               <p className="conf-step__paragraph">Введите URL постера:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder='URL постера...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, imageURL: e.target.value }))}
-                  value={ filmInfo.imageURL}
+                  placeholder="URL постера..."
+                  onChange={(e) =>
+                    setFilmInfo((prev: IMovieInfo) => ({
+                      ...prev,
+                      image_url: e.target.value,
+                    }))
+                  }
+                  value={filmInfo.image_url}
                   type="text"
                   className="conf-step__input popup__input"
                 />
@@ -187,9 +237,14 @@ export function Admin() {
               <p className="conf-step__paragraph">Введите описание фильма:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder='Описание фильма...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, synopsis: e.target.value }))}
-                  value={ filmInfo.synopsis }
+                  placeholder="Описание фильма..."
+                  onChange={(e) =>
+                    setFilmInfo((prev: IMovieInfo) => ({
+                      ...prev,
+                      synopsis: e.target.value,
+                    }))
+                  }
+                  value={filmInfo.synopsis}
                   type="text"
                   className="conf-step__input popup__input"
                 />
@@ -197,15 +252,19 @@ export function Admin() {
             </label>
           </div>
 
-
           <div className="label-margin">
             <label>
               <p className="conf-step__paragraph">Введите страну создания:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder='Страна создания...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, origin: e.target.value }))}
-                  value={ filmInfo.origin }
+                  placeholder="Страна создания..."
+                  onChange={(e) =>
+                    setFilmInfo((prev: IMovieInfo) => ({
+                      ...prev,
+                      origin: e.target.value,
+                    }))
+                  }
+                  value={filmInfo.origin}
                   type="text"
                   className="conf-step__input popup__input"
                 />
@@ -217,64 +276,82 @@ export function Admin() {
               <p className="conf-step__paragraph">Введите год создания:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder='Дата выхода (дд.мм.гггг)...'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, releaseDate: e.target.value }))}
-                  value={ filmInfo.releaseDate }
-                  type="date"
+                  placeholder="Год выхода (гггг)..."
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "") {
+                      setFilmInfo((prev: IMovieInfo) => ({
+                        ...prev,
+                        release_date: null,
+                      }));
+                    } else if (value.length <= 4) {
+                      const numberValue = Number(value);
+                      setFilmInfo((prev: IMovieInfo) => ({
+                        ...prev,
+                        release_date: numberValue,
+                      }));
+                    }
+                  }}
+                  value={
+                    filmInfo.release_date !== null ? filmInfo.release_date : ""
+                  }
+                  type="number"
+                  min="1900"
+                  max="2024"
                   className="conf-step__input popup__input"
                 />
               </div>
             </label>
           </div>
-          
-          
+
           <div className="label-margin">
             <label>
-              <p className="conf-step__paragraph">Введите длительность фильма:</p>
+              <p className="conf-step__paragraph">
+                Введите длительность фильма:
+              </p>
               <div className="popup__input-block">
                 <input
-                  placeholder='0'
-                  onChange={(e) => setFilmInfo(prev => ({ ...prev, duration: Number(e.target.value)}))}
-                  value={ filmInfo.duration }
-                  type="text"
+                  placeholder="Длительность, минут..."
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value === "") {
+                      setFilmInfo((prev: IMovieInfo) => ({
+                        ...prev,
+                        duration: null,
+                      }));
+                    } else if (value.length <= 3) {
+                      setFilmInfo((prev: IMovieInfo) => ({
+                        ...prev,
+                        duration: Number(e.target.value),
+                      }));
+                    }
+                  }}
+                  value={filmInfo.duration !== null ? filmInfo.duration : ""}
+                  type="number"
+                  min="1"
+                  max="999"
                   className="conf-step__input popup__input"
                 />
               </div>
             </label>
           </div>
-          <div className="label-margin">
-            <label>
-              <p className="conf-step__paragraph">Сеанс:</p>
-              <div className="popup__input-block">
-                <input
-                  placeholder='Начало...'
-                  onChange={(e) => setInput(e.target.value)}
-                  value={input}
-                  type="text"
-                  className="conf-step__input popup__input"
-                />
-                <input
-                  placeholder='Окончание...'
-                  onChange={(e) => setInput(e.target.value)}
-                  value={input}
-                  type="text"
-                  className="conf-step__input popup__input"
-                />
-              </div>
-            </label>
-          </div>
-          <button 
-            onClick={(ev: any) => { addHall({hall_title: input}, ev) }} 
+          <button
+            onClick={(ev: any) => {
+              addFilm(filmInfo, ev);
+            }}
             className="conf-step__button conf-step__button-accent popup__btn"
-            >Добавить фильм</button>
+          >
+            Добавить фильм
+          </button>
         </Popup>
-      }
+      )}
 
       <Header title={true} subtitle={true} />
       <main className="conf-steps">
-        {/* <HallManage /> */}
-        {/* <HallConfig /> */}
-        {/* <PriceConfig /> */}
+        {/* <HallManage />
+        <HallConfig />
+        <PriceConfig />
+        <SessionsManage /> */}
         <SessionsGrid />
         {/* <OpenSales /> */}
       </main>

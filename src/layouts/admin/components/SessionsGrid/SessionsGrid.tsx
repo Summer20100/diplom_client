@@ -10,7 +10,7 @@ const SessionsGrid: FC = () => {
   const { popupConfigOpen } = usePopup();
 
   const openPopup = () => {
-    popupConfigOpen('popupSessionsGrid');
+    popupConfigOpen('popupSessionsAddFilm');
   };
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const SessionsGrid: FC = () => {
     <section className="conf-step">
       <Header title={true} h2="Сетка сеансов" />
       <div className="conf-step__wrapper">
-        <Accordeon title="hall_title"/>
+        {/* <Accordeon title="hall_title"/> */}
         {/* <Accordeon title="session_date"/> */}
         {/* <Accordeon title="session_duration"/> */}
         

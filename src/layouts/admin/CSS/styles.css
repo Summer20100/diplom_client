@@ -98,6 +98,7 @@ select {
 
 .label-margin {
   margin-bottom: 10px;
+  width: 100%; /* ширина 100% видимой области по горизонтали */
   /* Adjust the value as needed */
 }
 
@@ -244,8 +245,8 @@ select {
 }
 
 .conf-step__paragraph {
-  font-size: 1.6rem;
-  font-weight: 400;
+  font-size: 2.0rem;
+  font-weight: 500;
   color: #000000;
   margin-bottom: 12px;
 }
@@ -451,6 +452,9 @@ select {
   border-color: #393939;
   background-color: #C4C4C4;
 }
+
+
+
 
 .conf-step__chair_vip {
   border-color: #0a828a;
@@ -750,6 +754,19 @@ select {
 
 .popup__input {
   width: 75%;
+  border-radius: 5px;
+  margin-right: 15px;
+  padding: 10px;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  /* cursor: pointer; */
+  outline: none;
+
+}
+
+.popup__input:focuse {
+  border: 2px solid red;
 }
 
 .popup__input-block {
@@ -888,7 +905,7 @@ select {
   border-radius: 5px;
   background-color: #ecf0f1;
   color: #2c3e50;
-  font-size: 16px;
+  font-size: 1.4rem;
   cursor: pointer;
   outline: none;
 }
@@ -909,4 +926,97 @@ option {
 /* Disabled option style */
 option:disabled {
   color: #7f8c8d;
+}
+
+.line {
+  border-bottom: 1px solid black;
+}
+
+.full-width-line {
+  width: 100%;
+  height: 1px;
+  background-color: black;
+  margin: 10px 0;
+}
+
+.full-width-line__dotted {
+  width: 100%;
+  height: 10px;
+  background-image: radial-gradient(black 50%, transparent 50%);
+  background-size: 10px 10px;
+  background-repeat: repeat-x;
+  margin: 10px 0;
+}
+
+.sessions__list {
+  font-size: 1.6rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.session__list {
+  font-size: 1.5rem;
+}
+
+.session-time__list {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  font-size: 1.4rem;
+  margin: 10px 0;
+  white-space: 2px;
+}
+
+.session-time__itm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.24), 0px 0px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 5px;
+  gap: 5px;
+  background-color: #ecf0f1;
+  font-size: 1.4rem;
+  text-transform: lowercase;
+}
+
+.time {
+  width: 40px;
+  /* height: 40px; */
+  /* padding: 5px; */
+  border: none;
+  border-radius: 5px;
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  font-size: 1.4rem;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  /* Optional: center the text inside the input */
+}
+
+.time:focus {
+  border-color: #2980b9;
+  /* Darker blue on focus */
+}
+
+.time-block {
+  width: 120px;
+}
+
+.seansses-create-form {
+  display: flex;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

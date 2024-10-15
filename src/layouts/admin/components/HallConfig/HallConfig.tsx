@@ -165,11 +165,14 @@ const HallConfig: FC = () => {
             : <HallSeats rows={rows} seats={seats} id={activeHall?.id || 0} hall_title={activeHall?.hall_title || ''} />
           }
 
-          <fieldset className="conf-step__buttons text-center">
-            <button 
+          <fieldset 
+            className="conf-step__buttons text-center"
+            style={{ visibility: hallsSeatsById.length !== 0 ? 'hidden' : 'visible' }}
+          >
+            {/* <button 
               className="conf-step__button conf-step__button-regular"
               disabled = { hallsSeatsById.length !== 0 }
-            >Отмена</button>
+            >Отмена</button> */}
             <input 
               onClick={() => createHall(activeHall as IHallSeats, rows, seats)} 
               type="submit" 
