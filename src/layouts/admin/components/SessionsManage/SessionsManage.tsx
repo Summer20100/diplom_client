@@ -30,7 +30,7 @@ const SessionsManage: FC = () => {
 
   useEffect(() => {
     getSessionsHalls();
-  }, [sessionsHalls]);
+  }, []);
 
   return (
     <section className="conf-step">

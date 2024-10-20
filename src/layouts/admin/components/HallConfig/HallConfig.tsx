@@ -28,7 +28,7 @@ const HallConfig: FC = () => {
 
   useEffect(() => {
     fetchDataHallSeats()
-  }, [])
+  }, []);
 
   const [activeHall, setActiveHall] = useState<IHall>()
   const [newHall, setNewHall] = useState<IHallConfig[] | undefined>([])
@@ -36,16 +36,16 @@ const HallConfig: FC = () => {
   const active = (hall: IHall) => {
     setActiveHall(hall)
     getHallChairsById(hall.id)
-  }
+  };
   
   if (halls.length > 0 && !activeHall) {
     setActiveHall(halls[0]); 
     getHallChairsById(halls[0].id)
-  }
+  };
   
   useEffect(() => {
     fetchDataHallSeats()
-  }, [hallsSeatsById])
+  }, [hallsSeatsById]);
   
   const createHall = (activeHall: IHall, rows: number, seats: number) => {
     const seat: IHallConfig[] = [];
@@ -90,7 +90,7 @@ const HallConfig: FC = () => {
   },[newHall, fetchAddHallSeats ])
 
   const chairType = (type: string) => {
-    console.log(type)
+    //console.log(type)
   }
 
   return (
@@ -151,8 +151,14 @@ const HallConfig: FC = () => {
           <p className="conf-step__paragraph">Теперь вы можете указать типы кресел на схеме зала:</p>
           <div className="conf-step__legend">
             {
-              seatType.map(seat => <HallSeatType key={seat.id} type={seat.type} chairType={chairType} />)
-            }
+              seatType.map(seat => 
+                <HallSeatType 
+                  key={seat.id} 
+                  type={seat.type} 
+                  chairType={chairType} 
+                  checkIsActive={false}
+                />
+            )}
             <p className="conf-step__hint">Чтобы изменить вид кресла, нажмите по нему левой кнопкой мыши</p>
           </div>
           { hallsSeatsById.length > 0

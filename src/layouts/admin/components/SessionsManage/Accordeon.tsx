@@ -36,10 +36,7 @@ interface ISessionsHalls {
 
 const Accordeon: FC = () => {
   const { halls, fetchDataHallSeats } = useHallStore();
-  const {
-    getSessionsHalls,
-    getNewSession,
-  } = useSessions();
+  const { getSessionsHalls, getNewSession } = useSessions();
 
   const [hallTitle, setHallTitle] = useState<string>("");
   const [sessionHall, setSessionHall] = useState<ISession[]>([]);
@@ -70,38 +67,16 @@ const Accordeon: FC = () => {
   });
 
   useEffect(() => {
-    getNewSession(addSession)
-  }, [addSession])
+    getNewSession(addSession);
+  }, [addSession]);
 
-  // console.log(newSession);
-
-  const [time, setTime] = useState<{
-    hour: string;
-    minute: string;
-    sec: string;
-  }>({
-    hour: "",
-    minute: "",
-    sec: "00",
-  });
-
-  const getFormattedTime = ({
-    hour,
-    minute,
-    sec,
-  }: {
-    hour: string;
-    minute: string;
-    sec: string;
-  }) => {
-    return `${hour}:${minute}:${sec}`;
-  };
+  const [time, setTime] = useState<string>('');
 
   useEffect(() => {
-    if (getFormattedTime(time).length === 8) {
+    if (time) {
       setAddSession((prev) => ({
         ...prev,
-        session_start: getFormattedTime(time),
+        session_start: time,
       }));
     }
   }, [time]);
@@ -124,17 +99,14 @@ const Accordeon: FC = () => {
     return `${formattedHour}:${formattedMinute}:00`;
   }
 
-
   useEffect(() => {
-    if (duration && addSession.session_start !== '') {
+    if (duration && addSession.session_start !== "") {
       setAddSession((prev) => ({
         ...prev,
-        session_finish: getDuration(prev.session_start, duration)
+        session_finish: getDuration(prev.session_start, duration),
       }));
     }
   }, [duration]);
-
-  // console.log(hallTitle)
 
   return (
     <div className="seansses-create-form">
@@ -174,49 +146,19 @@ const Accordeon: FC = () => {
         type="date"
         className="conf-step__input popup__input time-block"
       />
-      <div
+      <input
+        placeholder="ВРЕМЯ"
+        type="time"
+        onChange={(ev) => setTime(ev.target.value)}
+        //className="time"
         className="conf-step__input popup__input time-block"
-        style={{ backgroundColor: " #ecf0f1" }}
-      >
-        <input
-          placeholder="ЧЧ"
-          value={time.hour}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === "" || (Number(value) >= 0 && Number(value) <= 23)) {
-              setTime((prev) => ({ ...prev, hour: value }));
-            }
-          }}
-          maxLength={2}
-          className="time"
-          type="number"
-          min="0"
-          max="23"
-        />
-        :
-        <input
-          placeholder="ММ"
-          value={time.minute}
-          onChange={(e) => {
-            const value = e.target.value;
-            if (value === "" || (Number(value) >= 0 && Number(value) <= 59)) {
-              setTime((prev) => ({ ...prev, minute: value }));
-            }
-          }}
-          maxLength={2}
-          className="time"
-          type="number"
-          min="0"
-          max="59"
-        />
-      </div>
-
+      />
       <input
         placeholder="Длительнось, минут..."
-        value={duration || ''}
+        value={duration || ""}
         onChange={(e) => {
           const value = e.target.value;
-          setDuration(value === '' ? 0 : Math.min(Number(value), 999));
+          setDuration(value === "" ? 0 : Math.min(Number(value), 999));
         }}
         maxLength={3}
         className="conf-step__input popup__input time-block"

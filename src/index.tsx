@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import App01 from './App01'
+import App02 from './App02'
 import Client from './layouts/client/Client'
 import Admin from './layouts/admin/Admin'
 import Login from './layouts/admin/Login'
@@ -28,6 +29,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </Routes>
     {/* <App /> */}
     {/* <App01 /> */}
+    {/* <App02 /> */}
     {/* <Admin />
     <Client /> */}
   </BrowserRouter>

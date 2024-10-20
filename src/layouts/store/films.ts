@@ -11,6 +11,7 @@ type Actions = {
   getFilms: () => Promise<void>;
   getFilmById: (id: number) => Promise<void>;
   createFilm: (film: IMovieInfo) => Promise<void>;
+  updateFilm: (film: IMovieInfo) => Promise<void>;
   deleteFilm: (id: number) => Promise<void>;
 };
 
@@ -52,6 +53,26 @@ export const useFilmsStore = create<State & Actions>((set) => ({
     try {
       await axios.post(
         "https://diplom-server-post.onrender.com/api/films",
+        film,
+      );
+      const response = await axios.get(
+        "https://diplom-server-post.onrender.com/api/films",
+      );
+      if (response.status === 200) {
+        set({ films: response.data });
+      } else {
+        set({ films: [] });
+      }
+    } catch (error: any) {
+      console.error(error);
+    }
+  },
+
+  updateFilm: async (film: IMovieInfo) => {
+    const { id } = film;
+    try {
+      await axios.put(
+        `https://diplom-server-post.onrender.com/api/films/${id}`,
         film,
       );
       const response = await axios.get(

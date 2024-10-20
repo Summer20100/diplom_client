@@ -90,10 +90,10 @@ const PriceConfig: FC = () => {
           )
         }
         <fieldset className="conf-step__buttons text-center">
-          <button 
-            className="conf-step__button conf-step__button-regular"
-            onClick={() => setClear(0)}
-          >Отмена</button>
+          {/* <button 
+          className="conf-step__button conf-step__button-regular"
+          onClick={() => setClear(0)}
+          >Отмена</button> */}
           <input 
             type="submit" 
             value="Сохранить" 

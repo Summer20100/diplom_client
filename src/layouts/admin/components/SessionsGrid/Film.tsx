@@ -1,14 +1,7 @@
 import { useFilmsStore } from "../../../store/films";
 import { FC, useEffect, useState } from "react";
 import { IMovieInfo } from "../../../models/IMovieDate";
-
-// interface IMovieInfo {
-//   id: number;
-//   title: string;
-//   poster_title: string;
-//   image_url: string;
-//   duration: number;
-// }
+import { usePopup } from "../../../store/popup";
 
 const Film: FC<IMovieInfo> = ({
   duration,
@@ -21,9 +14,12 @@ const Film: FC<IMovieInfo> = ({
   synopsis,
   title,
 }) => {
-  const { getFilmById, filmInfo, deleteFilm } = useFilmsStore();
+  const { getFilmById, getFilms, films, filmInfo } = useFilmsStore();
+  const { popupConfigOpen } = usePopup();
 
-  console.log(filmInfo);
+  const openPopup = () => {
+    popupConfigOpen('popupSessionsCorrectFilm');
+  };
 
   return (
     <>
@@ -32,6 +28,7 @@ const Film: FC<IMovieInfo> = ({
         onClick={() => {
           if (id !== undefined) {
             getFilmById(id);
+            openPopup();
           }
         }}
       >

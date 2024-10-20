@@ -1,22 +1,19 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useSeatType } from '../../../store/seats';
 
 interface IHallSeatType {
   type: string;
   chairType: (type: string) => void;
-  isActive: boolean
+  checkIsActive: boolean
 }
 
-const HallSeatType: FC<IHallSeatType> = ({ type, chairType, isActive }) => {
-  // const [isActive, setIsActive] = useState(false);
-  const { seats: seatType } = useSeatType();
+const HallSeatType: FC<IHallSeatType> = ({ type, chairType, checkIsActive }) => {
+  const [isActive, setIsActive] = useState(false);
   
   const handleClick = () => {
-    // setIsActive(!isActive);
+    setIsActive(!isActive);
     chairType(type);
   };
-
-  let classSeat = `conf-step__chair square conf-step__chair_${type} ${isActive ? 'active' : ''}`;
   
   let seatName = '';
   if (type === 'disabled') {
@@ -27,21 +24,44 @@ const HallSeatType: FC<IHallSeatType> = ({ type, chairType, isActive }) => {
     seatName = ' — обычные кресла';
   }
 
+  const [styleInput, setStyleInput] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (checkIsActive) {
+      setStyleInput(false)
+    } else {
+      setStyleInput(true)
+    }
+  }, [checkIsActive]);
+
+
+  const [classSeat, setClassSeat] = useState<string>('conf-step__chair square');
+
+  useEffect(() => {
+    if (checkIsActive) {
+      setClassSeat(`conf-step__chair square conf-step__chair_${type} ${isActive ? 'active' : ''}`)
+    } else {
+      setClassSeat(`conf-step__chair conf-step__chair_${type}`)
+    }
+  }, [checkIsActive]);
+
   return (
-    <>
-      <label className="custom-radio">
+       <label className="custom-radio">
         <input 
           type="radio" 
           name="options" 
           value={ type }
           onClick={(ev: any) => (handleClick())}
-          // checked={isActive}
-          // onChange={handleClick}
         />
-        <span className={classSeat}></span>
+        <span 
+          className={classSeat} 
+          style={{
+            pointerEvents: styleInput ? 'none' : 'auto',
+            cursor: styleInput ? 'default' : 'pointer'
+          }}
+        ></span>
         {seatName}
       </label>
-    </>
   );
 };
 

@@ -68,17 +68,21 @@ select {
   cursor: pointer;
 }
 
-.custom-radio {
+.custom-radio
+{
   margin-right: 10px;
 }
 
-.custom-radio input[type="radio"] {
+.custom-radio input[type="radio"]
+{
   display: none;
 }
 
-.custom-radio input[type="radio"]:checked+.square {
+.custom-radio input[type="radio"]:checked+.square
+{
   border: solid 3px red;
 }
+
 
 .text-center {
   text-align: center;
@@ -98,8 +102,7 @@ select {
 
 .label-margin {
   margin-bottom: 10px;
-  width: 100%; /* ширина 100% видимой области по горизонтали */
-  /* Adjust the value as needed */
+  width: 100%;
 }
 
 .page-header {
@@ -325,6 +328,29 @@ select {
   margin-top: 17px;
 }
 
+
+.conf-step__button.conf-step__button-delete {
+  color: #FFFFFF;
+  background-color: #fd3f3f;
+  padding: 12px 32px;
+  margin-top: 17px;
+}
+
+.conf-step__button.conf-step__button-delete:hover,
+.conf-step__button.conf-step__button-delete:focus {
+  background-color: #f38181;
+  outline: none;
+}
+
+.conf-step__button.conf-step__button-delete:active
+{
+  position: relative;
+  top: 2px;
+  background-color: darkred;
+  color: #FFFFFF;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.75);
+}
+
 .conf-step__button.conf-step__button-accent,
 .login__button {
   color: #FFFFFF;
@@ -390,7 +416,6 @@ select {
   margin-left: 20px;
 }
 
-
 .conf-step__chair:active {
   border-color: red;
 }
@@ -454,8 +479,6 @@ select {
 }
 
 
-
-
 .conf-step__chair_vip {
   border-color: #0a828a;
   background-color: #b0d6d8;
@@ -465,6 +488,7 @@ select {
 
 .conf-step__chair_disabled {
   border-color: #C4C4C4;
+  background-color: inherit;
 }
 
 .conf-step__selectors-box {
@@ -689,6 +713,42 @@ select {
   bottom: -17px;
   left: 0;
   background-color: #848484;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(1) {
+  background-color: #caff85;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(2) {
+  background-color: #85ff89;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(3) {
+  background-color: #85ffd3;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(4) {
+  background-color: #85e2ff;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(5) {
+  background-color: #8599ff;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(6) {
+  background-color: #ba85ff;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(7) {
+  background-color: #ff85fb;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(8) {
+  background-color: #ff85b1;
+}
+
+.conf-step__seances-timeline .conf-step__seances-movie:nth-of-type(9) {
+  background-color: #ffa285;
 }
 
 .login {

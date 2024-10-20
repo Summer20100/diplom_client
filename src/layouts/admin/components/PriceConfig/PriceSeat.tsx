@@ -7,12 +7,14 @@ interface IPriceSeat {
 }
 
 const PriceSeat: FC<IPriceSeat> = ({ type, priceHandler, clearPrice }) => {  
-  const [price, setPrice] = useState<number | ''>(0);
+  const [price, setPrice] = useState<number | null >(null);
   const typeSeat: string = `conf-step__chair conf-step__chair_${type}`
+
+  console.log(clearPrice)
 
   useEffect(() => {
     if ( clearPrice === 0 ) {
-      setPrice('')
+      setPrice(null)
     }
   }, [clearPrice]);
   
@@ -25,12 +27,12 @@ const PriceSeat: FC<IPriceSeat> = ({ type, priceHandler, clearPrice }) => {
             <input 
               onChange={(e: any) => {
                 setPrice(e.target.value)
-                priceHandler(type, e.target.value)
+                priceHandler(type, Number(e.target.value))
               }} 
-              type="text" 
+              type="number" 
               className="conf-step__input" 
               placeholder="0" 
-              value={ price }
+              value={price !== null ? price : ''}
             />
           </label>
           за 
