@@ -26,16 +26,6 @@ interface ISeatInfo {
   chair_type: string;
 }
 
-interface IFilmInfo {
-  title: string;
-  origin: string;
-  release_date: Date;
-  poster_title: string;
-  synopsis: string;
-  image_url: string;
-  duration: number;
-}
-
 export function Admin() {
   const { documentTitle, accordeon } = conf;
   const { getHallChairsById } = useHallSeats();
@@ -64,7 +54,7 @@ export function Admin() {
     synopsis: "",
     image_url: "",
     duration: null,
-    session_id: null,
+    for_registration: false,
   });
 
   useEffect(() => {
@@ -78,7 +68,7 @@ export function Admin() {
         synopsis: filmById.synopsis,
         image_url: filmById.image_url,
         duration: filmById.duration,
-        session_id: filmById.session_id,
+        for_registration: filmById.for_registration,
       });
     }
     if (namePopup === "popupSessionsAddFilm") {
@@ -90,7 +80,7 @@ export function Admin() {
         synopsis: "",
         image_url: "",
         duration: null,
-        session_id: null,
+        for_registration: false,
       });
     }
   }, [filmById, namePopup]);
@@ -125,7 +115,7 @@ export function Admin() {
       synopsis: "",
       image_url: "",
       duration: null,
-      session_id: null,
+      for_registration: false,
     });
   };
 
@@ -148,7 +138,7 @@ export function Admin() {
   };
 
   return (
-    <body>
+    <body className="admin">
       {namePopup === "popupHallManage" && (
         <Popup title="СОЗДАТЬ НОВЫЙ ЗАЛ" posterImage="poster-image.jpg">
           <p className="conf-step__paragraph">Введите название нового зала:</p>
@@ -573,12 +563,12 @@ export function Admin() {
 
       <Header title={true} subtitle={true} />
       <main className="conf-steps">
-        {/* <HallManage /> */}
-        {/* <HallConfig /> */}
-        {/* <PriceConfig /> */}
-        {/*  <SessionsManage /> */}
-        <SessionsGrid />
-        {/* <OpenSales /> */}
+{/*         <HallManage />
+        <HallConfig /> */}
+        <PriceConfig />
+        <SessionsManage />
+{/*         <SessionsGrid />
+        <OpenSales /> */}
       </main>
     </body>
   );

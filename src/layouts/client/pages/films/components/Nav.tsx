@@ -1,31 +1,36 @@
 import { FC } from "react";
 
-
-export const Nav = () => {
-  return (
-    <nav className="page-nav">
-      <a className="page-nav__day page-nav__day_today" href="#">
-        <span className="page-nav__day-week">Пн</span><span className="page-nav__day-number">31</span>
-      </a>
-      <a className="page-nav__day" href="#">
-        <span className="page-nav__day-week">Вт</span><span className="page-nav__day-number">1</span>
-      </a>
-      <a className="page-nav__day page-nav__day_chosen" href="#">
-        <span className="page-nav__day-week">Ср</span><span className="page-nav__day-number">2</span>
-      </a>
-      <a className="page-nav__day" href="#">
-        <span className="page-nav__day-week">Чт</span><span className="page-nav__day-number">3</span>
-      </a>
-      <a className="page-nav__day" href="#">
-        <span className="page-nav__day-week">Пт</span><span className="page-nav__day-number">4</span>
-      </a>
-      <a className="page-nav__day page-nav__day_weekend" href="#">
-        <span className="page-nav__day-week">Сб</span><span className="page-nav__day-number">5</span>
-      </a>
-      <a className="page-nav__day page-nav__day_next" href="#">
-      </a>
-    </nav>
-  )
+interface INav {
+  date: string;
+  getDate: (date: string | null) => void,
+  ind: number
 }
 
-export default Nav
+export const Nav: FC<INav> = ({ date, getDate, ind }) => {
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    
+    if (isNaN(date.getTime())) {
+      return { dayOfWeek: 'N/A', dayOfMonth: 'N/A' };
+    }
+    
+    const daysOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+    const dayOfWeek = daysOfWeek[date.getUTCDay()];
+    const dayOfMonth = date.getUTCDate();
+    
+    return { dayOfWeek, dayOfMonth };
+  }
+
+  const { dayOfWeek, dayOfMonth } = formatDate(date);
+
+  const newClassName = ind === 1 ? "page-nav__day active" : "page-nav__day";
+
+  return (
+    <a className={newClassName} href="#" onClick={(e) => { e.preventDefault(); getDate(date); }}>
+      <span className="page-nav__day-week">{ dayOfWeek || 'N/A' }</span>
+      <span className="page-nav__day-number">{ dayOfMonth !== null ? dayOfMonth : 'N/A' }</span>
+    </a>
+  );
+}
+
+export default Nav;

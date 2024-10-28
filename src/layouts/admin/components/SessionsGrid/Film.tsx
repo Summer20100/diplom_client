@@ -10,7 +10,7 @@ const Film: FC<IMovieInfo> = ({
   origin,
   poster_title,
   release_date,
-  session_id,
+  for_registration,
   synopsis,
   title,
 }) => {

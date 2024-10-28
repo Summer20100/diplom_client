@@ -54,8 +54,12 @@ const Hall: FC<IHall> = ({ date, title, hall_id }) => {
             className="conf-step__seances-movie"
             style={{
               width: durationWidthPx(session.session_start, session.session_finish),
-              backgroundColor: "rgb(133, 255, 137)",
-              left: leftPx(session.session_start)}}
+              backgroundColor: films.find(film => film.id === session.film_id)?.title 
+                ? "rgb(133, 255, 137)" 
+                : "red",
+              left: leftPx(session.session_start)
+            }}
+            
             title={films.find(film => film.id === session.film_id)?.title ?? 'Фильм не назначен'}
             key={session.id}
           >

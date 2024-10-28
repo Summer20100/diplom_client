@@ -1,7 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import Header from "../Header";
-import Accordeon from "./Accordeon";
+import ManageFilmSessions from "./ManageFilmSessions";
 import GridedSessions from "./GridedSessions";
+import FilmRegistration from "./FilmRegistration";
 import { usePopup } from "../../../store/popup";
 import { useFilmsStore } from "../../../store/films";
 import { useSessions } from "../../../store/sessions";
@@ -42,6 +43,8 @@ const SessionsGrid: FC = () => {
 
   const [deteGrid, setDeteGrid] = useState<string>('');
 
+  console.log(sessionForUpdate)
+
   return (
     <section className="conf-step">
       <Header title={true} h2="Сетка сеансов" />
@@ -62,7 +65,7 @@ const SessionsGrid: FC = () => {
         </div>
 
         <p className="conf-step__paragraph">Назначение фильма на сеанс:</p>
-        <Accordeon />
+        <ManageFilmSessions />
 
         <p className="conf-step__paragraph">
           <button
@@ -97,10 +100,10 @@ const SessionsGrid: FC = () => {
         </select>
 
         <GridedSessions date={ deteGrid }/>
+        {/* <FilmRegistration /> */}
 
-        
-
-        {/* <fieldset className="conf-step__buttons text-center">
+{/*         <fieldset className="conf-step__buttons text-center">
+          <FilmRegistration />
           <button className="conf-step__button conf-step__button-regular">Отмена</button>
           <input type="submit" value="Сохранить" className="conf-step__button conf-step__button-accent" />
         </fieldset> */}

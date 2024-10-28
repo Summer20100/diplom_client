@@ -10,11 +10,12 @@ html {
   font-size: 62.5%;
 }
 
-body {
-  background-image: url("./img/client/background.jpg");
+body.client {
+  background-image: url("/img/client/background.jpg");
   background-size: cover;
   background-attachment: fixed;
   background-position: right;
+  height: 100%;
 }
 
 .page-header {
@@ -145,10 +146,17 @@ body {
 .movie .movie-seances__hall + .movie-seances__hall {
   margin-top: 2rem;
 }
-.movie .movie-seances__hall .movie-seances__hall-title {
+.movie .movie-seances__hall {
   font-weight: 700;
   font-size: 1.6rem;
 }
+
+.movie-seances__hall-title {
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
 .movie .movie-seances__hall .movie-seances__list {
   margin-top: 0.7rem;
   font-size: 0;
@@ -204,6 +212,11 @@ body {
   font-size: 1.6rem;
   font-weight: 700;
 }
+
+.buying__info .buying__info-hall {
+  text-transform: uppercase;
+}
+
 .buying__info .buying__info-start {
   font-size: 1.4rem;
   font-weight: 300;
@@ -227,7 +240,7 @@ body {
   display: block;
   width: 2.4rem;
   height: 3.2rem;
-  background-image: url(./img/client/hint.png);
+  background-image: url("/img/client/hint.png");
   background-size: 2.4rem 3.2rem;
 }
 
@@ -240,7 +253,7 @@ body {
 .buying-scheme__wrapper {
   font-size: 0;
   display: inline-block;
-  background-image: url(../i/screen.png);
+  background-image: url("/img/client/screen.png");
   background-position: top;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -332,7 +345,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background-image: url(../i/border-top.png);
+  background-image: url("/img/client/border-top.png");
   background-size: 10px 3px;
 }
 .tichet__check::after {
@@ -343,7 +356,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background-image: url(./img/client/border-bottom.png);
+  background-image: url("/img/client/border-bottom.png");
   background-size: 10px 3px;
 }
 
@@ -361,7 +374,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background-image: url(./img/client/border-top.png);
+  background-image: url("/img/client/border-top.png");
   background-size: 10px 3px;
 }
 .ticket__info-wrapper::after {
@@ -372,7 +385,7 @@ body {
   left: 0;
   right: 0;
   height: 3px;
-  background-image: url(./img/client/border-bottom.png);
+  background-image: url("/img/client/border-bottom.png");
   background-size: 10px 3px;
 }
 

@@ -35,7 +35,7 @@ interface ISessionsHalls {
   sessions: ISessionsData[];
 }
 
-const Accordeon: FC = () => {
+const ManageFilmSessions: FC = () => {
   const { sessions, getSessionById, sessionById, getSessionForUpdate } = useSessions();
   const { films } = useFilmsStore();
 
@@ -149,7 +149,7 @@ const Accordeon: FC = () => {
         name="options"
         onChange={(e) => setSelectedHall(Number(e.target.value))}
       >
-        <option value="0">Выберите дату...</option>
+        <option value="0">Выберите зал...</option>
         {sessions &&
           uniqueSessions.map((session, index) => (
             <option
@@ -186,4 +186,4 @@ const Accordeon: FC = () => {
   );
 };
 
-export default Accordeon;
+export default ManageFilmSessions;

@@ -28,5 +28,5 @@ export interface IMovieInfo {
   synopsis: string;
   image_url: string;
   duration: number | null;
-  session_id: number | null;
+  for_registration: boolean;
 }

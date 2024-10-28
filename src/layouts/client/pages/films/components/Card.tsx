@@ -1,40 +1,52 @@
-import { FC } from 'react'
-import { IMovieDate, IHall, IMovie } from '../../../../models/IMovieDate'
+import { FC, useEffect } from 'react'
+import { IMovieDate, IMovie } from '../../../../models/IMovieDate'
+import { useFilmsStore } from '../../../../store/films';
+import Hall from '../components/Hall';
 
-type CardProps = {
-  movie: IMovie;
+interface ISessions {
+  id?: number;
+  session_start: string;
+  session_finish: string;
+  film_id?: number | null;
 };
 
-import Hall from './Hall';
+interface IHall {
+  hall_id: number;
+  hall_title: string;
+  sessions: ISessions[];
+};
 
-export const Card: FC<CardProps> = ({ movie }) => {
+interface ICard {
+  film_id: number;
+  halls: IHall[];
+};
 
-  if (!movie) {
-    return <div>Loading...</div>;
-  }
 
-  const { id, poster_title, title, image, synopsis, duration, origin, hall } = movie
-  console.log(id)
-  const hallList = hall.map((el: IHall) =>
-    <Hall key={new Date().getTime()} hall={el} id={id}/>
-  )
+export const Card: FC<ICard> = ({ film_id, halls }) => {
+  const { films } = useFilmsStore();
+
+  const film = films.filter(itm => itm.id === film_id)[0];
 
   return (
     <section className="movie">
       <div className="movie__info">
         <div className="movie__poster">
-          <img className="movie__poster-image" alt={poster_title} src={image} />
+          <img className="movie__poster-image" alt={film.poster_title} src={film.image_url} />
         </div>
         <div className="movie__description">
-          <h2 className="movie__title">{title}</h2>
-          <p className="movie__synopsis">{synopsis}</p>
+        <h2 className="movie__title">{film.title}</h2>
+          <p className="movie__synopsis">{film.synopsis}</p>
           <p className="movie__data">
-            <span className="movie__data-duration">{duration} минут</span>
-            <span className="movie__data-origin"> {origin} </span>
+            <span className="movie__data-duration">{film.duration} минут</span>
+            <span className="movie__data-origin">{film.origin}</span>
           </p>
         </div>
       </div>
-      {hallList}
+
+      { halls && 
+          halls.map((itm, ind) =>
+            <Hall key={itm.hall_id} hall_id={itm.hall_id} film_id={film_id} hall_title={itm.hall_title} sessions={itm.sessions}/>
+        )}
     </section>
   )
 }

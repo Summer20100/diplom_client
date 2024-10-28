@@ -5,6 +5,7 @@ import axios from "axios";
 type State = {
   films: IMovieInfo[];
   filmInfo: IMovieInfo | null;
+  filmsFetch: IMovieInfo[],
 };
 
 type Actions = {
@@ -13,11 +14,26 @@ type Actions = {
   createFilm: (film: IMovieInfo) => Promise<void>;
   updateFilm: (film: IMovieInfo) => Promise<void>;
   deleteFilm: (id: number) => Promise<void>;
+  fetchDataFilms: () => Promise<void>
 };
 
 export const useFilmsStore = create<State & Actions>((set) => ({
   films: [],
   filmInfo: null,
+  filmsFetch: [],
+
+  fetchDataFilms: async () => {
+    try {
+      const response = await axios.get('src/layouts/store/films.json');
+      if (response.status === 200) {
+        set({ filmsFetch: response.data });
+      } else {
+        set({ filmsFetch: [] });
+      }
+    } catch (error: any) {
+      console.error(error);
+    }
+  },
 
   getFilms: async () => {
     try {

@@ -1,89 +1,73 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import Card from "./components/Card";
 import Nav from "./components/Nav";
 import { IMovieDate, IMovie } from '../../../models/IMovieDate'
+import { useSessions } from "../../../store/sessions";
 
 import { useMovieStore } from '../../../store/store';
 import { useFilmsStore } from '../../../store/films';
 import Login from "../../../admin/Login";
 
-
-// import '../css/styles.css';
-// import '../css/normalize.css';
-
-// const films: IMovieDate = 
-//   [
-//     {
-//       "date": "2024-01-01",
-//       "movie": [
-//         {
-//           "id": 125,
-//           "title": "Альфа",
-//           "image": "./img/client/poster2.jpg",
-//           "synopsis": "20 тысяч лет назад Земля была холодным и неуютным местом, в котором смерть подстерегала человека на каждом шагу.",
-//           "duration": 130,
-//           "origin": "США",		
-//           "hall" : [
-//             {
-//               "title": "HALL 1",
-//               "time": ["11:30", "12:30"]
-//             },
-//             {
-//               "title": "HALL 2",
-//               "time": ["13:30", "14:30"]
-//             },
-//             {
-//               "title": "HALL 3",
-//               "time": ["15:30", "16:30"]
-//             }
-//           ]
-//         }
-//       ]
-//     },
-//     {
-//       "date": "2024-01-02",
-//       "movie": [
-//         {
-//           "id": 125,
-//           "title": "Альфа",
-//           "image": "./img/client/poster2.jpg",
-//           "synopsis": "./img/client/poster2.jpg",
-//           "duration": 130,
-//           "origin": "США",		
-//           "hall" : [
-//             {
-//               "title": "HALL 1",
-//               "time": ["15:30", "17:30"]
-//             }
-//           ]
-//         }
-//       ]
-//     }
-//   ]
-
+interface ISession {
+  id?: number | null;
+  hall_id: number | null;
+  hall_title: string;
+  session_date: string;
+  session_start: string;
+  session_finish: string;
+  film_id: number | null;
+};
 
 export const Films = () => {
   const { data, fetchData } = useMovieStore();
-  const { films, fetchDataFilms } = useFilmsStore();
+  const { filmsFetch, fetchDataFilms, getFilms, films, getFilmById } = useFilmsStore();
+  const { getSessions, sessions, getSessionsByDate, sessionsByDate } = useSessions();
+  const [newDate, setNewDate] = useState<string | null>(null);
 
   useEffect(() => {
+    getSessions();
     fetchData();
-    fetchDataFilms()
-  }, [fetchData, fetchDataFilms])
+    fetchDataFilms();
+    getFilms();
+    getSessionsByDate();
+  }, [fetchData, fetchDataFilms, getFilms, getSessionsByDate, getSessions]);
 
-  if (data.length === 0) {
+/*   if (data.length === 0) {
     return <div>Loading...</div>;
+  } */
+   
+  const getDate = (date: string | null) => {
+    setNewDate(date);
   }
 
-  const filmCards = data[0].movie.map((film: IMovie, ind: number) =>
-    <Card key={ind} movie={film} />
-  )
-  
+  const filmSessions = newDate ? sessionsByDate?.filter(itm => itm.session_date === newDate)[0].films : [];
+
+  const filmInfo = (id: Number) => {
+    const film = films.filter(itm => itm.id === id)
+    if (film[0].for_registration) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
   return (
     <>
-      <Nav />
+      <nav className="page-nav">
+        {sessionsByDate && 
+          sessionsByDate.map((itm, ind) => (
+            <Nav key={ind} date={itm.session_date} getDate={getDate} ind={ind}/>
+          ))
+        }
+      </nav>
+
       <main>
-        { filmCards }
+        { filmSessions && 
+          filmSessions.map((itm, ind) =>
+            itm.film_id !== null  && filmInfo(itm.film_id) &&
+            <Card key={itm.film_id} film_id={itm.film_id} halls={itm.halls}/>
+        )}
       </main>
     </>
   );

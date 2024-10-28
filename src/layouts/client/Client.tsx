@@ -16,7 +16,7 @@ export const Client = () => {
 
   return (
     <>
-      <body>
+      <body className="client">
         <Header />
         <Outlet />
       </body>

@@ -9,25 +9,42 @@ interface ISession {
   session_start: string;
   session_finish: string;
   film_id: number | null;
-}
+};
 
 interface ISessions {
   id?: number;
   session_start: string;
   session_finish: string;
-  film_id: number | null;
-}
+  film_id?: number | null;
+};
 
 interface ISessionDay {
   session_date: string;
   session: ISessions[];
-}
+};
 
 interface ISessionsHalls {
   hall_id: number;
   hall_title: string;
   sessions: ISessionDay[];
-}
+};
+
+interface IHall {
+  hall_id: number;
+  hall_title: string;
+  sessions: ISessions[];
+};
+
+interface IFilm {
+  film_id: number;
+  halls: IHall[];
+};
+
+interface ISessionsByDate {
+  session_date: string;
+  films: IFilm[];
+};
+
 
 type State = {
   sessions: ISession[];
@@ -36,6 +53,7 @@ type State = {
   newSession: ISession | null;
   sessionByIdHall: ISession[] | null;
   sessionForUpdate: ISession | null;
+  sessionsByDate: ISessionsByDate[] |null;
 };
 
 type Actions = {
@@ -43,6 +61,7 @@ type Actions = {
   getSessionsHalls: () => Promise<void>;
   getSessionById: (id: number) => Promise<void>;
   getSessionByIdHall: (hall_id: number) => Promise<void>;
+  getSessionsByDate: () => Promise<void>;
   getNewSession: (session: ISession) => void;
   getSessionForUpdate: (session: ISession) => void;
   addSession: (session: ISession | null) => void;
@@ -57,8 +76,24 @@ export const useSessions = create<State & Actions>((set) => ({
   sessionsHalls: [],
   newSession: null,
   sessionForUpdate: null,
+  sessionsByDate: [],
 
   getNewSession: (session: ISession) => set({ newSession: session }),
+
+  getSessionsByDate: async () => {
+    try {
+      const response = await axios.get(
+        "https://diplom-server-post.onrender.com/api/sessions/date",
+      );
+      if (response.status === 200) {
+        set({ sessionsByDate: response.data });
+      } else {
+        set({ sessionsByDate: [] });
+      }
+    } catch (error: any) {
+      console.error(error);
+    }
+  },
 
   getSessionForUpdate: (session: ISession) => set({ sessionForUpdate: session }),
 

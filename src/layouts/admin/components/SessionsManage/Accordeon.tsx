@@ -99,6 +99,8 @@ const Accordeon: FC = () => {
     return `${formattedHour}:${formattedMinute}:00`;
   }
 
+  console.log(addSession)
+
   useEffect(() => {
     if (duration && addSession.session_start !== "") {
       setAddSession((prev) => ({
@@ -113,7 +115,6 @@ const Accordeon: FC = () => {
       <select
         id="options"
         name="options"
-        // value={hallTitle}
         onChange={(e) => {
           if (e.target.value === "0") {
             setHallTitle("");
@@ -150,7 +151,6 @@ const Accordeon: FC = () => {
         placeholder="ВРЕМЯ"
         type="time"
         onChange={(ev) => setTime(ev.target.value)}
-        //className="time"
         className="conf-step__input popup__input time-block"
       />
       <input

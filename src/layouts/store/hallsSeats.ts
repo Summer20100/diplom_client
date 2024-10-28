@@ -39,6 +39,7 @@ export const useHallSeats = create<State & Actions>((set) => ({
   hallsSeats: [],
   hallsSeatsById: [],
   delHallSeats: null,
+
   fetchDataHallSeats: async () => {
     try {
       const response = await axios.get('https://diplom-server-post.onrender.com/api/hallchairs');
@@ -83,7 +84,6 @@ export const useHallSeats = create<State & Actions>((set) => ({
       console.error("Error in price updating: ", error);
     }
   },
-
 
   getHallChairsById: async (id: number) => {
     try {

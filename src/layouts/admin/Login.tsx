@@ -2,8 +2,8 @@ import conf from '../configurations/conf';
 import { useEffect, FC, useState } from 'react';
 import Header from './components/Header';
 
-// import './CSS/normalize.css';
-// import './CSS/styles.css';
+import './CSS/normalize.css';
+import './CSS/styles.css';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState<string>('')
@@ -21,7 +21,7 @@ export const Login: FC = () => {
   }, [])
 
   return (
-    <body>
+    <body className='admin'>
       <Header title={true} subtitle={true} />
       <main>
         <section className="login">
