@@ -4,7 +4,7 @@ import Nav from "./components/Nav";
 import { IMovieDate, IMovie } from '../../../models/IMovieDate'
 import { useSessions } from "../../../store/sessions";
 
-import { useMovieStore } from '../../../store/store';
+
 import { useFilmsStore } from '../../../store/films';
 import Login from "../../../admin/Login";
 
@@ -19,18 +19,15 @@ interface ISession {
 };
 
 export const Films = () => {
-  const { data, fetchData } = useMovieStore();
-  const { filmsFetch, fetchDataFilms, getFilms, films, getFilmById } = useFilmsStore();
+  const { getFilms, films, getFilmById } = useFilmsStore();
   const { getSessions, sessions, getSessionsByDate, sessionsByDate } = useSessions();
   const [newDate, setNewDate] = useState<string | null>(null);
 
   useEffect(() => {
     getSessions();
-    fetchData();
-    fetchDataFilms();
     getFilms();
     getSessionsByDate();
-  }, [fetchData, fetchDataFilms, getFilms, getSessionsByDate, getSessions]);
+  }, [getFilms, getSessionsByDate, getSessions]);
 
 /*   if (data.length === 0) {
     return <div>Loading...</div>;
@@ -51,15 +48,24 @@ export const Films = () => {
     }
   }
 
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
     <>
       <nav className="page-nav">
         {sessionsByDate && 
           sessionsByDate.map((itm, ind) => (
-            <Nav key={ind} date={itm.session_date} getDate={getDate} ind={ind}/>
+            <Nav 
+              key={ind} 
+              date={itm.session_date} 
+              getDate={getDate} 
+              ind={ind}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+            />
           ))
         }
+        <a className="page-nav__day page-nav__day_next" ></a>
       </nav>
 
       <main>

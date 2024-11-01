@@ -81,6 +81,8 @@ const Accordeon: FC = () => {
     }
   }, [time]);
 
+  console.log(addSession)
+
   const [duration, setDuration] = useState<number | null>();
 
   function getDuration(start: string, duration: number | 0) {
@@ -96,10 +98,8 @@ const Accordeon: FC = () => {
     const formattedMinute =
       finishMinute < 10 ? `0${finishMinute}` : `${finishMinute}`;
 
-    return `${formattedHour}:${formattedMinute}:00`;
-  }
-
-  console.log(addSession)
+    return `${formattedHour}:${formattedMinute}`;
+  };
 
   useEffect(() => {
     if (duration && addSession.session_start !== "") {
@@ -108,7 +108,7 @@ const Accordeon: FC = () => {
         session_finish: getDuration(prev.session_start, duration),
       }));
     }
-  }, [duration]);
+  }, [duration, time]);
 
   return (
     <div className="seansses-create-form">

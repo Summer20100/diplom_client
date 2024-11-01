@@ -45,6 +45,18 @@ interface ISessionsByDate {
   films: IFilm[];
 };
 
+interface IHallchairsOfSessionsByIdSession {
+  id_seat: number,
+  row_number: number,
+  seat_number: number,
+  chair_type: string,
+  price: string,
+  hall_title: string,
+  hall_id: number,
+  session_id: number,
+  check_is_buying: boolean,
+};
+
 
 type State = {
   sessions: ISession[];
@@ -54,12 +66,15 @@ type State = {
   sessionByIdHall: ISession[] | null;
   sessionForUpdate: ISession | null;
   sessionsByDate: ISessionsByDate[] |null;
+  message: string | null;
+  hallchairsOfSessionsByIdSession: IHallchairsOfSessionsByIdSession[] | null;
 };
 
 type Actions = {
   getSessions: () => Promise<void>;
   getSessionsHalls: () => Promise<void>;
   getSessionById: (id: number) => Promise<void>;
+  getHallchairsOfSessionsByIdSession: (session_id: number) => Promise<void>;
   getSessionByIdHall: (hall_id: number) => Promise<void>;
   getSessionsByDate: () => Promise<void>;
   getNewSession: (session: ISession) => void;
@@ -72,11 +87,13 @@ type Actions = {
 export const useSessions = create<State & Actions>((set) => ({
   sessions: [],
   sessionById: null,
+  hallchairsOfSessionsByIdSession: [],
   sessionByIdHall: [],
   sessionsHalls: [],
   newSession: null,
   sessionForUpdate: null,
   sessionsByDate: [],
+  message: null,
 
   getNewSession: (session: ISession) => set({ newSession: session }),
 
@@ -95,16 +112,50 @@ export const useSessions = create<State & Actions>((set) => ({
     }
   },
 
+
+  getHallchairsOfSessionsByIdSession: async (session_id: number) => {
+    try {
+      const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${session_id}`);
+      if (response.status === 200) {
+        set({ hallchairsOfSessionsByIdSession: response.data });
+      } else {
+        set({ message: "Session does not exist" });
+        console.log("Session does not exist");
+      }
+    } catch (err: any) {
+      console.error(err.response.data.message);
+    }
+  },
+
   getSessionForUpdate: (session: ISession) => set({ sessionForUpdate: session }),
 
-  addSession: async (session: ISession | null) => {
+/*   addSession: async (session: ISession | null) => {
     try {
+      const hall_id = session?.hall_id;
+      const responseHallchairs = await axios.get(
+        `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`);
       const response = await axios.post(
         "https://diplom-server-post.onrender.com/api/sessions",
         session,
       );
-      if (response.status === 200) {
-        console.log("Сессия создана успешно");
+      if (responseHallchairs.status === 200 && response.status === 200) {
+        const id = response.data.session_id;
+
+        const hallchairs_of_sessions = [];
+        if (responseHallchairs.data > 0) {
+          for (let hallchair of responseHallchairs.data) {
+            hallchairs_of_sessions.push({...hallchair, session_id: id})
+          }
+        };
+        const responseHallchairs_of_sessions = await axios.post(
+          `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions`, 
+          hallchairs_of_sessions,
+        );
+        if (responseHallchairs_of_sessions.status === 200) {
+          console.log("Сессия создана успешно");
+          set({ message: response.data.message });
+        }
+
         const getResponse = await axios.get(
           "https://diplom-server-post.onrender.com/api/sessions/halls",
         );
@@ -123,12 +174,85 @@ export const useSessions = create<State & Actions>((set) => ({
         }
       } else {
         console.error("Заполните все поля");
+        set({ message: response.data })
       }
     } catch (error: any) {
-      console.error(error);
+      if (error.response) {
+        console.log(error.response.data.message );
+        set({ message: error.response.data.message });
+      } else {
+        console.error("Ошибка:", error.message);
+      }
+    }
+  }, */
+
+  addSession: async (session: ISession | null) => {
+    try {
+      const hall_id = session?.hall_id;
+      const responseHallchairs = await axios.get(
+        `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`
+      );
+  
+      const response = await axios.post(
+        "https://diplom-server-post.onrender.com/api/sessions",
+        session
+      );
+  
+      if (responseHallchairs.status === 200 && response.status === 200) {
+        const id = response.data.session_id;
+  
+        const hallchairs_of_sessions = [];
+        if (responseHallchairs.data.length > 0) {
+          for (let hallchair of responseHallchairs.data) {
+            hallchairs_of_sessions.push({ ...hallchair, session_id: id });
+          }
+        }
+  
+        if (hallchairs_of_sessions.length > 0) {
+          const responseHallchairs_of_sessions = await axios.post(
+            `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions`,
+            hallchairs_of_sessions
+          );
+  
+          if (responseHallchairs_of_sessions.status === 200) {
+            console.log("Сессия создана успешно");
+            set({ message: response.data.message });
+          } else {
+            console.error("Ошибка при создании hallchairs_of_sessions:", responseHallchairs_of_sessions.data);
+          }
+        }
+  
+        const getResponse = await axios.get(
+          "https://diplom-server-post.onrender.com/api/sessions/halls"
+        );
+        if (getResponse.status === 200) {
+          set({ sessionsHalls: getResponse.data });
+        } else {
+          console.log("Failed to fetch updated sessions list");
+        }
+  
+        const getResponseSessions = await axios.get(
+          "https://diplom-server-post.onrender.com/api/sessions/"
+        );
+        if (getResponseSessions.status === 200) {
+          set({ sessions: getResponseSessions.data });
+        } else {
+          console.log("Failed to fetch updated sessions list");
+        }
+      } else {
+        console.error("Заполните все поля");
+        set({ message: response.data });
+      }
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Ошибка при добавлении сессии:", error.response.data.message);
+        set({ message: error.response.data.message });
+      } else {
+        console.error("Ошибка:", error.message);
+      }
     }
   },
-
+  
   getSessions: async () => {
     try {
       const response = await axios.get(
@@ -155,6 +279,7 @@ export const useSessions = create<State & Actions>((set) => ({
         );
         if (response.status === 200) {
           console.log("Сессия обновлена успешно");
+          set({ message: response.data.message });
           const getResponse = await axios.get(
             "https://diplom-server-post.onrender.com/api/sessions/halls",
           );
@@ -189,6 +314,7 @@ export const useSessions = create<State & Actions>((set) => ({
       );
       if (deleteResponse.status === 200) {
         console.log(`Session with ID: ${id} deleted successfully`);
+        set({ message: deleteResponse.data.message });
         const getResponseSessionsHalls = await axios.get(
           "https://diplom-server-post.onrender.com/api/sessions/halls",
         );

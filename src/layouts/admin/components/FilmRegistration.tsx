@@ -27,10 +27,6 @@ const FilmRegistration: FC = () => {
     }
   };
   
-
-  console.log(filmForUpdate?.id)
-
-
   return (
     <fieldset className="conf-step__buttons text-center">
       <select

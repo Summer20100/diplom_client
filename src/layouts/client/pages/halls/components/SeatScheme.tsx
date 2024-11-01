@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import Seat from "./Seat"
 
-interface Seat {
+interface ISeat {
   id_seat: number;
   row_number: number;
   seat_number: number;
@@ -8,33 +9,39 @@ interface Seat {
   price: string;
   hall_title: string;
   hall_id: number;
-}
+  session_id: number,
+  check_is_buying: boolean
+};
 
 interface SeatSchemeProps {
-  seats: Seat[];
-}
+  seats: ISeat[];
+  seatInfo: (seat : ISeat[]) => void;
+};
 
-const SeatScheme: React.FC<SeatSchemeProps> = ({ seats }) => {
-  // Сгруппируем места по строкам
-  const rows = seats.reduce<{ [key: number]: Seat[] }>((acc, seat) => {
+const SeatScheme: React.FC<SeatSchemeProps> = ({ seats, seatInfo }) => {
+  const [seatInfoNew, setSeatInfoNew] = useState<ISeat[]>([])
+
+  function infoSeats(seat: ISeat) {
+    setSeatInfoNew((prev) => {
+      if (!prev) return [seat];
+      const existingSeatIndex = prev.findIndex((s) => s.id_seat === seat.id_seat);
+      if (existingSeatIndex !== -1) {
+        return prev.filter((s) => s.id_seat !== seat.id_seat);
+      }
+      return [...prev, seat];
+    });
+  };
+
+  useEffect(() => {
+    seatInfo(seatInfoNew);
+  }, [seatInfoNew, seatInfo]);
+ 
+
+  const rows = seats.reduce<{ [key: number]: ISeat[] }>((acc, seat) => {
     if (!acc[seat.row_number]) acc[seat.row_number] = [];
     acc[seat.row_number].push(seat);
     return acc;
   }, {});
-
-  // Функция для определения класса для стиля
-  const getChairClass = (chairType: string) => {
-    switch (chairType) {
-      case 'vip':
-        return 'buying-scheme__chair_vip';
-      case 'disabled':
-        return 'buying-scheme__chair_disabled';
-      case 'standart':
-        return 'buying-scheme__chair_standart';
-      default:
-        return 'buying-scheme__chair_disabled'; // default style for unknown types
-    }
-  };
 
   return (
     <div className="buying-scheme__wrapper">
@@ -43,15 +50,13 @@ const SeatScheme: React.FC<SeatSchemeProps> = ({ seats }) => {
         .map((rowNumber) => (
           <div className="buying-scheme__row" key={rowNumber}>
             {rows[Number(rowNumber)].map((seat) => (
-              <span
-                key={seat.id_seat}
-                className={`buying-scheme__chair ${getChairClass(seat.chair_type)}`}
-              ></span>
+              <Seat key={`${rowNumber}-${seat.id_seat}`} seat={seat} infoSeats={infoSeats} />
             ))}
           </div>
-        ))}
+      ))}
     </div>
   );
+  
 };
 
 export default SeatScheme;

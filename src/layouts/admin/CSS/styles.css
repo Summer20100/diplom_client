@@ -53,15 +53,18 @@ html {
 }
 
 body .admin {
-/*   background-image: url("./img/admin/background.jpg"); */
   background-image: url("/img/admin/background.jpg");
+  min-height: 100vh;
+  width: 100%;
+  background-repeat: no-repeat;
+  margin: 0;
   background-color: rgba(0, 0, 0, 0.5);
   background-blend-mode: multiply;
   background-size: cover;
   background-attachment: fixed;
   counter-reset: num;
-  height: 100%;
 }
+
 
 input[type='radio'],
 input[type='submit'],
@@ -85,7 +88,6 @@ select {
 {
   border: solid 3px red;
 }
-
 
 .text-center {
   text-align: center;

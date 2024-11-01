@@ -10,6 +10,7 @@ const SessionsManage: FC = () => {
     sessionsHalls,
     addSession,
     newSession,
+    message
   } = useSessions();
 
   function formattedDate(date: string) {
@@ -34,12 +35,14 @@ const SessionsManage: FC = () => {
 
   return (
     <section className="conf-step">
-      <Header title={true} h2="Сетка сеансов" />
+      <Header title={true} h2="Конфигурация сеансов" />
       <div className="conf-step__wrapper">
         <p className="conf-step__paragraph" style={{ fontSize: "2.0rem" }}>
           Управление сеансами:
         </p>
         <Accordeon />
+
+        <div>{ message }</div>
 
         <fieldset
           className="conf-step__buttons"

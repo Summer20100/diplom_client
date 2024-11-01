@@ -8,9 +8,7 @@ interface IPriceSeat {
 
 const PriceSeat: FC<IPriceSeat> = ({ type, priceHandler, clearPrice }) => {  
   const [price, setPrice] = useState<number | null >(null);
-  const typeSeat: string = `conf-step__chair conf-step__chair_${type}`
-
-  console.log(clearPrice)
+  const typeSeat: string = `conf-step__chair conf-step__chair_${type}`;
 
   useEffect(() => {
     if ( clearPrice === 0 ) {

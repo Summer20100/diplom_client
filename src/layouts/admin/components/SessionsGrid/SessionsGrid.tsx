@@ -39,15 +39,13 @@ const SessionsGrid: FC = () => {
   function formattedDate(date: string) {
     const newDate = new Date(date);
     return newDate.toLocaleDateString("ru-RU");
-  }
+  };
 
   const [deteGrid, setDeteGrid] = useState<string>('');
 
-  console.log(sessionForUpdate)
-
   return (
     <section className="conf-step">
-      <Header title={true} h2="Сетка сеансов" />
+      <Header title={true} h2="Управление фильмами" />
       <div className="conf-step__wrapper">
         <p className="conf-step__paragraph">
           <button

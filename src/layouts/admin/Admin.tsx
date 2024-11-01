@@ -24,7 +24,7 @@ interface ISeatInfo {
   id_seat: number;
   hall_id: number;
   chair_type: string;
-}
+};
 
 export function Admin() {
   const { documentTitle, accordeon } = conf;
@@ -563,12 +563,12 @@ export function Admin() {
 
       <Header title={true} subtitle={true} />
       <main className="conf-steps">
-{/*         <HallManage />
-        <HallConfig /> */}
+        <HallManage />
+        <HallConfig />
         <PriceConfig />
         <SessionsManage />
-{/*         <SessionsGrid />
-        <OpenSales /> */}
+        <SessionsGrid />
+        <OpenSales />
       </main>
     </body>
   );
