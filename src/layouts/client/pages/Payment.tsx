@@ -52,7 +52,7 @@ export const Payment = () => {
                     {paymentData?.map((seat: IQRCode, index: number) => (
                       <Fragment key={seat.id_seat}>
                         {seat.id_seat}
-                        {index < (paymentData.length - 1) && ", "}
+                        {index < (paymentData?.length - 1) && ", "}
                       </Fragment>
                     ))}
                   </span>
