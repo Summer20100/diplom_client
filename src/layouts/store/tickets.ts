@@ -33,20 +33,23 @@ export const useTickets = create<State & Actions>((set) => ({
     set({ ticketsForBuying: tickets });
     try {
       const updateRequests = tickets.map(ticket => {
-        const { session_id: id, id_seat, check_is_buying } = ticket;
+        const { session_id: id, id_seat } = ticket;
+        const newTicket = {
+          id_seat,
+          check_is_buying: true
+        }
         const newCheckIsBuing = true;
         return axios.put(
           `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${id}`,
-          { id_seat: 16, check_is_buying: true }
+          newTicket
         ).catch(err => {
-          console.error(`Failed to update ticket ${id} - ${id_seat}:`, err);
+          console.error(`Failed to buy tickets ${id} - ${id_seat}:`, err);
         });
       });
-  
-      await Promise.all(updateRequests);
-      console.log("All tickets processed.");
+
+      console.log("All tickets bought");
     } catch (err) {
-      console.error("Error updating tickets:", err);
+      console.error("Error buying tickets:", err);
     }
   },  
 }));

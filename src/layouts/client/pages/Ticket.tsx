@@ -86,8 +86,6 @@ export const Payment: FC = () => {
     }
   };
 
-  console.log(paymentData)
-
   return (
     <>
       <main>
