@@ -43,23 +43,29 @@ export const Payment = () => {
             {paymentData && (
               <>
                 <p className="ticket__info">На фильм:
-                  <span className="ticket__details ticket__title" style={{ margin: '0 5px' }}>{paymentData[0].title}</span>
+                  <span className="ticket__details ticket__title" style={{ margin: '0 5px' }}>
+                    {paymentData?.[0]?.title ?? 'Неизвестно'}
+                  </span>
                 </p>
                 <p className="ticket__info">Места:
                   <span className="ticket__details ticket__chairs" style={{ margin: '0 5px' }}>
-                    {paymentData.map((seat: IQRCode, index: number) => (
+                    {paymentData?.map((seat: IQRCode, index: number) => (
                       <Fragment key={seat.id_seat}>
                         {seat.id_seat}
-                        {index < paymentData.length - 1 && ", "}
+                        {index < (paymentData.length - 1) && ", "}
                       </Fragment>
                     ))}
                   </span>
                 </p>
                 <p className="ticket__info">В зале:
-                  <span className="ticket__details ticket__hall" style={{ margin: '0 5px', textTransform: "uppercase" }}>{paymentData[0].hall_title}</span>
+                  <span className="ticket__details ticket__hall" style={{ margin: '0 5px', textTransform: "uppercase" }}>
+                    {paymentData?.[0]?.hall_title ?? 'Неизвестно'}
+                  </span>
                 </p>
                 <p className="ticket__info">Начало сеанса:
-                  <span className="ticket__details ticket__start" style={{ margin: '0 5px' }}>{paymentData[0].session_start.slice(0, 5)}</span>
+                  <span className="ticket__details ticket__start" style={{ margin: '0 5px' }}>
+                    {paymentData?.[0]?.session_start?.slice(0, 5) ?? 'Неизвестно'}
+                  </span>
                 </p>
                 <p className="ticket__info">Стоимость:
                   <span className="ticket__details ticket__cost" style={{ margin: '0 5px' }}>
