@@ -1,6 +1,4 @@
 import ReactDOM from 'react-dom/client'
-import App from './App'
-import App01 from './App01'
 import Client from './layouts/client/Client'
 import Admin from './layouts/admin/Admin'
 import Login from './layouts/admin/Login'
@@ -18,7 +16,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="admin" element={<Admin />} />
-{/*       <Route path="login" element={<Login />} /> */}
       <Route path="client/*" element={<Client />} >
         <Route index={true} element={<Films />} />
         <Route path="hall/:id" element={<Hall />} />
@@ -26,11 +23,6 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <Route path="ticket" element={<Ticket />} />
       </Route>
     </Routes>
-    {/* <App /> */}
-    {/* <App01 /> */}
-    {/* <App02 /> */}
-    {/* <Admin />
-    <Client /> */}
   </BrowserRouter>
   // </React.StrictMode>
 )

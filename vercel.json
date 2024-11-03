@@ -1,0 +1,21 @@
+{
+    "rewrites": [
+        { 
+            "source": "/", 
+            "destination": "/index.html" 
+        },
+        { 
+            "source": "/admin", 
+            "destination": "/index.html" 
+        },
+        { 
+            "source": "/client", 
+            "destination": "/index.html" 
+        },
+        { 
+            "source": "/client/:path*", 
+            "destination": "/index.html" 
+        }
+    ]
+}
+  
