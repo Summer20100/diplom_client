@@ -20,15 +20,16 @@ interface ISchemeProps {
 const Seat: FC<ISchemeProps> = ({ seat, infoSeats }) => {
   const [checked, setChecked] = useState(false);
 
-  
   const getChairClass = (chairType: string) => {
     switch (chairType) {
       case 'vip':
         return 'buying-scheme__chair_vip';
       case 'disabled':
-        return 'buying-scheme__chair_disabled';
+        return 'buying-scheme__chair_disabled cursor-default';
       case 'standart':
         return 'buying-scheme__chair_standart';
+      case 'taken':
+        return 'square buying-scheme__chair buying-scheme__chair_taken cursor-default';
       default:
         return 'buying-scheme__chair_disabled';
     }
@@ -43,13 +44,26 @@ const Seat: FC<ISchemeProps> = ({ seat, infoSeats }) => {
 
   return (
     <label className="custom-checkbox">
-      <input
-        type="checkbox"
-        key={seat.id_seat}
-        onChange={handleCheckboxChange}
-        disabled={seat.chair_type === 'disabled'}
-      />
-      <span className={`square buying-scheme__chair ${checked ? 'buying-scheme__chair_selected' : ''} ${getChairClass(seat.chair_type)}`}></span>
+      { seat.check_is_buying 
+        ? <>
+          <input
+            type="checkbox"
+            key={seat.id_seat}
+            disabled
+          />
+          <span className={`${getChairClass('taken')}`}></span>
+        </>
+        : 
+        <>
+          <input
+            type="checkbox"
+            key={seat.id_seat}
+            onChange={handleCheckboxChange}
+            disabled={seat.chair_type === 'disabled'}
+          />
+          <span className={`square buying-scheme__chair ${checked ? 'buying-scheme__chair_selected' : ''} ${getChairClass(seat.chair_type)}`}></span>
+        </>
+      }
     </label>
   );
 };

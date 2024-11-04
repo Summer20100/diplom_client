@@ -104,6 +104,8 @@ const ManageFilmSessions: FC = () => {
     }
   }, [sessionForUpdate]);
 
+  console.log(sessionForUpdate)
+
   return (
     <div className="seansses-create-form">
       <select
@@ -116,7 +118,7 @@ const ManageFilmSessions: FC = () => {
         films.map((film, index) => (
           <option
             value={film.id ?? index}
-            key={film.id || index}
+            key={film.id || null}
           >
             {film.poster_title}
           </option>
@@ -174,8 +176,6 @@ const ManageFilmSessions: FC = () => {
                 key={session.id || index}
               >
                 {session.session_start.slice(0, 5)}, {duration(session.session_start, session.session_finish)} мин.
-
-                { session.film_id }
               </option>
             )
           )

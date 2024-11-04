@@ -1,0 +1,12 @@
+# Включаем механизм перезаписи
+RewriteEngine On
+
+# Устанавливаем базовый путь
+RewriteBase /
+
+# Не перенаправлять запросы на существующие файлы или директории
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Перенаправляем все остальные запросы на index.html
+RewriteRule . /index.html [L]

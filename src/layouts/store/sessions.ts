@@ -67,6 +67,7 @@ type State = {
   sessionForUpdate: ISession | null;
   sessionsByDate: ISessionsByDate[] |null;
   message: string | null;
+  error: string | null;
   hallchairsOfSessionsByIdSession: IHallchairsOfSessionsByIdSession[] | null;
 };
 
@@ -94,6 +95,7 @@ export const useSessions = create<State & Actions>((set) => ({
   sessionForUpdate: null,
   sessionsByDate: [],
   message: null,
+  error: null,
 
   getNewSession: (session: ISession) => set({ newSession: session }),
 
@@ -272,7 +274,6 @@ export const useSessions = create<State & Actions>((set) => ({
     try {
       const result = session ? { id: session.id } : 0;
       if (result !== 0) {
-        console.log(result.id);
         const response = await axios.put(
           `https://diplom-server-post.onrender.com/api/sessions/${result.id}`,
           session,

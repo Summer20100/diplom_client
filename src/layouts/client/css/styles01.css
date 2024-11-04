@@ -443,6 +443,10 @@ body.client {
   height: 20rem;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 @media screen and (min-width: 479px) {
   .page-nav .page-nav__day {
     padding: 1rem 2rem;

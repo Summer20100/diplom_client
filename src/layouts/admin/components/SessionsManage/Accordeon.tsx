@@ -81,8 +81,6 @@ const Accordeon: FC = () => {
     }
   }, [time]);
 
-  console.log(addSession)
-
   const [duration, setDuration] = useState<number | null>();
 
   function getDuration(start: string, duration: number | 0) {
