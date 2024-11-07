@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { IHallSeats } from "../models/IHallSeats";
 import axios from "axios";
 
 interface IHallChears {
@@ -42,7 +41,8 @@ export const useHallSeats = create<State & Actions>((set) => ({
 
   fetchDataHallSeats: async () => {
     try {
-      const response = await axios.get('https://diplom-server-post.onrender.com/api/hallchairs');
+      // const response = await axios.get('https://diplom-server-post.onrender.com/api/hallchairs');
+      const response = await axios.get('http://localhost:3001/api/hallchairs');
       if (response.status === 200) {
         set({ hallsSeats: response.data });
       } else {
@@ -56,7 +56,8 @@ export const useHallSeats = create<State & Actions>((set) => ({
   addHallSeats: async (hallSeats: IHallChears[]) => {
     set({ fetchAddHallSeats: false });
     try {
-      await axios.post('https://diplom-server-post.onrender.com/api/hallchairs', hallSeats);
+      // await axios.post('https://diplom-server-post.onrender.com/api/hallchairs', hallSeats);
+      await axios.post('http://localhost:3001/api/hallchairs', hallSeats);
     } catch (error) {
       console.error("Error adding hall seats:", error);
     } finally {
@@ -69,7 +70,8 @@ export const useHallSeats = create<State & Actions>((set) => ({
       const updatePromises = priceForUpdate.map(async (newPrice) => {
         const { id, price, type } = newPrice;
         try {
-          const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?type=${type}`, { price });
+          // const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?type=${type}`, { price });
+          const response = await axios.put(`http://localhost:3001/api/hallchairs/${id}?type=${type}`, { price });
           if (response.status === 200) {
             console.log(`Price updated successfully for hall_id: ${id}`);
           } else {
@@ -87,7 +89,8 @@ export const useHallSeats = create<State & Actions>((set) => ({
 
   getHallChairsById: async (id: number) => {
     try {
-      const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
+      // const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
+      const response = await axios.get(`http://localhost:3001/api/hallchairs/${id}`);
       if (response.status === 200) {
         set({ hallsSeatsById: response.data });
         return response.data;
@@ -104,7 +107,8 @@ export const useHallSeats = create<State & Actions>((set) => ({
 
   deleteHallSeats: async (id: number) => {
     try {
-      const response = await axios.delete(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
+      // const response = await axios.delete(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
+      const response = await axios.delete(`http://localhost:3001/api/hallchairs/${id}`);
       if (response.status === 200) {
         set({ delHallSeats: response.data });
       } else {

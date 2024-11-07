@@ -40,7 +40,8 @@ export const useTickets = create<State & Actions>((set) => ({
         }
         const newCheckIsBuing = true;
         return axios.put(
-          `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${id}`,
+          // `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${id}`,
+          `http://localhost:3001/api/hallchairs_of_sessions/${id}`,
           newTicket
         ).catch(err => {
           console.error(`Failed to buy tickets ${id} - ${id_seat}:`, err);

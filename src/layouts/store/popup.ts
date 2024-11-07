@@ -49,7 +49,8 @@ export const usePopup = create<State & Actions>((set) => ({
   updateHallSeat: async (infoHallChearsForUpdate: IHallChearsForUpdate) => {
     const { hall_id : id, id_seat : seat, chair_type : type } = infoHallChearsForUpdate;
     try {
-      const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?seat=${seat}`, {
+      // const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?seat=${seat}`, {
+      const response = await axios.put(`http://localhost:3001/api/hallchairs/${id}?seat=${seat}`, {
         chair_type: type,
       });
       if (response.status === 200) {

@@ -57,7 +57,6 @@ interface IHallchairsOfSessionsByIdSession {
   check_is_buying: boolean,
 };
 
-
 type State = {
   sessions: ISession[];
   sessionById: ISession | null;
@@ -102,7 +101,8 @@ export const useSessions = create<State & Actions>((set) => ({
   getSessionsByDate: async () => {
     try {
       const response = await axios.get(
-        "https://diplom-server-post.onrender.com/api/sessions/date",
+        // "https://diplom-server-post.onrender.com/api/sessions/date",
+        "http://localhost:3001/api/sessions/date",
       );
       if (response.status === 200) {
         set({ sessionsByDate: response.data });
@@ -117,7 +117,8 @@ export const useSessions = create<State & Actions>((set) => ({
 
   getHallchairsOfSessionsByIdSession: async (session_id: number) => {
     try {
-      const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${session_id}`);
+      // const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${session_id}`);
+      const response = await axios.get(`http://localhost:3001/api/hallchairs_of_sessions/${session_id}`);
       if (response.status === 200) {
         set({ hallchairsOfSessionsByIdSession: response.data });
       } else {
@@ -131,72 +132,17 @@ export const useSessions = create<State & Actions>((set) => ({
 
   getSessionForUpdate: (session: ISession) => set({ sessionForUpdate: session }),
 
-/*   addSession: async (session: ISession | null) => {
-    try {
-      const hall_id = session?.hall_id;
-      const responseHallchairs = await axios.get(
-        `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`);
-      const response = await axios.post(
-        "https://diplom-server-post.onrender.com/api/sessions",
-        session,
-      );
-      if (responseHallchairs.status === 200 && response.status === 200) {
-        const id = response.data.session_id;
-
-        const hallchairs_of_sessions = [];
-        if (responseHallchairs.data > 0) {
-          for (let hallchair of responseHallchairs.data) {
-            hallchairs_of_sessions.push({...hallchair, session_id: id})
-          }
-        };
-        const responseHallchairs_of_sessions = await axios.post(
-          `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions`, 
-          hallchairs_of_sessions,
-        );
-        if (responseHallchairs_of_sessions.status === 200) {
-          console.log("Сессия создана успешно");
-          set({ message: response.data.message });
-        }
-
-        const getResponse = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/halls",
-        );
-        if (getResponse.status === 200) {
-          set({ sessionsHalls: getResponse.data });
-        } else {
-          console.log("Failed to fetch updated sessions list");
-        }
-        const getResponseSessions = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/",
-        );
-        if (getResponseSessions.status === 200) {
-          set({ sessions: getResponseSessions.data });
-        } else {
-          console.log("Failed to fetch updated sessions list");
-        }
-      } else {
-        console.error("Заполните все поля");
-        set({ message: response.data })
-      }
-    } catch (error: any) {
-      if (error.response) {
-        console.log(error.response.data.message );
-        set({ message: error.response.data.message });
-      } else {
-        console.error("Ошибка:", error.message);
-      }
-    }
-  }, */
-
   addSession: async (session: ISession | null) => {
     try {
       const hall_id = session?.hall_id;
       const responseHallchairs = await axios.get(
-        `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`
+        // `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`
+        `http://localhost:3001/api/hallchairs/${hall_id}`
       );
   
       const response = await axios.post(
-        "https://diplom-server-post.onrender.com/api/sessions",
+        // "https://diplom-server-post.onrender.com/api/sessions",
+        "http://localhost:3001/api/sessions",
         session
       );
   
@@ -212,7 +158,8 @@ export const useSessions = create<State & Actions>((set) => ({
   
         if (hallchairs_of_sessions.length > 0) {
           const responseHallchairs_of_sessions = await axios.post(
-            `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions`,
+            // `https://diplom-server-post.onrender.com/api/hallchairs_of_sessions`,
+            `http://localhost:3001/api/hallchairs_of_sessions`,
             hallchairs_of_sessions
           );
   
@@ -225,7 +172,8 @@ export const useSessions = create<State & Actions>((set) => ({
         }
   
         const getResponse = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/halls"
+          // "https://diplom-server-post.onrender.com/api/sessions/halls"
+          "http://localhost:3001/api/sessions/halls"
         );
         if (getResponse.status === 200) {
           set({ sessionsHalls: getResponse.data });
@@ -234,7 +182,8 @@ export const useSessions = create<State & Actions>((set) => ({
         }
   
         const getResponseSessions = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/"
+          // "https://diplom-server-post.onrender.com/api/sessions/"
+          "http://localhost:3001/api/sessions/"
         );
         if (getResponseSessions.status === 200) {
           set({ sessions: getResponseSessions.data });
@@ -258,7 +207,8 @@ export const useSessions = create<State & Actions>((set) => ({
   getSessions: async () => {
     try {
       const response = await axios.get(
-        "https://diplom-server-post.onrender.com/api/sessions",
+        // "https://diplom-server-post.onrender.com/api/sessions",
+        "http://localhost:3001/api/sessions",
       );
       if (response.status === 200) {
         set({ sessions: response.data });
@@ -275,14 +225,16 @@ export const useSessions = create<State & Actions>((set) => ({
       const result = session ? { id: session.id } : 0;
       if (result !== 0) {
         const response = await axios.put(
-          `https://diplom-server-post.onrender.com/api/sessions/${result.id}`,
+          // `https://diplom-server-post.onrender.com/api/sessions/${result.id}`,
+          `http://localhost:3001/api/sessions/${result.id}`,
           session,
         );
         if (response.status === 200) {
           console.log("Сессия обновлена успешно");
           set({ message: response.data.message });
           const getResponse = await axios.get(
-            "https://diplom-server-post.onrender.com/api/sessions/halls",
+            // "https://diplom-server-post.onrender.com/api/sessions/halls",
+            "http://localhost:3001/api/sessions/halls",
           );
           if (getResponse.status === 200) {
             set({ sessionsHalls: getResponse.data });
@@ -290,7 +242,8 @@ export const useSessions = create<State & Actions>((set) => ({
             console.log("Failed to fetch updated sessions list");
           }
           const getResponseSessions = await axios.get(
-            "https://diplom-server-post.onrender.com/api/sessions/",
+            // "https://diplom-server-post.onrender.com/api/sessions/",
+            "http://localhost:3001/api/sessions/",
           );
           if (getResponseSessions.status === 200) {
             set({ sessions: getResponseSessions.data });
@@ -311,16 +264,19 @@ export const useSessions = create<State & Actions>((set) => ({
   deleteSessionById: async (id: number) => {
     try {
       const deleteResponse = await axios.delete(
-        `https://diplom-server-post.onrender.com/api/sessions/${id}`,
+        // `https://diplom-server-post.onrender.com/api/sessions/${id}`,
+        `http://localhost:3001/api/sessions/${id}`,
       );
       if (deleteResponse.status === 200) {
         console.log(`Session with ID: ${id} deleted successfully`);
         set({ message: deleteResponse.data.message });
         const getResponseSessionsHalls = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/halls",
+          // "https://diplom-server-post.onrender.com/api/sessions/halls",
+          "http://localhost:3001/api/sessions/halls",
         );
         const getResponseSessions = await axios.get(
-          "https://diplom-server-post.onrender.com/api/sessions/",
+          // "https://diplom-server-post.onrender.com/api/sessions/",
+          "http://localhost:3001/api/sessions/",
         );
         if (getResponseSessions.status === 200) {
           set({ sessions: getResponseSessions.data });
@@ -343,7 +299,8 @@ export const useSessions = create<State & Actions>((set) => ({
   getSessionsHalls: async () => {
     try {
       const response = await axios.get(
-        "https://diplom-server-post.onrender.com/api/sessions/halls",
+        // "https://diplom-server-post.onrender.com/api/sessions/halls",
+        "http://localhost:3001/api/sessions/halls",
       );
       if (response.status === 200) {
         set({ sessionsHalls: response.data });
@@ -358,7 +315,8 @@ export const useSessions = create<State & Actions>((set) => ({
   getSessionById: async (id: number | null ) => {
     try {
       const response = await axios.get(
-        `https://diplom-server-post.onrender.com/api/sessions/${id}`,
+        // `https://diplom-server-post.onrender.com/api/sessions/${id}`,
+        `http://localhost:3001/api/sessions/${id}`,
       );
       if (response.status === 200) {
         set({ sessionById: response.data });
@@ -373,7 +331,8 @@ export const useSessions = create<State & Actions>((set) => ({
   getSessionByIdHall: async (hall_id: number) => {
     try {
       const response = await axios.get(
-        `https://diplom-server-post.onrender.com/api/sessions/hall/${hall_id}`,
+        // `https://diplom-server-post.onrender.com/api/sessions/hall/${hall_id}`,
+        `http://localhost:3001/api/sessions/hall/${hall_id}`,
       );
       if (response.status === 200) {
         set({ sessionByIdHall: response.data });

@@ -96,12 +96,13 @@ export function Admin() {
     getHallChairsById(seatInfo?.hall_id ?? 0);
   }, [message, seatInfo]);
 
-  const addHall = (hall_title: Object, ev: any) => {
+  const addHall = (hall_title: any, ev: any) => {
     createHall(hall_title);
     ev.preventDefault();
     popupConfigClose();
     setInput("");
   };
+  
 
   const addFilm = (film: IMovieInfo, ev: any) => {
     createFilm(film);
@@ -201,7 +202,7 @@ export function Admin() {
               <p className="conf-step__paragraph">Введите название фильма:</p>
               <div className="popup__input-block">
                 <input
-                  placeholder="Страна создания..."
+                  placeholder="Название фильма..."
                   onChange={(e) =>
                     setFilmInfo((prev: IMovieInfo) => ({
                       ...prev,
@@ -222,7 +223,7 @@ export function Admin() {
               </p>
               <div className="popup__input-block">
                 <input
-                  placeholder="Страна создания..."
+                  placeholder="Постер к фильму..."
                   onChange={(e) =>
                     setFilmInfo((prev: IMovieInfo) => ({
                       ...prev,
@@ -319,8 +320,6 @@ export function Admin() {
                     filmInfo.release_date !== null ? filmInfo.release_date : ""
                   }
                   type="number"
-                  min="1900"
-                  max="2024"
                   className="conf-step__input popup__input"
                 />
               </div>
@@ -334,7 +333,7 @@ export function Admin() {
               </p>
               <div className="popup__input-block">
                 <input
-                  placeholder="Длительность, минут..."
+                  placeholder="Длительность фильма, минут..."
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value === "") {
@@ -351,8 +350,6 @@ export function Admin() {
                   }}
                   value={filmInfo.duration !== null ? filmInfo.duration : ""}
                   type="number"
-                  min="1"
-                  max="999"
                   className="conf-step__input popup__input"
                 />
               </div>

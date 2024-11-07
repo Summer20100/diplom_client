@@ -21,12 +21,12 @@ interface ISeat {
 };
 
 interface IChairsTypes {
-  [key: string]: number; // Здесь тип значения должен быть number
+  [key: string]: number;
 };
 
 interface IChairType {
   chair_type: string;
-  price: string; // Оставляем как string, но преобразуем к числу
+  price: string;
 };
 
 export const Hall = () => {

@@ -11,7 +11,7 @@ html {
 }
 
 body.client {
-  position: fixed;
+  /* position: fixed; */
   background-image: url("/img/client/background.jpg");
   background-size: cover;
   background-attachment: fixed;
@@ -21,7 +21,8 @@ body.client {
   background-blend-mode: multiply;
   background-repeat: no-repeat;
   overflow: hidden;
-  margin: 0;
+  /* margin: 0; */
+  padding-bottom: 5em;
 }
 
 .page-header {
@@ -41,6 +42,7 @@ body.client {
 
 /* ~~~~~~~~~~~~ Главная ~~~~~~~~~~~~ */
 .page-nav {
+  position: -webkit-sticky;
   position: sticky;
   top: 2px;
   padding-bottom: 1rem;
@@ -59,6 +61,11 @@ body.client {
   border-radius: 2px;
   text-decoration: none;
   color: #000000;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none
 }
 .page-nav .page-nav__day + .page-nav__day {
   margin-left: 1px;
@@ -90,6 +97,18 @@ body.client {
   font-weight: 700;
   font-size: 2.4rem;
 }
+
+.page-nav .page-nav__day_previous {
+  text-align: center;
+}
+
+.page-nav .page-nav__day_previous::before {
+  content: '<';
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 2.4rem;
+}
+
 .page-nav .page-nav__day_today .page-nav__day-week::before {
   content: 'Сегодня';
   display: block;
@@ -466,3 +485,4 @@ body.client {
     display: none;
   }
 }
+

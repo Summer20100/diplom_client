@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { IMovieDate, IMovieInfo } from "../models/IMovieDate";
 import axios from "axios";
 
 interface IQRCode {
@@ -35,7 +34,8 @@ export const useQRCode = create<State & Actions>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const response = await axios.post(
-        "https://diplom-server-post.onrender.com/api/qrcode",
+        // "https://diplom-server-post.onrender.com/api/qrcode",
+        "http://localhost:3001/api/qrcode",
         dataQRCode,
         { responseType: "blob" }
       );

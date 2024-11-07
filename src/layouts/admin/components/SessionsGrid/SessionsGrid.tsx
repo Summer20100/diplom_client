@@ -87,14 +87,16 @@ const SessionsGrid: FC = () => {
               ...new Map(
                 sessions.map((session) => [session.session_date, session]),
               ).values(),
-            ].map((session, index) => (
-              <option
-                value={formattedDate(session.session_date)}
-                key={session.id || index}
-              >
-                {formattedDate(session.session_date)}
-              </option>
-            ))}
+            ].map((session, index) => {
+              return (
+                <option
+                  value={formattedDate(session.session_date)}
+                  key={session.id || index}
+                >
+                  {formattedDate(session.session_date)}
+                </option>
+              )
+          })}
         </select>
 
         <GridedSessions date={ deteGrid }/>

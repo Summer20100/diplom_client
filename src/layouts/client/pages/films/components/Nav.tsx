@@ -5,7 +5,8 @@ interface INav {
   getDate: (date: string | null) => void;
   ind: number;
   selectedIndex: number | null;
-  setSelectedIndex: (index: number | null) => void;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  className?: string;
 }
 
 export const Nav: FC<INav> = ({ date, getDate, ind, selectedIndex, setSelectedIndex }) => {
@@ -15,7 +16,9 @@ export const Nav: FC<INav> = ({ date, getDate, ind, selectedIndex, setSelectedIn
   
       if (isNaN(date.getTime())) {
         return { dayOfWeek: 'N/A', dayOfMonth: 'N/A', isWeekend: false };
-      }
+      };
+
+      date.setDate(date.getDate() + 1);
   
       const daysOfWeek = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
       const dayOfWeek = daysOfWeek[date.getUTCDay()];
@@ -48,17 +51,19 @@ export const Nav: FC<INav> = ({ date, getDate, ind, selectedIndex, setSelectedIn
     let className = 'page-nav__day'; 
     if (selectedIndex === ind) {
       className += ' page-nav__day_chosen';
-    } else if (getCurrentDate() === getCurrentDate(date)) {
-      className += ' page-nav__day_today page-nav__day_chosen';
       getDate(date);
-    } else if (formattedDate.isWeekend) {
+    } 
+    if (getCurrentDate() === getCurrentDate(date)) {
+      className += ' page-nav__day_today';
+    } 
+    if (formattedDate.isWeekend) {
       className += ' page-nav__day_weekend';
     } 
     setNewClassName(className);
   }, [date, selectedIndex, ind, formattedDate.isWeekend]);
   
   return (
-    <a
+    <a style={{cursor: "pointer", userSelect: 'none'}}
       className={newClassName}
       onClick={handleActive}
     >

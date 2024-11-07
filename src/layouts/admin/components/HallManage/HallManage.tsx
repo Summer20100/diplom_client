@@ -4,9 +4,10 @@ import Hall from './Hall';
 import { useHallStore } from "../../../store/halls"
 import { useHallSeats } from "../../../store/hallsSeats"
 import { usePopup } from "../../../store/popup";
+import { ErrorNotification, MessageNotification } from "../../../Notification"
 
 const HallManage: FC = () => {
-  const { halls, fetchDataHallSeats, deleteHall, delHall } = useHallStore()
+  const { halls, fetchDataHallSeats, deleteHall, delHall, error, message, clearNotifications } = useHallStore()
   const { deleteHallSeats } = useHallSeats();
   const { popupConfigOpen } = usePopup();
 
@@ -18,6 +19,10 @@ const HallManage: FC = () => {
     popupConfigOpen('popupHallManage');
   };
 
+  const closeNotification = () => {
+    clearNotifications();
+  };
+  
   return (
     <>
       <section className="conf-step">
@@ -37,6 +42,9 @@ const HallManage: FC = () => {
               ))
             }
           </ul>
+          {error && <ErrorNotification message={error} onClose={closeNotification} />}
+          {message && <MessageNotification message={message} onClose={closeNotification} />}
+
           <button onClick={openPopup} className="conf-step__button conf-step__button-accent">Создать зал</button>
         </div>
       </section>

@@ -81,12 +81,29 @@ const ManageFilmSessions: FC = () => {
     }
   }, [selectedSession]);
 
+  const newDate = (date: string) => {
+    const ttt = new Date(date);
+    ttt.setUTCDate(ttt.getUTCDate() + 1);
+
+    const day = String(ttt.getUTCDate()).padStart(2, '0');
+    const month  = String(ttt.getUTCMonth() + 1).padStart(2, '0');
+    const year = ttt.getUTCFullYear();
+
+    const formattedDate = `${day}.${month}.${year}`;
+    return formattedDate;
+  };
+
   useEffect(() => {
     if (sessionById) {
       const { film_id, ...sessionWithoutFilmId } = sessionById;
-      setSessionForUpdate((prev) => ({ ...prev, ...sessionWithoutFilmId }));
+      setSessionForUpdate((prev) => ({ 
+        ...prev, 
+        ...sessionWithoutFilmId,
+        session_date: newDate(sessionById.session_date)
+      }));
     }
   }, [sessionById]);
+
 
   const [sessionForUpdate, setSessionForUpdate] = useState<ISession>({
     id: null,
@@ -98,13 +115,15 @@ const ManageFilmSessions: FC = () => {
     film_id: null,
   });
 
+  console.log(sessionForUpdate)
+
   useEffect(() => {
     if (sessionForUpdate) {
       getSessionForUpdate(sessionForUpdate)
     }
   }, [sessionForUpdate]);
 
-  console.log(sessionForUpdate)
+  // console.log(sessionForUpdate)
 
   return (
     <div className="seansses-create-form">
@@ -136,14 +155,16 @@ const ManageFilmSessions: FC = () => {
               ...new Map(
                 sessions.map((session) => [session.session_date, session]),
               ).values(),
-            ].map((session, index) => (
-              <option
-                value={formattedDate(session.session_date)}
-                key={session.id || index}
-              >
-                {formattedDate(session.session_date)}
-              </option>
-            ))}
+            ].map((session, index) => {
+              return (
+                <option
+                  value={formattedDate(session.session_date)}
+                  key={session.id || index}
+                >
+                  {formattedDate(session.session_date)}
+                </option>
+              )
+            })}
       </select>
 
       <select
