@@ -32,11 +32,26 @@ export const Login: FC = () => {
             <form onSubmit={(e) => onSubmit(e)} className="login__form">
               <label className="login__label" htmlFor="email">
                 E-mail
-                <input onChange={(e) => setEmail(e.target.value)} className="login__input" type="email" placeholder="example@domain.xyz" name="email" required />
+                <input 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  className="login__input" type="email" 
+                  placeholder="example@domain.xyz" 
+                  value={email}
+                  name="email" 
+                  required 
+                />
               </label>
               <label className="login__label" htmlFor="pwd">
                 Пароль
-                <input onChange={(e) => setPass(e.target.value)} className="login__input" type="password" placeholder="" name="password" required />
+                <input 
+                  onChange={(e) => setPass(e.target.value)} 
+                  className="login__input" 
+                  type="password" 
+                  placeholder="" 
+                  value={pass}
+                  name="password" 
+                  required 
+                />
               </label>
               <div className="text-center">
                 <input value="Авторизоваться" type="submit" className="login__button" />

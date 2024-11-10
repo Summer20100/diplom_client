@@ -115,7 +115,7 @@ const ManageFilmSessions: FC = () => {
     film_id: null,
   });
 
-  console.log(sessionForUpdate)
+  // console.log(sessionForUpdate)
 
   useEffect(() => {
     if (sessionForUpdate) {
