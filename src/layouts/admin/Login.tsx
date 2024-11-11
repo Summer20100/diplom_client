@@ -1,5 +1,6 @@
 import conf from '../configurations/conf';
 import { useEffect, FC, useState } from 'react';
+import { useAuth } from "../store/auth"
 import Header from './components/Header';
 
 import './CSS/normalize.css';
@@ -7,13 +8,15 @@ import './CSS/styles.css';
 
 export const Login: FC = () => {
   const [email, setEmail] = useState<string>('')
-  const [pass, setPass] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
 
   const { documentTitle } = conf;
+  const { login } = useAuth();
 
   const onSubmit = (e: any) => {
     e.preventDefault();
-    console.log({ 'email': email, 'pass': pass })
+    // console.log({ 'email': email, 'pass': password })
+    login(email, password);
   }
 
   useEffect(() => {
@@ -34,22 +37,24 @@ export const Login: FC = () => {
                 E-mail
                 <input 
                   onChange={(e) => setEmail(e.target.value)} 
-                  className="login__input" type="email" 
+                  className="login__input" 
+                  // type="email" 
+                  type="text" 
                   placeholder="example@domain.xyz" 
                   value={email}
-                  name="email" 
+                  // name="email" 
                   required 
                 />
               </label>
               <label className="login__label" htmlFor="pwd">
                 Пароль
                 <input 
-                  onChange={(e) => setPass(e.target.value)} 
+                  onChange={(e) => setPassword(e.target.value)} 
                   className="login__input" 
                   type="password" 
                   placeholder="" 
-                  value={pass}
-                  name="password" 
+                  value={password}
+                  // name="password" 
                   required 
                 />
               </label>
