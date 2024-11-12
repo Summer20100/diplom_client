@@ -1,27 +1,54 @@
 import conf from '../configurations/conf';
 import { useEffect, FC, useState } from 'react';
-import { useAuth } from "../store/auth"
+import { useAuth } from "../store/auth";
+import { useUser } from "../store/users";
+import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 
 import './CSS/normalize.css';
 import './CSS/styles.css';
 
 export const Login: FC = () => {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
 
   const { documentTitle } = conf;
-  const { login } = useAuth();
+  const { login, token, user, isAuth } = useAuth();
+  const { getUsers, setUsers, isValid } = useUser();
 
-  const onSubmit = (e: any) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log({ 'email': email, 'pass': password })
-    login(email, password);
-  }
+    await login(email, password);
+    await getUsers();
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setUsers([]);
+  };
 
   useEffect(() => {
     documentTitle('Авторизация | ИдёмВКино');
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      getUsers();
+    }
+  }, [token]);
+
+  // console.log(user?.roles.find(el => el === "USER") || null)
+
+  useEffect(() => {
+    if (isValid) {
+      // if (user?.roles.includes("ADMIN")) {
+        navigate('/admin');
+      // } else if (user?.roles.includes("USER")) {
+        // navigate('/client');
+      // }
+    }
+  }, [isValid, navigate, user]);
 
   return (
     <body className='admin'>
@@ -32,17 +59,15 @@ export const Login: FC = () => {
             <h2 className="login__title">Авторизация</h2>
           </header>
           <div className="login__wrapper">
-            <form onSubmit={(e) => onSubmit(e)} className="login__form">
+            <form onSubmit={onSubmit} className="login__form">
               <label className="login__label" htmlFor="email">
                 E-mail
                 <input 
-                  onChange={(e) => setEmail(e.target.value)} 
+                  onChange={handleEmailChange} 
                   className="login__input" 
-                  // type="email" 
                   type="text" 
                   placeholder="example@domain.xyz" 
                   value={email}
-                  // name="email" 
                   required 
                 />
               </label>
@@ -54,7 +79,7 @@ export const Login: FC = () => {
                   type="password" 
                   placeholder="" 
                   value={password}
-                  // name="password" 
+                  name="password"
                   required 
                 />
               </label>
@@ -69,6 +94,6 @@ export const Login: FC = () => {
       <script src="js/accordeon.js"></script>
     </body>
   );
-}
+};
 
 export default Login;

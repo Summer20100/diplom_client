@@ -1,8 +1,8 @@
 import ReactDOM from 'react-dom/client'
+
 import Client from './layouts/client/Client'
 import Admin from './layouts/admin/Admin'
 import Login from './layouts/admin/Login'
-
 import Films from './layouts/client/pages/films/Films'
 import Hall from './layouts/client/pages/halls/Hall'
 import Payment from './layouts/client/pages/Payment'

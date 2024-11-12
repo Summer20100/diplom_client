@@ -15,6 +15,7 @@ import { useHallSeats } from "../store/hallsSeats";
 import { useSessions } from "../store/sessions";
 import { useState, useEffect, FC } from "react";
 import { IMovieInfo } from "../models/IMovieDate";
+import { useUser } from "../store/users";
 import Popup from "./components/Popup";
 
 import "./CSS/normalize.css";
@@ -42,6 +43,8 @@ export function Admin() {
     sessionById,
     sessionByIdHall,
   } = useSessions();
+
+
 
   const [input, setInput] = useState<string>("");
   const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
