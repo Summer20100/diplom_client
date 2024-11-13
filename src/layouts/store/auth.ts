@@ -5,25 +5,33 @@ import api from "../http/index";
 interface IUser {
   username: string;
   roles: string[];
-};
+}
 
 type State = {
   message: string;
   token: string | null;
   isAuth: boolean;
   user: IUser | null;
+  roles: string[];
 };
 
 type Actions = {
+  fetchUserInfo: (user: IUser | null) => Promise<void>;
   registration: (username: string, password: string) => Promise<void>;
   login: (username: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 export const useAuth = create<State & Actions>((set) => ({
   message: '',
   token: localStorage.getItem('token'),
-  isAuth: false,
+  isAuth: !!localStorage.getItem('token'),
   user: null,
+  roles: [],
+
+  fetchUserInfo: async (user: IUser | null) => {
+    set({ user })
+  },
 
   registration: async (username: string, password: string) => {
     try {
@@ -43,14 +51,23 @@ export const useAuth = create<State & Actions>((set) => ({
   login: async (username: string, password: string) => {
     try {
       const result = await api.post(
-      /* 'http://localhost:3001/api/auth/login', */
-      'api/auth/login',
+        /* 'http://localhost:3001/api/auth/login', */
+        'api/auth/login',
         { username, password },
         { withCredentials: true }
       );
       const token = result.data.token;
-      set({ token, message: 'Login successful' , isAuth: true, user: result.data.user});
       localStorage.setItem('token', token);
+      localStorage.setItem('roles', result.data.roles);
+      set({ 
+        token, 
+        message: 'Login successful', 
+        isAuth: true, 
+        user: result.data.user,
+        roles: result.data.roles
+      });
+      
+
       console.log(result.data);
     } catch (error: any) {
       set({ message: error.response?.data?.message || 'Login failed' });
@@ -59,4 +76,17 @@ export const useAuth = create<State & Actions>((set) => ({
     }
   },
 
+  logout: async () => {
+    try {
+      localStorage.removeItem('token');
+      localStorage.removeItem('roles');
+      set({ token: null, user: null, isAuth: false, message: 'Пользователь успешно вышел' });
+      console.log('Пользователь успешно вышел');
+    } catch (error: any) {
+      set({ message: error.response?.data?.message || 'Ошибка выхода' });
+      console.error(error);
+    }
+  },
 }));
+
+

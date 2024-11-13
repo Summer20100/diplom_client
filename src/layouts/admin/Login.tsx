@@ -4,6 +4,7 @@ import { useAuth } from "../store/auth";
 import { useUser } from "../store/users";
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
+import api from '../http/index'
 
 import './CSS/normalize.css';
 import './CSS/styles.css';
@@ -14,18 +15,20 @@ export const Login: FC = () => {
   const [password, setPassword] = useState<string>('');
 
   const { documentTitle } = conf;
-  const { login, token, user, isAuth } = useAuth();
+  const { login, token, user, isAuth, fetchUserInfo } = useAuth();
   const { getUsers, setUsers, isValid } = useUser();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await login(email, password);
     await getUsers();
+    window.location.reload();
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     setUsers([]);
+    fetchUserInfo(null);
   };
 
   useEffect(() => {
@@ -38,17 +41,30 @@ export const Login: FC = () => {
     }
   }, [token]);
 
-  // console.log(user?.roles.find(el => el === "USER") || null)
+  const [roles, setRoles] = useState<string | null>(localStorage.getItem('roles'));
 
   useEffect(() => {
-    if (isValid) {
-      // if (user?.roles.includes("ADMIN")) {
-        navigate('/admin');
-      // } else if (user?.roles.includes("USER")) {
-        // navigate('/client');
-      // }
-    }
-  }, [isValid, navigate, user]);
+    if (!isValid && roles === null) {
+      navigate("/");
+    };
+    if (isValid && roles === "USER") {
+      navigate("/client");
+    };
+    if (isValid && roles === "ADMIN") {
+      navigate("/admin");
+    };
+  }, [isValid, roles, navigate]);
+
+  // useEffect(() => {
+  //   const handleStorageChange = () => {
+  //     setRoles(localStorage.getItem('roles'));
+  //   };
+
+  //   window.addEventListener("storage", handleStorageChange);
+  //   return () => window.removeEventListener("storage", handleStorageChange);
+  // }, []);
+
+  // console.log(localStorage.getItem('roles'))
 
   return (
     <body className='admin'>

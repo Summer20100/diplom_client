@@ -43,5 +43,5 @@ export const useUser = create<State & Actions>((set) => ({
     }
   },
 
-  setUsers: (users: IUser[]) => set({ users }), // Установка пользователей без изменения isValid
+  setUsers: (users: IUser[]) => set({ users }),
 }));

@@ -16,6 +16,10 @@ import { useSessions } from "../store/sessions";
 import { useState, useEffect, FC } from "react";
 import { IMovieInfo } from "../models/IMovieDate";
 import { useUser } from "../store/users";
+import { useAuth } from "../store/auth";
+import { useNavigate } from 'react-router-dom';
+
+
 import Popup from "./components/Popup";
 
 import "./CSS/normalize.css";
@@ -139,6 +143,12 @@ export function Admin() {
 
   const handleChairType = (type: string) => {
     setSelectedType(type);
+  };
+
+  const { logout } = useAuth();
+  const backToLogin = () => {
+    logout();
+    window.location.reload();
   };
 
   return (
@@ -562,6 +572,7 @@ export function Admin() {
       )}
 
       <Header title={true} subtitle={true} />
+      <button onClick={backToLogin}>ВЫХОД</button>
       <main className="conf-steps">
         <HallManage />
         <HallConfig />

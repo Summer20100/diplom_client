@@ -1,5 +1,6 @@
 import { FC, useEffect } from "react";
 import { Routes, Route, Outlet } from "react-router-dom";
+import { useAuth } from "../store/auth";
 import conf from '../configurations/conf';
 
 import './css/normalize01.css';
@@ -12,7 +13,14 @@ export const Client = () => {
 
   useEffect(() => {
     documentTitle('ИдёмВКино');
-  }, [])
+  }, []);
+
+  const { logout } = useAuth();
+
+  const backToLogin = () => {
+    logout();
+    window.location.reload();
+  };
 
   return (
     <>

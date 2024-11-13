@@ -4,7 +4,7 @@ interface IHeader {
   title: boolean | string;
   subtitle?: boolean | string;
   h2?: string;
-}
+};
 
 const Header: FC<IHeader> = ({ title, subtitle, h2 }) => {
   if (h2) {
@@ -23,7 +23,9 @@ const Header: FC<IHeader> = ({ title, subtitle, h2 }) => {
             <span className="page-header__subtitle">Администраторррская</span>
           </>
           :
-          <h1 className="page-header__title">Идём<span>в</span>кино</h1>
+          <>
+            <h1 className="page-header__title">Идём<span>в</span>кино</h1>
+          </>
         }
       </header>
     );
