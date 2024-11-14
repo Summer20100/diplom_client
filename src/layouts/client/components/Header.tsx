@@ -1,14 +1,8 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from "../../store/auth";
+import ButtonLogout from "../../ButtonLogout"
 
 const Header: FC = () => {
-  const { logout } = useAuth();
-  const backToLogin = () => {
-    logout();
-    window.location.reload();
-  };
-
   return (
     <>
       <header className="page-header">
@@ -17,7 +11,7 @@ const Header: FC = () => {
             Идём<span>в</span>кино
           </h1>
         </Link>
-        <button onClick={backToLogin}>ВЫХОД</button>
+        <ButtonLogout />
       </header>
     </>
   );

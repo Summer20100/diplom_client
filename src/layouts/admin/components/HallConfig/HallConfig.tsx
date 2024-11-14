@@ -19,7 +19,7 @@ interface IHallConfig {
 }
 
 const HallConfig: FC = () => {
-  const { halls, fetchDataHallSeats } = useHallStore();
+  const { halls, fetchDataHallSeats, activeHallConfig, setActiveHallConfig } = useHallStore();
   const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats();
   const { seats: seatType } = useSeatType();
   
@@ -27,7 +27,7 @@ const HallConfig: FC = () => {
   const [seats, setSeats] = useState<number>(8);
 
   useEffect(() => {
-    fetchDataHallSeats()
+    fetchDataHallSeats();
   }, []);
 
   const [activeHall, setActiveHall] = useState<IHall>()
@@ -37,15 +37,19 @@ const HallConfig: FC = () => {
     setActiveHall(hall)
     getHallChairsById(hall.id)
   };
-  
-  if (halls.length > 0 && !activeHall) {
-    setActiveHall(halls[0]); 
-    getHallChairsById(halls[0].id)
-  };
-  
+
   useEffect(() => {
-    fetchDataHallSeats()
-  }, [hallsSeatsById]);
+    if (halls.length > 0 && !activeHall) {
+      setActiveHall(halls[0]);
+      getHallChairsById(halls[0].id);
+    }
+  }, [halls]);
+
+  useEffect(() => {
+    if (activeHall) {
+      getHallChairsById(activeHall.id);
+    }
+  }, [activeHall]);
   
   const createHall = (activeHall: IHall, rows: number, seats: number) => {
     const seat: IHallConfig[] = [];
@@ -92,6 +96,13 @@ const HallConfig: FC = () => {
   const chairType = (type: string) => {
     //console.log(type)
   }
+
+  console.log("hallsSeatsById>>>", hallsSeatsById)
+  console.log("halls>>>", halls)
+
+  const handleSelectHall = (hall: IHallSeats) => {
+    setActiveHallConfig(hall);
+  };
 
   return (
     <>

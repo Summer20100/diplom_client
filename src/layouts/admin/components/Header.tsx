@@ -1,12 +1,14 @@
 import { FC } from 'react';
+import ButtonLogout from "../../ButtonLogout"
 
 interface IHeader {
   title: boolean | string;
   subtitle?: boolean | string;
   h2?: string;
+  page?: string
 };
 
-const Header: FC<IHeader> = ({ title, subtitle, h2 }) => {
+const Header: FC<IHeader> = ({ title, subtitle, h2, page }) => {
   if (h2) {
     return (
       <header className="conf-step__header conf-step__header_opened">
@@ -16,7 +18,7 @@ const Header: FC<IHeader> = ({ title, subtitle, h2 }) => {
   } else {
     return (
       <header className="page-header">
-        {title && subtitle
+        {title && subtitle && page === 'login'
           ?
           <>
             <h1 className="page-header__title">Идём<span>в</span>кино</h1>
@@ -25,6 +27,8 @@ const Header: FC<IHeader> = ({ title, subtitle, h2 }) => {
           :
           <>
             <h1 className="page-header__title">Идём<span>в</span>кино</h1>
+            <span className="page-header__subtitle">Администраторррская</span>
+            < ButtonLogout />
           </>
         }
       </header>

@@ -10,23 +10,29 @@ interface ILegend {
 }
 
 export const Legend:FC <ILegend> = ({ chairtype }) => {
-/*   console.log(chairtype) */
   return (
-    <div className="buying-scheme__legend">
-      <div className="col">
-        <p className="buying-scheme__legend-price">
-          <span className="buying-scheme__chair buying-scheme__chair_standart">
-          </span> Свободно (
-          <span className="buying-scheme__legend-value">250</span>руб
-          )
-        </p>
-        <p className="buying-scheme__legend-price"><span className="buying-scheme__chair buying-scheme__chair_vip"></span> Свободно VIP (<span className="buying-scheme__legend-value">350</span>руб)</p>            
+      <div className="buying-scheme__legend">
+        <div className="col">
+          {
+            chairtype.map((chair, index) => (
+              <p key={index} className="buying-scheme__legend-price">
+                <span
+                  className={`buying-scheme__chair buying-scheme__chair_${chair.chair_type}`}
+                ></span> Свободно (
+                <span className="buying-scheme__legend-value">{chair.price}</span> руб.)
+              </p>
+            ))
+          }
+        </div>
+        <div className="col">
+          <p className="buying-scheme__legend-price">
+            <span className="buying-scheme__chair buying-scheme__chair_taken">
+            </span> Занято</p>
+          <p className="buying-scheme__legend-price">
+            <span className="buying-scheme__chair buying-scheme__chair_selected">
+            </span> Выбрано</p>                    
+        </div>
       </div>
-      <div className="col">
-        <p className="buying-scheme__legend-price"><span className="buying-scheme__chair buying-scheme__chair_taken"></span> Занято</p>
-        <p className="buying-scheme__legend-price"><span className="buying-scheme__chair buying-scheme__chair_selected"></span> Выбрано</p>                    
-      </div>
-    </div>
   )
 }
 

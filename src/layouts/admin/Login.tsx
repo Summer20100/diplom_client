@@ -4,7 +4,7 @@ import { useAuth } from "../store/auth";
 import { useUser } from "../store/users";
 import { useNavigate } from 'react-router-dom';
 import Header from './components/Header';
-import api from '../http/index'
+import api from '../http/index';
 
 import './CSS/normalize.css';
 import './CSS/styles.css';
@@ -13,23 +13,10 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
   const { documentTitle } = conf;
   const { login, token, user, isAuth, fetchUserInfo } = useAuth();
   const { getUsers, setUsers, isValid } = useUser();
-
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    await login(email, password);
-    await getUsers();
-    window.location.reload();
-  };
-
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    setUsers([]);
-    fetchUserInfo(null);
-  };
+  const [roles, setRoles] = useState<string | null>(localStorage.getItem('roles'));
 
   useEffect(() => {
     documentTitle('Авторизация | ИдёмВКино');
@@ -41,34 +28,45 @@ export const Login: FC = () => {
     }
   }, [token]);
 
-  const [roles, setRoles] = useState<string | null>(localStorage.getItem('roles'));
-
   useEffect(() => {
-    if (!isValid && roles === null) {
-      navigate("/");
-    };
-    if (isValid && roles === "USER") {
-      navigate("/client");
-    };
-    if (isValid && roles === "ADMIN") {
-      navigate("/admin");
-    };
+    if (isValid && roles) {
+      navigate(roles === 'ADMIN' ? '/admin' : '/client');
+    }
   }, [isValid, roles, navigate]);
 
-  // useEffect(() => {
-  //   const handleStorageChange = () => {
-  //     setRoles(localStorage.getItem('roles'));
-  //   };
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setRoles(localStorage.getItem('roles'));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
-  //   window.addEventListener("storage", handleStorageChange);
-  //   return () => window.removeEventListener("storage", handleStorageChange);
-  // }, []);
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await login(email, password);
+    await getUsers();
+    setRoles(localStorage.getItem('roles'));
 
-  // console.log(localStorage.getItem('roles'))
+    if (localStorage.getItem('roles') === 'ADMIN') {
+      navigate('/admin');
+    } else if (localStorage.getItem('roles') === 'USER') {
+      navigate('/client');
+    } else if (!localStorage.getItem('roles')) {
+      navigate('/');
+    };
+    window.location.reload();
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    setUsers([]);
+    fetchUserInfo(null);
+  };
 
   return (
     <body className='admin'>
-      <Header title={true} subtitle={true} />
+      <Header title={true} subtitle={true} page="login"/>
       <main>
         <section className="login">
           <header className="login__header">
@@ -106,8 +104,6 @@ export const Login: FC = () => {
           </div>
         </section>
       </main>
-
-      <script src="js/accordeon.js"></script>
     </body>
   );
 };

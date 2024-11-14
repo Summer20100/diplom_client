@@ -11,6 +11,8 @@ type State = {
   delHall: IHallSeats | null;
   message: string;
   error: string;
+  activeHallConfig: IHallSeats | null; // Состояние для HallConfig
+  activeHallPrice: IHallSeats | null;  // Состояние для PriceConfig
 };
 
 type Actions = {
@@ -18,6 +20,8 @@ type Actions = {
   deleteHall: (id: number) => Promise<void>;
   createHall: (hall_name: string) => Promise<void>;
   clearNotifications: () => void;
+  setActiveHallConfig: (hall: IHallSeats | null) => void;
+  setActiveHallPrice: (hall: IHallSeats | null) => void;
 };
 
 export const useHallStore = create<State & Actions>((set) => ({
@@ -25,6 +29,8 @@ export const useHallStore = create<State & Actions>((set) => ({
   delHall: null,
   message: '',
   error: '',
+  activeHallConfig: null,
+  activeHallPrice: null,
   
   createHall: async (hall_name: string) => {
     try {
@@ -87,4 +93,8 @@ export const useHallStore = create<State & Actions>((set) => ({
   },
 
   clearNotifications: () => set({ message: '', error: '' }),
+
+  setActiveHallConfig: (hall) => set({ activeHallConfig: hall }),
+  
+  setActiveHallPrice: (hall) => set({ activeHallPrice: hall }),
 }));

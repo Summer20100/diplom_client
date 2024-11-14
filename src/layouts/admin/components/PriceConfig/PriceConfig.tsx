@@ -1,6 +1,6 @@
 import { FC, useEffect, useLayoutEffect, useState } from 'react';
 import Header from '../Header';
-import { HallSelector } from "../HallConfig/HallSelector"
+import { HallSelector } from "./HallSelector"
 import { IHallSeats } from "../../../models/IHallSeats";
 import { useHallStore } from "../../../store/halls"
 import { useHallSeats } from "../../../store/hallsSeats"
@@ -14,9 +14,10 @@ interface IPrice {
 }
 
 const PriceConfig: FC = () => {
-  const { halls } = useHallStore()
+  const { halls, activeHallPrice, setActiveHallPrice } = useHallStore()
   const { seats } = useSeatType()
   const { updatePriceHallSeats, fetchDataHallSeats, getHallChairsById } = useHallSeats();
+
 
   useEffect(() => {
     fetchDataHallSeats()
@@ -26,7 +27,10 @@ const PriceConfig: FC = () => {
 
   const active = (hall: IHallSeats) => {
     setActiveHall(hall)
-  }
+  };
+
+  console.log(activeHallPrice)
+  console.log(activeHall)
 
   const priceSeat = (type: string, price: number) => {
     if ( activeHall ) {

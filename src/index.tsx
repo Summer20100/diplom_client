@@ -26,7 +26,9 @@ function App() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [roles]);
 
-  useEffect(() => {
+/*   console.log(localStorage.getItem('roles')) */
+
+/*   useEffect(() => {
     if (!isValid && roles === null) {
       navigate("/");
     };
@@ -36,14 +38,21 @@ function App() {
     if (isValid && roles === "ADMIN") {
       navigate("/admin");
     };
-  }, [isValid, roles, navigate]);
+  }, [isValid, roles, navigate]); */
+
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setRoles(localStorage.getItem('roles'));
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <Routes>
       { (!isValid && roles === null) && <Route path="/" element={<Login />} /> }
       { (isValid && roles === "ADMIN") && <Route path="/admin" element={<Admin />} /> }
-      { (isValid && roles === "USER") &&
-        <Route path="/client/*" element={<Client />}>
+      { (isValid && roles === "USER") && <Route path="/client/*" element={<Client />}>
           <Route index element={<Films />} />
           <Route path="hall/:id" element={<Hall />} />
           <Route path="payment" element={<Payment />} />

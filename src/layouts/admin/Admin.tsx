@@ -18,9 +18,12 @@ import { IMovieInfo } from "../models/IMovieDate";
 import { useUser } from "../store/users";
 import { useAuth } from "../store/auth";
 import { useNavigate } from 'react-router-dom';
+import { PopupHallManage } from "./Popups/PopupHallManage";
+import { PopupHallConfig } from "./Popups/PopupHallConfig"
+import ButtonLogout from "../ButtonLogout"
+  
 
-
-import Popup from "./components/Popup";
+import Popup from "./Popups/Popup";
 
 import "./CSS/normalize.css";
 import "./CSS/styles.css";
@@ -127,10 +130,6 @@ export function Admin() {
     });
   };
 
-  const correctFilm = (film: IMovieInfo, ev: any) => {
-    console.log(film);
-  };
-
   const inf = (chair_type: string) => {
     if (hallsSeat) {
       setSeatInfo({
@@ -143,12 +142,6 @@ export function Admin() {
 
   const handleChairType = (type: string) => {
     setSelectedType(type);
-  };
-
-  const { logout } = useAuth();
-  const backToLogin = () => {
-    logout();
-    window.location.reload();
   };
 
   return (
@@ -174,7 +167,9 @@ export function Admin() {
             </button>
           </div>
         </Popup>
-      )}
+      )};
+
+{/*       { namePopup === "popupHallManage" && <PopupHallManage /> } */}
 
       {namePopup === "popupHallConfig" && (
         <Popup title="ТИПЫ КРЕСЕЛ" posterImage="poster-image.jpg">
@@ -572,7 +567,6 @@ export function Admin() {
       )}
 
       <Header title={true} subtitle={true} />
-      <button onClick={backToLogin}>ВЫХОД</button>
       <main className="conf-steps">
         <HallManage />
         <HallConfig />
