@@ -19,7 +19,7 @@ import { useUser } from "../../store/users";
 import { useAuth } from "../../store/auth";
 import { useNavigate } from 'react-router-dom';
 import { PopupHallManage } from "../Popups/PopupHallManage";
-import ButtonLogout from "../../ButtonLogout"
+import ButtonLogout from "../../HeaderButtons"
   
 
 import Popup from "./Popup";

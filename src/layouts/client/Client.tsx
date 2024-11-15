@@ -16,7 +16,7 @@ export const Client = () => {
   const { documentTitle } = conf;
 
   useEffect(() => {
-    documentTitle('ИдёмВКино');
+    documentTitle('ИдёмВКино | ПрямоСейчас');
   }, []);
 
   const { logout } = useAuth();

@@ -52,13 +52,13 @@ export const Nav: FC<INav> = ({ date, getDate, ind, selectedIndex, setSelectedIn
     if (selectedIndex === ind) {
       className += ' page-nav__day_chosen';
       getDate(date);
-    } 
+    };
     if (getCurrentDate() === getCurrentDate(date)) {
       className += ' page-nav__day_today';
-    } 
+    };
     if (formattedDate.isWeekend) {
       className += ' page-nav__day_weekend';
-    } 
+    };
     setNewClassName(className);
   }, [date, selectedIndex, ind, formattedDate.isWeekend]);
   

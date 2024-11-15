@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import ButtonLogout from "../../ButtonLogout"
+import ButtonLogout from "../../HeaderButtons"
 
 interface IHeader {
   title: boolean | string;
@@ -17,17 +17,19 @@ const Header: FC<IHeader> = ({ title, subtitle, h2, page }) => {
     );
   } else {
     return (
-      <header className="page-header">
+      <header className="page-header page-header__buttons">
         {title && subtitle && page === 'login'
           ?
-          <>
+          <div>
             <h1 className="page-header__title">Идём<span>в</span>кино</h1>
             <span className="page-header__subtitle">Администраторррская</span>
-          </>
+          </div>
           :
           <>
-            <h1 className="page-header__title">Идём<span>в</span>кино</h1>
-            <span className="page-header__subtitle">Администраторррская</span>
+            <div>
+              <h1 className="page-header__title">Идём<span>в</span>кино</h1>
+              <span className="page-header__subtitle">Администраторррская</span>
+            </div>
             < ButtonLogout />
           </>
         }

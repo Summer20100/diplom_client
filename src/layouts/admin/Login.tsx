@@ -13,14 +13,9 @@ export const Login: FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { documentTitle } = conf;
   const { login, token, user, isAuth, fetchUserInfo } = useAuth();
   const { getUsers, setUsers, isValid } = useUser();
   const [roles, setRoles] = useState<string | null>(localStorage.getItem('roles'));
-
-  useEffect(() => {
-    documentTitle('Авторизация | ИдёмВКино');
-  }, []);
 
   useEffect(() => {
     if (token) {
@@ -48,9 +43,9 @@ export const Login: FC = () => {
     await getUsers();
     setRoles(localStorage.getItem('roles'));
 
-    if (localStorage.getItem('roles') === 'ADMIN') {
+    if (localStorage.getItem('roles')?.includes('ADMIN')) {
       navigate('/admin');
-    } else if (localStorage.getItem('roles') === 'USER') {
+    } else if (localStorage.getItem('roles')?.includes('CLIENT')) {
       navigate('/client');
     } else if (!localStorage.getItem('roles')) {
       navigate('/');

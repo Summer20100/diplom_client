@@ -63,38 +63,37 @@ export const Films: FC = () => {
       })
     : [];
 
-  const nextPeriod = () => {
-    const newStartDay = new Date(startDay);
-    newStartDay.setDate(newStartDay.getDate() + 8);
-    const newFinishDay = new Date(newStartDay);
-    newFinishDay.setDate(newStartDay.getDate() + 7);
+    const nextPeriod = () => {
+      const newStartDay = new Date(finishDay);
+      newStartDay.setDate(newStartDay.getDate());
+      const newFinishDay = new Date(newStartDay);
+      newFinishDay.setDate(newStartDay.getDate() + 7);
+      
+      setStartDay(newStartDay);
+      setFinishDay(newFinishDay);
+      setIsFirstRange(false);
+      setSelectedIndex(0);
     
-    setStartDay(newStartDay);
-    setFinishDay(newFinishDay);
-    setIsFirstRange(false);
-    setSelectedIndex(0);
-
-    const lastSessionDate = sessionsByDate && sessionsByDate.length > 0 
-      ? new Date(sessionsByDate[sessionsByDate.length - 1]?.session_date)
-      : null;
+      const lastSessionDate = sessionsByDate && sessionsByDate.length > 0 
+        ? new Date(sessionsByDate[sessionsByDate.length - 1]?.session_date)
+        : null;
     
-    if (lastSessionDate) {
-      setIsLastRange(newFinishDay >= lastSessionDate);
-    }
-  };
-
-  const previousPeriod = () => {
-    const newStartDay = new Date(startDay);
-    newStartDay.setDate(newStartDay.getDate() - 8);
-    const newFinishDay = new Date(newStartDay);
-    newFinishDay.setDate(newStartDay.getDate() + 7);
+      if (lastSessionDate) {
+        setIsLastRange(newFinishDay >= lastSessionDate);
+      }
+    };
     
-    setStartDay(newStartDay);
-    setFinishDay(newFinishDay);
-    setIsFirstRange(newStartDay <= initialStartDay);
-    setIsLastRange(false); 
-    setSelectedIndex(0);
-  };
+    const previousPeriod = () => {
+      const newFinishDay = new Date(startDay);
+      newFinishDay.setDate(newFinishDay.getDate());
+      const newStartDay = new Date(newFinishDay);
+      newStartDay.setDate(newFinishDay.getDate() - 7);
+      setStartDay(newStartDay);
+      setFinishDay(newFinishDay);
+      setIsFirstRange(newStartDay <= initialStartDay);
+      setIsLastRange(false);
+      setSelectedIndex(0);
+    };
 
   return (
     <>
@@ -117,6 +116,7 @@ export const Films: FC = () => {
         {!isLastRange && (
           <a className="page-nav__day page-nav__day_next" onClick={nextPeriod}></a>
         )}
+
       </nav>
 
       <main>

@@ -97,9 +97,6 @@ const HallConfig: FC = () => {
     //console.log(type)
   }
 
-  console.log("hallsSeatsById>>>", hallsSeatsById)
-  console.log("halls>>>", halls)
-
   const handleSelectHall = (hall: IHallSeats) => {
     setActiveHallConfig(hall);
   };

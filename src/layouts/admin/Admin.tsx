@@ -20,7 +20,7 @@ import { useAuth } from "../store/auth";
 import { useNavigate } from 'react-router-dom';
 import { PopupHallManage } from "./Popups/PopupHallManage";
 import { PopupHallConfig } from "./Popups/PopupHallConfig"
-import ButtonLogout from "../ButtonLogout"
+import ButtonLogout from "../HeaderButtons"
   
 
 import Popup from "./Popups/Popup";
@@ -98,7 +98,6 @@ export function Admin() {
   const [selectedType, setSelectedType] = useState<string>("standart");
 
   useEffect(() => {
-    documentTitle("ИдёмВКино");
     accordeon("conf-step__header");
   }, []);
 

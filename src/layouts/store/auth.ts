@@ -59,11 +59,12 @@ export const useAuth = create<State & Actions>((set) => ({
       const token = result.data.token;
       localStorage.setItem('token', token);
       localStorage.setItem('roles', result.data.roles);
+      localStorage.setItem('username', result.data.username);
       set({ 
         token, 
         message: 'Login successful', 
         isAuth: true, 
-        user: result.data.user,
+/*         user: result.data.user, */
         roles: result.data.roles
       });
       

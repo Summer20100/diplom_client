@@ -29,9 +29,6 @@ const PriceConfig: FC = () => {
     setActiveHall(hall)
   };
 
-  console.log(activeHallPrice)
-  console.log(activeHall)
-
   const priceSeat = (type: string, price: number) => {
     if ( activeHall ) {
       const { id } = activeHall;

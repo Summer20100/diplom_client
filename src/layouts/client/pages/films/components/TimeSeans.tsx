@@ -31,8 +31,6 @@ const TimeSeans: FC<IHall> = ({ sessions, hall_id, hall_title, film_id }) => {
     </li>
   ));
 
-  console.log(`/client/hall/${hall_id}`)
-
   return (
     <>
       <ul className="movie-seances__list">
