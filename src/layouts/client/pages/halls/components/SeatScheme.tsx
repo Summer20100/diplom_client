@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import Seat from "./Seat"
 
 interface ISeat {
@@ -36,27 +37,38 @@ const SeatScheme: React.FC<SeatSchemeProps> = ({ seats, seatInfo }) => {
     seatInfo(seatInfoNew);
   }, [seatInfoNew, seatInfo]);
  
-
   const rows = seats.reduce<{ [key: number]: ISeat[] }>((acc, seat) => {
     if (!acc[seat.row_number]) acc[seat.row_number] = [];
     acc[seat.row_number].push(seat);
     return acc;
   }, {});
 
+  const [isZoomIn, setIsZoomIn ] = useState<boolean>(false);
+  console.log(isZoomIn)
+
   return (
-    <div className="buying-scheme__wrapper">
-      {Object.keys(rows)
-        .sort((a, b) => Number(a) - Number(b))
-        .map((rowNumber) => (
-          <div className="buying-scheme__row" key={rowNumber}>
-            {rows[Number(rowNumber)].map((seat) => (
-              <Seat key={`${rowNumber}-${seat.id_seat}`} seat={seat} infoSeats={infoSeats} />
-            ))}
-          </div>
-      ))}
+    <div className="buying-scheme__wrapper" onDoubleClick={() => setIsZoomIn((prev) => !prev)}>
+    <TransformWrapper 
+      doubleClick={{ mode: !isZoomIn ? "zoomIn" : "zoomOut", step: 3 }}
+      maxScale={3}
+      minScale={1}
+    >
+      <TransformComponent>
+        <div className="buying-scheme__wrapper-hall">
+          {Object.keys(rows)
+            .sort((a, b) => Number(a) - Number(b))
+            .map((rowNumber) => (
+              <div className="buying-scheme__row" key={rowNumber}>
+                {rows[Number(rowNumber)].map((seat) => (
+                  <Seat key={`${rowNumber}-${seat.id_seat}`} seat={seat} infoSeats={infoSeats} />
+                ))}
+              </div>
+          ))}
+        </div>
+      </TransformComponent>
+    </TransformWrapper>
     </div>
   );
-  
 };
 
 export default SeatScheme;

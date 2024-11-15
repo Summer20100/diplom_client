@@ -276,17 +276,24 @@ body.client {
 }
 
 .buying-scheme__wrapper {
-  font-size: 0;
   display: inline-block;
+  min-width: 10rem;
+}
+
+.buying-scheme__wrapper-hall {
+  font-size: 0;
   background-image: url("/img/client/screen.png");
   background-position: top;
   background-repeat: no-repeat;
   background-size: 100%;
   padding-top: 3rem;
+  margin: 100px;
 }
-.buying-scheme__wrapper::before {
+.buying-scheme__wrapper-hall::before {
   content: '';
 }
+
+
 
 /* .buying-scheme__row + .buying-scheme__row {
   margin-top: 4px;

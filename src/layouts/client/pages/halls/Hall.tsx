@@ -116,12 +116,12 @@ export const Hall = () => {
             </div>
           </div>
           <div className="buying-scheme">
-          { hallchairsOfSessionsByIdSession && (
-            <div className="buying-scheme">
-              <SeatScheme seats={hallchairsOfSessionsByIdSession} seatInfo={seatInfo} />
-              <Legend chairtype={ result } />
-            </div>
-          )}
+            { hallchairsOfSessionsByIdSession && (
+              <div className="buying-scheme">
+                <SeatScheme seats={hallchairsOfSessionsByIdSession} seatInfo={seatInfo} />
+                <Legend chairtype={ result } />
+              </div>
+            )}
           </div>
           <button 
             className="acceptin-button" 
