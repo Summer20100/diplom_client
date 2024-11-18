@@ -17,12 +17,32 @@ interface IPrice {
   id: number
 }
 
+interface IHallChears {
+  id_seat: number,
+  hall_id: number,
+  hall_title: string,
+  row_number: number,
+  seat_number: number,
+  chair_type: string,
+  price: number,
+}
+
+interface IHallChearsForUpdate {
+  id_seat: number,
+  hall_id: number,
+  chair_type: string,
+}
+
 type State = {
   hallsSeats: IHallChears[],
   hallsSeatsById: IHallChears[],
   delHallSeats: null,
-  fetchAddHallSeats: boolean
-}
+  fetchAddHallSeats: boolean,
+  message: string,
+  error: string,
+  messagePrice: string[],
+  errorPrice: string[],
+};
 
 type Actions = {
   fetchDataHallSeats: () => Promise<void>,
@@ -30,7 +50,9 @@ type Actions = {
   getHallChairsById: (id: number) => Promise<IHallChears[]>,
   deleteHallSeats: (id: number) => Promise<void>,
   getHallChairInfo: ({ }: IHallChears) => void,
+  updateHallSeat: (infoHallChearsForUpdate: IHallChearsForUpdate) => Promise<void>;
   updatePriceHallSeats: (price: IPrice[]) => Promise<void>,
+  clearNotifications: () => void,
 }
 
 export const useHallSeats = create<State & Actions>((set) => ({
@@ -38,6 +60,10 @@ export const useHallSeats = create<State & Actions>((set) => ({
   hallsSeats: [],
   hallsSeatsById: [],
   delHallSeats: null,
+  message: '',
+  error: '',
+  messagePrice: [],
+  errorPrice: [],
 
   fetchDataHallSeats: async () => {
     try {
@@ -53,15 +79,51 @@ export const useHallSeats = create<State & Actions>((set) => ({
     }
   },
 
+/*   addHallSeats: async (hallSeats: IHallChears[]) => {
+    set({ fetchAddHallSeats: false });
+    try {
+      // await axios.post('https://diplom-server-post.onrender.com/api/hallchairs', hallSeats);
+      const response = await axios.post('http://localhost:3001/api/hallchairs', hallSeats);
+      set({ message: response.data.message });
+    } catch (error) {
+      console.error("Error adding hall seats:", error);
+      set({ error: error.response.data.error});
+    } finally {
+      set({ fetchAddHallSeats: true });
+    }
+  },
+ */
+
   addHallSeats: async (hallSeats: IHallChears[]) => {
     set({ fetchAddHallSeats: false });
     try {
       // await axios.post('https://diplom-server-post.onrender.com/api/hallchairs', hallSeats);
-      await axios.post('http://localhost:3001/api/hallchairs', hallSeats);
-    } catch (error) {
+      const response = await axios.post('http://localhost:3001/api/hallchairs', hallSeats);
+      set({ message: response.data.message });
+    } catch (error: any) {
       console.error("Error adding hall seats:", error);
+      set({ error: error.response?.data?.error });
     } finally {
       set({ fetchAddHallSeats: true });
+    }
+  },
+
+  clearNotifications: () => set({ message: '', error: '' }),
+
+  updateHallSeat: async (infoHallChearsForUpdate: IHallChearsForUpdate) => {
+    const { hall_id : id, id_seat : seat, chair_type : type } = infoHallChearsForUpdate;
+    try {
+      // const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?seat=${seat}`, {
+      const response = await axios.put(`http://localhost:3001/api/hallchairs/${id}?seat=${seat}`, {
+        chair_type: type,
+      });
+      if (response.status === 200) {
+        set({ message: response.data.message  });
+        console.log(response.data.message);
+      }
+    } catch (error: any) {
+      console.error(error);
+      set({error: error.response.data.error});
     }
   },
 
@@ -73,17 +135,21 @@ export const useHallSeats = create<State & Actions>((set) => ({
           // const response = await axios.put(`https://diplom-server-post.onrender.com/api/hallchairs/${id}?type=${type}`, { price });
           const response = await axios.put(`http://localhost:3001/api/hallchairs/${id}?type=${type}`, { price });
           if (response.status === 200) {
-            console.log(`Price updated successfully for hall_id: ${id}`);
+            console.log(`Стоимость места типа "${type}" обновлена успешно`);
+            set({ message: response.data.message  });
           } else {
-            console.error(`Failed to update price for hall_id: ${id}, status: ${response.status}`);
+            console.error(`Стоимость места типа "${type}" не обновлена`);
+            set({error: response.data.error});
           }
-        } catch (error) {
-          console.error(`Error updating price for hall_id: ${id}: `, error);
+        } catch (error: any) {
+          console.error(`Стоимость места типа "${type}" не обновлена`);
+          set({error: error.response.data.error });
         }
       });
       await Promise.all(updatePromises);
-    } catch (error) {
-      console.error("Error in price updating: ", error);
+    } catch (err: any) {
+      console.error("Ошибка на сервере", err);
+      set({error: err?.response?.data.error });
     }
   },
 

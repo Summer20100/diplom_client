@@ -114,7 +114,6 @@ export const useSessions = create<State & Actions>((set) => ({
     }
   },
 
-
   getHallchairsOfSessionsByIdSession: async (session_id: number) => {
     try {
       // const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs_of_sessions/${session_id}`);
@@ -122,11 +121,12 @@ export const useSessions = create<State & Actions>((set) => ({
       if (response.status === 200) {
         set({ hallchairsOfSessionsByIdSession: response.data });
       } else {
-        set({ message: "Session does not exist" });
-        console.log("Session does not exist");
+        set({ error: response.data.error });
+        console.log("Данной сессии не существует");
       }
     } catch (err: any) {
-      console.error(err.response.data.message);
+      console.error(err.response.data.error);
+      set({ error: err.response.data.error });
     }
   },
 
@@ -145,7 +145,7 @@ export const useSessions = create<State & Actions>((set) => ({
         "http://localhost:3001/api/sessions",
         session
       );
-  
+
       if (responseHallchairs.status === 200 && response.status === 200) {
         const id = response.data.session_id;
   
@@ -196,8 +196,8 @@ export const useSessions = create<State & Actions>((set) => ({
       }
     } catch (error: any) {
       if (error.response) {
-        console.error("Ошибка при добавлении сессии:", error.response.data.message);
-        set({ message: error.response.data.message });
+        console.error("Ошибка при добавлении сессии:", error.response.data.error);
+        set({ error: error.response.data.error });
       } else {
         console.error("Ошибка:", error.message);
       }

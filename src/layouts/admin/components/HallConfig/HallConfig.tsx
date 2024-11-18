@@ -6,6 +6,8 @@ import { useSeatType } from "../../../store/seats"
 import { useHallSeats } from "../../../store/hallsSeats"
 import { HallSelector } from "./HallSelector"
 import { IHallSeats, IHall } from "../../../models/IHallSeats";
+import { ErrorNotification, MessageNotification } from "../../../Notification";
+import { usePopup } from "../../../store/popup";
 import HallSeatType from "./HallSeatType"
 
 interface IHallConfig {
@@ -20,7 +22,25 @@ interface IHallConfig {
 
 const HallConfig: FC = () => {
   const { halls, fetchDataHallSeats, activeHallConfig, setActiveHallConfig } = useHallStore();
-  const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats();
+  const { 
+    addHallSeats, 
+    hallsSeats, 
+    getHallChairsById, 
+    hallsSeatsById, 
+    deleteHallSeats, 
+    fetchAddHallSeats,
+    clearNotifications,
+    error,
+    message
+  } = useHallSeats();
+
+/*   const { 
+    message: messageTypeSeat, 
+    error: errorTypeSeat,
+    clearNotifications: clearNotificationsTypeSeat
+  } = usePopup(); */
+
+
   const { seats: seatType } = useSeatType();
   
   const [rows, setRows] = useState<number>(10);
@@ -69,9 +89,7 @@ const HallConfig: FC = () => {
         });
         id_seat += 1;
       }
-    }
-
-    console.log(hallsSeatsById)
+    };
 
     if (hallsSeatsById.length > 0) {
       if (seat.length === hallsSeatsById.length && id === hallsSeatsById[0].hall_id) {
@@ -101,6 +119,10 @@ const HallConfig: FC = () => {
     setActiveHallConfig(hall);
   };
 
+  const closeNotification = () => {
+    clearNotifications();
+  };
+
   return (
     <>
       <section className="conf-step">
@@ -120,6 +142,10 @@ const HallConfig: FC = () => {
               ))
             }
           </ul>
+
+          {error && <ErrorNotification message={error} onClose={closeNotification} />}
+          {message && <MessageNotification message={message} onClose={closeNotification} />}
+          
           <p className="conf-step__paragraph">Укажите количество рядов и максимальное количество кресел в ряду:</p>
           <div className="conf-step__legend">
             <label className="conf-step__label">
@@ -169,6 +195,7 @@ const HallConfig: FC = () => {
             )}
             <p className="conf-step__hint">Чтобы изменить вид кресла, нажмите по нему левой кнопкой мыши</p>
           </div>
+
           { hallsSeatsById.length > 0
             ? <HallSeats 
                 rows={Math.max(...hallsSeatsById.map(seat => seat.row_number))} 

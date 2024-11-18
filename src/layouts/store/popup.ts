@@ -54,7 +54,7 @@ export const usePopup = create<State & Actions>((set) => ({
         chair_type: type,
       });
       if (response.status === 200) {
-        set({ message: response.data.message + " hall_id:" + id + " seat:" + seat + " type:" + type });
+        set({ message: response.data.message  });
       }
     } catch (error: any) {
       console.error(error);

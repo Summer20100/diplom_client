@@ -5,6 +5,7 @@ import { IHallSeats } from "../../../models/IHallSeats";
 import { useHallStore } from "../../../store/halls"
 import { useHallSeats } from "../../../store/hallsSeats"
 import { useSeatType } from "../../../store/seats"
+import { ErrorNotification, MessageNotification } from "../../../Notification";
 import PriceSeat from "./PriceSeat"
 
 interface IPrice {
@@ -16,7 +17,14 @@ interface IPrice {
 const PriceConfig: FC = () => {
   const { halls, activeHallPrice, setActiveHallPrice } = useHallStore()
   const { seats } = useSeatType()
-  const { updatePriceHallSeats, fetchDataHallSeats, getHallChairsById } = useHallSeats();
+  const { 
+    updatePriceHallSeats, 
+    clearNotifications, 
+    fetchDataHallSeats, 
+    getHallChairsById, 
+    message, 
+    error 
+  } = useHallSeats();
 
 
   useEffect(() => {
@@ -84,6 +92,10 @@ const PriceConfig: FC = () => {
             ))
           }
         </ul>
+
+        {error && <ErrorNotification message={error} onClose={() => clearNotifications()} />}
+        {message && <MessageNotification message={message} onClose={() => clearNotifications()} />}
+
         <p className="conf-step__paragraph">Установите цены для типов кресел:</p>
         {
           seats.map(seat => 

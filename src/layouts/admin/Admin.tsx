@@ -36,11 +36,23 @@ interface ISeatInfo {
 
 export function Admin() {
   const { documentTitle, accordeon } = conf;
-  const { getHallChairsById } = useHallSeats();
+  const { getHallChairsById, updateHallSeat, message } = useHallSeats();
+/*   const { getHallChairsById, updateHallSeat } = useHallSeats(); */
   const { seats: seatType } = useSeatType();
   const { createHall } = useHallStore();
-  const { updateHallSeat, hallsSeat, message, popupConfigClose, namePopup } =
-    usePopup();
+  const {  
+    hallsSeat,
+    popupConfigClose, 
+    namePopup 
+  } = usePopup();
+
+/*   const { 
+    updateHallSeat, 
+    hallsSeat, 
+    message, 
+    popupConfigClose, 
+    namePopup 
+  } = usePopup(); */
   const { createFilm, filmInfo: filmById, deleteFilm, updateFilm } = useFilmsStore();
   const {
     getSessions,
@@ -50,8 +62,6 @@ export function Admin() {
     sessionById,
     sessionByIdHall,
   } = useSessions();
-
-
 
   const [input, setInput] = useState<string>("");
   const [seatInfo, setSeatInfo] = useState<ISeatInfo | undefined>(undefined);
