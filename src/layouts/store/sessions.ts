@@ -81,6 +81,7 @@ type Actions = {
   getSessionForUpdate: (session: ISession) => void;
   addSession: (session: ISession | null) => void;
   updateSession: (session: ISession | null) => void;
+  clearNotifications: () => void;
   deleteSessionById: (id: number) => Promise<void>;
 };
 
@@ -343,4 +344,6 @@ export const useSessions = create<State & Actions>((set) => ({
       console.error(error);
     }
   },
+
+  clearNotifications: () => set({ message: '', error: '' }),
 }));

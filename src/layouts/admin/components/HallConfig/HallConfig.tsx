@@ -34,13 +34,6 @@ const HallConfig: FC = () => {
     message
   } = useHallSeats();
 
-/*   const { 
-    message: messageTypeSeat, 
-    error: errorTypeSeat,
-    clearNotifications: clearNotificationsTypeSeat
-  } = usePopup(); */
-
-
   const { seats: seatType } = useSeatType();
   
   const [rows, setRows] = useState<number>(10);

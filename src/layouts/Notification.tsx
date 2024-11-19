@@ -1,7 +1,8 @@
+import { display } from 'html2canvas/dist/types/css/property-descriptors/display';
 import React, { useState, useEffect } from 'react';
 
 interface NotificationProps {
-  message: string;
+  message: string | { msg: string }[];
   onClose: () => void;
   type: 'error' | 'message';
 }
@@ -20,15 +21,17 @@ const Notification: React.FC<NotificationProps> = ({ message, onClose, type }) =
 
   const styles = {
     container: {
-      padding: '10px',
-      boxSizing: 'border-box' as 'border-box',
+      paddingTop: '8px',
+      paddingRight: '8px',
+      paddingLeft: '8px',
+      boxSizing: 'border-box' as const,
       margin: '8px 0',
       borderRadius: '4px',
-      fontSize: '10px',
+      fontSize: '12px',
       fontWeight: 'bold',
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
+      flexDirection: 'column' as const,
+      justifyContent: 'flex-start',
       maxWidth: '100%',
       backgroundColor: type === 'error' ? '#f8d7da' : '#d1ecf1',
       color: type === 'error' ? '#721c24' : '#0c5460',
@@ -36,11 +39,18 @@ const Notification: React.FC<NotificationProps> = ({ message, onClose, type }) =
       opacity: isVisible ? 1 : 0,
       transition: 'opacity 1s ease-out',
     },
+    item: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '8px',
+    },
     icon: {
       marginRight: '8px',
+      marginBottom: '0',
     },
     messageText: {
       flexGrow: 1,
+      marginBottom: '0',
     },
     closeBtn: {
       background: 'none',
@@ -51,11 +61,26 @@ const Notification: React.FC<NotificationProps> = ({ message, onClose, type }) =
       transition: 'color 0.3s ease',
     },
   };
-
+  
+  if (Array.isArray(message)) {
+    return (
+      <div style={styles.container} onClick={onClose}>
+        {message.map((el, index) => (
+          <div key={index} style={styles.item}>
+            <span style={styles.icon}>{type === 'error' ? '❌' : 'ℹ️'}</span>
+            <span style={styles.messageText}>{el.msg}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  
   return (
     <div style={styles.container} onClick={onClose}>
-      <span style={styles.icon}>{type === 'error' ? '❌' : 'ℹ️'}</span>
-      <span style={styles.messageText}>{message}</span>
+      <div style={styles.item}>
+        <span style={styles.icon}>{type === 'error' ? '❌' : 'ℹ️'}</span>
+        <span style={styles.messageText}>{message}</span>
+      </div>
     </div>
   );
 };

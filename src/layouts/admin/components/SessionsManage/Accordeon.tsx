@@ -8,31 +8,31 @@ interface IAccordeon {
 
 interface ISession {
   id?: number | null;
-  hall_id: number;
+  hall_id: number | null;
   hall_title: string;
   session_date: string;
   session_start: string;
   session_finish: string;
   film_id: number | null;
-}
+};
 
 interface ISessions {
   id: number;
   session_start: string;
   session_finish: string;
   film_id: number | null;
-}
+};
 
 interface ISessionsData {
   session_date: string;
   session: ISessions[];
-}
+};
 
 interface ISessionsHalls {
   hall_id: number;
   hall_title: string;
   sessions: ISessionsData[];
-}
+};
 
 const Accordeon: FC = () => {
   const { halls, fetchDataHallSeats } = useHallStore();
@@ -58,7 +58,7 @@ const Accordeon: FC = () => {
   }
 
   const [addSession, setAddSession] = useState<ISession>({
-    hall_id: 0,
+    hall_id: null,
     hall_title: "",
     session_date: "",
     session_start: "",
@@ -108,21 +108,38 @@ const Accordeon: FC = () => {
     }
   }, [duration, time]);
 
+  console.log(addSession)
+
   return (
     <div className="seansses-create-form">
       <select
         id="options"
         name="options"
-        onChange={(e) => {
+/*         onChange={(e) => {
           if (e.target.value === "0") {
-            setHallTitle("");
+            setAddSession((prev) => ({ ...prev, ...selectedHall }));
           }
+          const selectedHall = JSON.parse(e.target.value);
+          setAddSession((prev) => ({ ...prev, ...selectedHall }));
+          setHallTitle(selectedHall.hall_title);
+        }} */
+
+        onChange={(e) => {
+/*           if (e.target.value === "0") {
+            setHallTitle("");
+          } */
           const selectedHall = JSON.parse(e.target.value);
           setAddSession((prev) => ({ ...prev, ...selectedHall }));
           setHallTitle(selectedHall.hall_title);
         }}
       >
-        <option value="0">Выберите зал...</option>
+        <option 
+          value={JSON.stringify({
+            hall_id: null,
+            hall_title: "",
+            session_finish: ""
+          })}
+        >Выберите зал...</option>
         {halls.map((hall, index) => (
           <option
             value={JSON.stringify({
@@ -161,8 +178,6 @@ const Accordeon: FC = () => {
         maxLength={3}
         className="conf-step__input popup__input time-block"
         type="number"
-        min="1"
-        max="999"
       />
     </div>
   );

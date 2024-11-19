@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import Header from "../Header";
 import Accordeon from "./Accordeon";
 import { useSessions } from "../../../store/sessions";
+import { ErrorNotification, MessageNotification } from "../../../Notification";
 
 const SessionsManage: FC = () => {
   const {
@@ -10,7 +11,9 @@ const SessionsManage: FC = () => {
     sessionsHalls,
     addSession,
     newSession,
-    message
+    message,
+    error,
+    clearNotifications
   } = useSessions();
 
   function formattedDate(date: string) {
@@ -42,7 +45,8 @@ const SessionsManage: FC = () => {
         </p>
         <Accordeon />
 
-        <div>{ message }</div>
+        {error && <ErrorNotification message={error} onClose={() => clearNotifications()} />}
+        {message && <MessageNotification message={message} onClose={() => clearNotifications()} />}
 
         <fieldset
           className="conf-step__buttons"
