@@ -78,6 +78,7 @@ export const Login: FC = () => {
                   placeholder="example@domain.xyz" 
                   value={email}
                   required 
+                  autoComplete="username"
                 />
               </label>
               <label className="login__label" htmlFor="pwd">
@@ -90,6 +91,7 @@ export const Login: FC = () => {
                   value={password}
                   name="password"
                   required 
+                  autoComplete="password"
                 />
               </label>
               <div className="text-center">

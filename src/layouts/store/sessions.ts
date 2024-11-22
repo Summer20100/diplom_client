@@ -136,15 +136,16 @@ export const useSessions = create<State & Actions>((set) => ({
   addSession: async (session: ISession | null) => {
     try {
       const hall_id = session?.hall_id;
-      const responseHallchairs = await axios.get(
-        // `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`
-        `http://localhost:3001/api/hallchairs/${hall_id}`
-      );
-  
+
       const response = await axios.post(
         // "https://diplom-server-post.onrender.com/api/sessions",
         "http://localhost:3001/api/sessions",
         session
+      );
+
+      const responseHallchairs = await axios.get(
+        // `https://diplom-server-post.onrender.com/api/hallchairs/${hall_id}`
+        `http://localhost:3001/api/hallchairs/${hall_id}`
       );
 
       if (responseHallchairs.status === 200 && response.status === 200) {
@@ -231,7 +232,7 @@ export const useSessions = create<State & Actions>((set) => ({
           session,
         );
         if (response.status === 200) {
-          console.log("Сессия обновлена успешно");
+/*           console.log("Сессия обновлена успешно"); */
           set({ message: response.data.message });
           const getResponse = await axios.get(
             // "https://diplom-server-post.onrender.com/api/sessions/halls",

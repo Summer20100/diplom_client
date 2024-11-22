@@ -21,13 +21,17 @@ type Actions = {
 export const useUser = create<State & Actions>((set) => ({
   users: [],
   message: '',
-  isValid: false,
+  isValid: true,
 
   getUsers: async () => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        set({ users: [], isValid: false, message: "Токен отсутствует" });
+        set({ 
+          users: [], 
+          isValid: false, 
+          message: "Токен отсутствует" 
+        });
         return;
       }
       const response = await api.get<IUser[]>('api/auth/users', {
@@ -36,10 +40,12 @@ export const useUser = create<State & Actions>((set) => ({
         },
       });
       set({ users: response.data, isValid: true });
-      console.log("Users loaded:", response.data);
     } catch (error) {
-      set({ users: [], isValid: false, message: "Не удалось загрузить пользователей" });
-      //console.error("Failed to fetch users:", error);
+      set({ 
+        users: [], 
+        isValid: false, 
+        message: "Не удалось загрузить пользователей" 
+      });
     }
   },
 

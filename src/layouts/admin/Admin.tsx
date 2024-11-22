@@ -15,6 +15,7 @@ import { useHallSeats } from "../store/hallsSeats";
 import { useSessions } from "../store/sessions";
 import { useState, useEffect, FC } from "react";
 import { IMovieInfo } from "../models/IMovieDate";
+import { ErrorNotification, MessageNotification } from "../Notification";
 import { useUser } from "../store/users";
 import { useAuth } from "../store/auth";
 import { useNavigate } from 'react-router-dom';
@@ -53,7 +54,17 @@ export function Admin() {
     popupConfigClose, 
     namePopup 
   } = usePopup(); */
-  const { createFilm, filmInfo: filmById, deleteFilm, updateFilm } = useFilmsStore();
+  const { 
+    createFilm, 
+    filmInfo: filmById, 
+    title: titleForm, 
+    deleteFilm, 
+    clearNotifications, 
+    updateFilm, 
+    error: errorCreateFilm,
+    message: messageCreateFilm
+   } = useFilmsStore();
+
   const {
     getSessions,
     getSessionById,
@@ -122,22 +133,31 @@ export function Admin() {
     setInput("");
   };
   
-
   const addFilm = (film: IMovieInfo, ev: any) => {
     createFilm(film);
     ev.preventDefault();
-    popupConfigClose();
-    setFilmInfo({
-      title: "",
-      origin: "",
-      release_date: null,
-      poster_title: "",
-      synopsis: "",
-      image_url: "",
-      duration: null,
-      for_registration: false,
-    });
   };
+
+  useEffect(() => {
+    if (messageCreateFilm) {
+      popupConfigClose();
+      setFilmInfo({
+        title: "",
+        origin: "",
+        release_date: null,
+        poster_title: "",
+        synopsis: "",
+        image_url: "",
+        duration: null,
+        for_registration: false,
+      });
+    };
+  }, [messageCreateFilm]);
+
+
+
+/*   console.log(error)
+  console.log(titleForm) */
 
   const inf = (chair_type: string) => {
     if (hallsSeat) {
@@ -152,6 +172,8 @@ export function Admin() {
   const handleChairType = (type: string) => {
     setSelectedType(type);
   };
+
+/*   console.log(filmInfo) */
 
   return (
     <body className="admin">
@@ -232,6 +254,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "title" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
           <div className="label-margin">
             <label>
@@ -253,6 +276,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "poster_title" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
           <div className="label-margin">
             <label>
@@ -272,6 +296,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "image_url" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
           <div className="label-margin">
             <label>
@@ -291,6 +316,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "synopsis" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
 
           <div className="label-margin">
@@ -311,6 +337,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "origin" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
           <div className="label-margin">
             <label>
@@ -341,6 +368,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "release_date" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
 
           <div className="label-margin">
@@ -371,6 +399,7 @@ export function Admin() {
                 />
               </div>
             </label>
+            { errorCreateFilm && titleForm === "duration" && <ErrorNotification message={errorCreateFilm} onClose={() => clearNotifications()} /> }
           </div>
           <button
             onClick={(ev: any) => {

@@ -25,7 +25,7 @@ const Notification: React.FC<NotificationProps> = ({ message, onClose, type }) =
       paddingRight: '8px',
       paddingLeft: '8px',
       boxSizing: 'border-box' as const,
-      margin: '8px 0',
+      margin: '20px 0',
       borderRadius: '4px',
       fontSize: '12px',
       fontWeight: 'bold',

@@ -60,7 +60,7 @@ const Accordeon: FC = () => {
   const [addSession, setAddSession] = useState<ISession>({
     hall_id: null,
     hall_title: "",
-    session_date: "",
+    session_date: new Date().toISOString().split("T")[0],
     session_start: "",
     session_finish: "",
     film_id: null,
@@ -71,6 +71,7 @@ const Accordeon: FC = () => {
   }, [addSession]);
 
   const [time, setTime] = useState<string>('');
+  const [duration, setDuration] = useState<number | null>();
 
   useEffect(() => {
     if (time) {
@@ -79,9 +80,7 @@ const Accordeon: FC = () => {
         session_start: time,
       }));
     }
-  }, [time]);
-
-  const [duration, setDuration] = useState<number | null>();
+  }, [time, duration]);
 
   function getDuration(start: string, duration: number | 0) {
     const startHour = parseInt(start.split(":")[0]);
@@ -101,33 +100,20 @@ const Accordeon: FC = () => {
 
   useEffect(() => {
     if (duration && addSession.session_start !== "") {
+/*       const finish = duration === 0 ? "" : getDuration(addSession.session_start, duration); */
       setAddSession((prev) => ({
         ...prev,
-        session_finish: getDuration(prev.session_start, duration),
+        session_finish: getDuration(addSession.session_start, duration),
       }));
     }
-  }, [duration, time]);
-
-  console.log(addSession)
+  }, [duration]);
 
   return (
     <div className="seansses-create-form">
       <select
         id="options"
         name="options"
-/*         onChange={(e) => {
-          if (e.target.value === "0") {
-            setAddSession((prev) => ({ ...prev, ...selectedHall }));
-          }
-          const selectedHall = JSON.parse(e.target.value);
-          setAddSession((prev) => ({ ...prev, ...selectedHall }));
-          setHallTitle(selectedHall.hall_title);
-        }} */
-
         onChange={(e) => {
-/*           if (e.target.value === "0") {
-            setHallTitle("");
-          } */
           const selectedHall = JSON.parse(e.target.value);
           setAddSession((prev) => ({ ...prev, ...selectedHall }));
           setHallTitle(selectedHall.hall_title);
@@ -135,7 +121,7 @@ const Accordeon: FC = () => {
       >
         <option 
           value={JSON.stringify({
-            hall_id: null,
+            hall_id: 999999999,
             hall_title: "",
             session_finish: ""
           })}
@@ -165,19 +151,36 @@ const Accordeon: FC = () => {
       <input
         placeholder="ВРЕМЯ"
         type="time"
-        onChange={(ev) => setTime(ev.target.value)}
+        onChange={(ev) => {
+          setTime(ev.target.value);
+          if (duration) {
+            setAddSession((prev) => ({
+              ...prev,
+              session_finish: getDuration(ev.target.value, duration),
+            }))
+          }
+        }}
         className="conf-step__input popup__input time-block"
       />
       <input
-        placeholder="Длительнось, минут..."
+        placeholder="Длительность, минут..."
         value={duration || ""}
         onChange={(e) => {
           const value = e.target.value;
-          setDuration(value === "" ? 0 : Math.min(Number(value), 999));
+          const numericValue = Number(value);
+
+          if (value === "" || numericValue < 0 || isNaN(numericValue)) {
+            setDuration(null);
+            setAddSession((prev) => ({ ...prev, session_finish: "" }));
+          } else {
+            setDuration(numericValue);
+          }
         }}
         maxLength={3}
         className="conf-step__input popup__input time-block"
         type="number"
+        inputMode="numeric"
+        pattern="[0-9]*"
       />
     </div>
   );

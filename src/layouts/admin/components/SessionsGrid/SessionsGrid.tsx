@@ -6,10 +6,18 @@ import FilmRegistration from "./FilmRegistration";
 import { usePopup } from "../../../store/popup";
 import { useFilmsStore } from "../../../store/films";
 import { useSessions } from "../../../store/sessions";
+import { ErrorNotification, MessageNotification } from "../../../Notification";
 import Film from "./Film";
 
 const SessionsGrid: FC = () => {
-  const { getFilms, films, filmInfo } = useFilmsStore();
+  const { 
+    getFilms, 
+    films, 
+    filmInfo, 
+    message, 
+    error,
+    clearNotifications
+   } = useFilmsStore();
   const { popupConfigOpen } = usePopup();
 
   const {
@@ -22,6 +30,9 @@ const SessionsGrid: FC = () => {
     getSessions,
     sessionForUpdate,
     updateSession,
+    error: errorSessions,
+    message: messageSessions,
+    clearNotifications: clearNotificationsSessions
   } = useSessions();
 
   const openPopup = () => {
@@ -55,7 +66,8 @@ const SessionsGrid: FC = () => {
             Добавить фильм
           </button>
         </p>
-
+        { message && <MessageNotification message={message} onClose={() => clearNotifications()} /> }
+        
         <p className="conf-step__paragraph">Список фильмов:</p>
 
         <div className="conf-step__movies">
@@ -65,6 +77,7 @@ const SessionsGrid: FC = () => {
         <p className="conf-step__paragraph">Назначение фильма на сеанс:</p>
         <ManageFilmSessions />
 
+        { messageSessions && <MessageNotification message={messageSessions} onClose={() => clearNotificationsSessions()} /> }
         <p className="conf-step__paragraph">
           <button
             className="conf-step__button conf-step__button-accent"

@@ -79,6 +79,10 @@ export const useHallStore = create<State & Actions>((set) => ({
         // `https://diplom-server-post.onrender.com/api/hall/${id}`,
         `http://localhost:3001/api/hall/${id}`,
       );
+      await axios.get(
+        // "https://diplom-server-post.onrender.com/api/sessions/halls",
+        "http://localhost:3001/api/sessions/halls",
+      );
       if (response.status === 200) {
         set((state) => ({
           halls: state.halls.filter((hall) => hall.id !== id),

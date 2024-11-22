@@ -54,17 +54,29 @@ function App() {
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!isValid) {
+      console.log("token не валидный");
+      localStorage.clear();
+      navigate('/');
+    } else {
+      console.log("token валидный");
+    }
+  }, [isValid]);
+
   return (
     <Routes>
-      { (!isValid && roles === null) && <Route path="/" element={<Login />} /> }
+      { (!isValid && roles === null) && <Route path="*" element={<Login />} /> }
       { (isValid && roles?.includes("ADMIN")) && <Route path="/admin" element={<Admin />} /> }
-      { (isValid && roles?.includes("CLIENT")) && <Route path="/client/*" element={<Client />}>
+      { (isValid && roles?.includes("CLIENT")) && 
+        <Route path="/client/*" element={<Client />}>
           <Route index element={<Films />} />
           <Route path="hall/:id" element={<Hall />} />
           <Route path="payment" element={<Payment />} />
           <Route path="ticket" element={<Ticket />} />
         </Route>
       }
+      <Route path="*" element={<Login />} />
     </Routes>
   );
 }

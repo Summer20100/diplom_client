@@ -79,8 +79,7 @@ export const useAuth = create<State & Actions>((set) => ({
 
   logout: async () => {
     try {
-      localStorage.removeItem('token');
-      localStorage.removeItem('roles');
+      localStorage.clear();
       set({ token: null, user: null, isAuth: false, message: 'Пользователь успешно вышел' });
       console.log('Пользователь успешно вышел');
     } catch (error: any) {

@@ -2,6 +2,7 @@ import { FC, useEffect } from "react";
 import Header from "../Header";
 import Accordeon from "./Accordeon";
 import { useSessions } from "../../../store/sessions";
+import { useHallStore } from "../../../store/halls"
 import { ErrorNotification, MessageNotification } from "../../../Notification";
 
 const SessionsManage: FC = () => {
@@ -15,6 +16,8 @@ const SessionsManage: FC = () => {
     error,
     clearNotifications
   } = useSessions();
+
+  const { delHall } = useHallStore();
 
   function formattedDate(date: string) {
     const newDate = new Date(date);
@@ -34,7 +37,7 @@ const SessionsManage: FC = () => {
 
   useEffect(() => {
     getSessionsHalls();
-  }, []);
+  }, [delHall]);
 
   return (
     <section className="conf-step">

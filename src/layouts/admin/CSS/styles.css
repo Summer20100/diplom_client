@@ -330,6 +330,11 @@ select {
 
 .conf-step__buttons {
   margin-top: 10px;
+  display: flex;
+  height: auto;
+}
+.conf-step__buttons select {
+  margin-top: 17px;
 }
 
 .conf-step__button-regular {
@@ -1079,12 +1084,24 @@ option:disabled {
   display: flex;
 }
 
+.seansses-create-form select,
+.seansses-create-form input {
+  width: 100%;
+}
+
+.seansses-create-form select:last-child,
+.seansses-create-form input:last-child {
+  margin-right: 0;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
+
+
 
 /* Firefox */
 input[type=number] {

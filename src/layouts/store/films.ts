@@ -5,6 +5,10 @@ import axios from "axios";
 type State = {
   films: IMovieInfo[];
   filmInfo: IMovieInfo | null;
+  message: string;
+  saleStatus: string,
+  error: string;
+  title: string,
 };
 
 type Actions = {
@@ -13,11 +17,16 @@ type Actions = {
   createFilm: (film: IMovieInfo) => Promise<void>;
   updateFilm: (film: IMovieInfo) => Promise<void>;
   deleteFilm: (id: number) => Promise<void>;
+  clearNotifications: () => void;
 };
 
 export const useFilmsStore = create<State & Actions>((set) => ({
   films: [],
   filmInfo: null,
+  message: '',
+  error: '',
+  title: '',
+  saleStatus: '',
 
   getFilms: async () => {
     try {
@@ -53,11 +62,14 @@ export const useFilmsStore = create<State & Actions>((set) => ({
 
   createFilm: async (film: IMovieInfo) => {
     try {
-      await axios.post(
+      const responseCreateFilm = await axios.post(
         // "https://diplom-server-post.onrender.com/api/films",
         "http://localhost:3001/api/films",
         film,
       );
+      if (responseCreateFilm.status === 200) {
+        set({ message: responseCreateFilm.data.message });
+      }
       const response = await axios.get(
         // "https://diplom-server-post.onrender.com/api/films",
         "http://localhost:3001/api/films",
@@ -69,17 +81,25 @@ export const useFilmsStore = create<State & Actions>((set) => ({
       }
     } catch (error: any) {
       console.error(error);
+      set({ error: error.response.data.error, title: error.response.data.title });
     }
   },
 
   updateFilm: async (film: IMovieInfo) => {
     const { id } = film;
     try {
-      await axios.put(
+      const responseUpdateFilm = await axios.put(
         // `https://diplom-server-post.onrender.com/api/films/${id}`,
         `http://localhost:3001/api/films/${id}`,
         film,
       );
+      if (responseUpdateFilm.status === 200) {
+        set({ 
+          message: responseUpdateFilm.data.message, 
+          saleStatus: responseUpdateFilm.data.sale_status, 
+        });
+      };
+      
       const response = await axios.get(
         // "https://diplom-server-post.onrender.com/api/films",
         "http://localhost:3001/api/films",
@@ -96,11 +116,14 @@ export const useFilmsStore = create<State & Actions>((set) => ({
 
   deleteFilm: async (id: number) => {
     try {
-      await axios.delete(
+      const responseDeleteFilm = await axios.delete(
         // `https://diplom-server-post.onrender.com/api/films/${id}`,
         `http://localhost:3001/api/films/${id}`,
       );
-      console.log("Фильм удалён успешно");
+      if (responseDeleteFilm.status === 200) {
+        set({ message: responseDeleteFilm.data.message });
+      };
+/*       console.log("Фильм удалён успешно"); */
       const response = await axios.get(
         // "https://diplom-server-post.onrender.com/api/films",
         "http://localhost:3001/api/films",
@@ -114,4 +137,6 @@ export const useFilmsStore = create<State & Actions>((set) => ({
       console.error("Ошибка при удалении фильма:", error);
     }
   },
+
+  clearNotifications: () => set({ message: '', error: '', title: '', saleStatus: '' }),
 }));
