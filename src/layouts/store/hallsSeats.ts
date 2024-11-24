@@ -35,6 +35,7 @@ interface IHallChearsForUpdate {
 
 type State = {
   hallsSeats: IHallChears[],
+  hallsSeatsByIdHallConfig: IHallChears[],
   hallsSeatsById: IHallChears[],
   delHallSeats: null,
   fetchAddHallSeats: boolean,
@@ -47,6 +48,7 @@ type State = {
 type Actions = {
   fetchDataHallSeats: () => Promise<void>,
   addHallSeats: (hallSeats: IHallChears[]) => Promise<void>,
+  getHallChairsByIdHallConfig: (id: number) => Promise<IHallChears[]>,
   getHallChairsById: (id: number) => Promise<IHallChears[]>,
   deleteHallSeats: (id: number) => Promise<void>,
   getHallChairInfo: ({ }: IHallChears) => void,
@@ -58,6 +60,7 @@ type Actions = {
 export const useHallSeats = create<State & Actions>((set) => ({
   fetchAddHallSeats: true,
   hallsSeats: [],
+  hallsSeatsByIdHallConfig: [],
   hallsSeatsById: [],
   delHallSeats: null,
   message: '',
@@ -153,6 +156,24 @@ export const useHallSeats = create<State & Actions>((set) => ({
     }
   },
 
+  getHallChairsByIdHallConfig: async (id: number) => {
+    try {
+      // const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
+      const response = await axios.get(`http://localhost:3001/api/hallchairs/${id}`);
+      if (response.status === 200) {
+        set({ hallsSeatsByIdHallConfig: response.data });
+        return response.data;
+      } else {
+        set({ hallsSeatsByIdHallConfig: [] });
+        return [];
+      }
+    } catch (error: any) {
+      set({ hallsSeatsByIdHallConfig: [] });
+      // console.error(error);
+      return [];
+    }
+  },
+
   getHallChairsById: async (id: number) => {
     try {
       // const response = await axios.get(`https://diplom-server-post.onrender.com/api/hallchairs/${id}`);
@@ -165,7 +186,7 @@ export const useHallSeats = create<State & Actions>((set) => ({
         return [];
       }
     } catch (error: any) {
-      set({ hallsSeatsById: [] });
+      set({ hallsSeatsByIdHallConfig: [] });
       // console.error(error);
       return [];
     }

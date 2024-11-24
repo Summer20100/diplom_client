@@ -37,8 +37,14 @@ interface ISeatInfo {
 
 export function Admin() {
   const { documentTitle, accordeon } = conf;
-  const { getHallChairsById, updateHallSeat, message } = useHallSeats();
-/*   const { getHallChairsById, updateHallSeat } = useHallSeats(); */
+  const { 
+    getHallChairsById, 
+    updateHallSeat,
+    getHallChairsByIdHallConfig,
+    hallsSeatsByIdHallConfig,
+    message 
+  } = useHallSeats();
+
   const { seats: seatType } = useSeatType();
   const { createHall } = useHallStore();
   const {  
@@ -123,7 +129,7 @@ export function Admin() {
   }, []);
 
   useEffect(() => {
-    getHallChairsById(seatInfo?.hall_id ?? 0);
+    getHallChairsByIdHallConfig(seatInfo?.hall_id ?? 0);
   }, [message, seatInfo]);
 
   const addHall = (hall_title: any, ev: any) => {
@@ -223,7 +229,7 @@ export function Admin() {
               ev.preventDefault();
               if (seatInfo !== undefined) {
                 updateHallSeat(seatInfo);
-                getHallChairsById(seatInfo.hall_id);
+                getHallChairsByIdHallConfig(seatInfo.hall_id);
                 popupConfigClose();
               }
             }}

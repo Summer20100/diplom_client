@@ -5,11 +5,11 @@ import { useHallStore } from "../../../store/halls"
 interface IHallSelector {
   name: string;
   hall: IHallSeats;
-  activeHall: (hall: IHallSeats) => void;
+  // activeHall: (hall: IHallSeats) => void;
   isActive: boolean;
 }
 
-export const HallSelector: FC<IHallSelector> = ({ name, hall, activeHall, isActive } ) => {
+export const HallSelector: FC<IHallSelector> = ({ name, hall, isActive } ) => {
   const { halls, fetchDataHallSeats, activeHallPrice, setActiveHallPrice } = useHallStore();
 
 
@@ -18,7 +18,7 @@ export const HallSelector: FC<IHallSelector> = ({ name, hall, activeHall, isActi
       <input 
         type="radio" 
         onClick={()=>{
-          activeHall(hall),
+          // activeHall(hall),
           setActiveHallPrice(hall)
         }} 
         className="conf-step__radio" 

@@ -32,7 +32,7 @@ const FilmRegistration: FC = () => {
       console.error("No film selected for update");
     }
   };
-  console.log(message)
+  // console.log(message)
   
   return (
     <>

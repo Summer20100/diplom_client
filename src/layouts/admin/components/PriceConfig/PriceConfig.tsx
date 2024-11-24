@@ -15,7 +15,10 @@ interface IPrice {
 }
 
 const PriceConfig: FC = () => {
-  const { halls, activeHallPrice, setActiveHallPrice } = useHallStore()
+  const { halls, activeHallPrice, setActiveHallPrice } = useHallStore();
+
+  console.log("activeHallPrice>>>", activeHallPrice)
+
   const { seats } = useSeatType()
   const { 
     updatePriceHallSeats, 
@@ -26,20 +29,19 @@ const PriceConfig: FC = () => {
     error 
   } = useHallSeats();
 
-
   useEffect(() => {
     fetchDataHallSeats()
   }, [])
   const [activeHall, setActiveHall] = useState<IHallSeats>()
   const [price, setPrice] = useState<IPrice[]>([])
 
-  const active = (hall: IHallSeats) => {
-    setActiveHall(hall)
-  };
+  // const active = (hall: IHallSeats) => {
+  //   setActiveHall(activeHallPrice)
+  // };
 
   const priceSeat = (type: string, price: number) => {
-    if ( activeHall ) {
-      const { id } = activeHall;
+    if ( activeHallPrice ) {
+      const { id } = activeHallPrice;
       setPrice(prev => {
         const existingSeat = prev.find(el => el.type === type);
         if (existingSeat) {
@@ -63,10 +65,10 @@ const PriceConfig: FC = () => {
   };
   
   useEffect(() => {
-    if (activeHall) {
-      getHallChairsById(activeHall.id);
+    if (activeHallPrice) {
+      getHallChairsById(activeHallPrice.id);
     }
-  }, [activeHall]);
+  }, [activeHallPrice]);
 
   useEffect(() => {
     if (price) {
@@ -86,8 +88,8 @@ const PriceConfig: FC = () => {
                 key={hall.id}
                 name={hall.hall_title}
                 hall={hall}
-                activeHall={active}
-                isActive={activeHall?.id === hall.id}
+                // activeHall={active}
+                isActive={activeHallPrice?.id === hall.id}
               />
             ))
           }

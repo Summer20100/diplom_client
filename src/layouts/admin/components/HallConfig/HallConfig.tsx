@@ -21,18 +21,26 @@ interface IHallConfig {
 }
 
 const HallConfig: FC = () => {
-  const { halls, fetchDataHallSeats, activeHallConfig, setActiveHallConfig } = useHallStore();
+  const { halls, fetchDataHallSeats, activeHallConfig, activeHallPrice, setActiveHallConfig } = useHallStore();
+
+  console.log("activeHallConfig>>>", activeHallConfig)
+
   const { 
     addHallSeats, 
     hallsSeats, 
-    getHallChairsById, 
-    hallsSeatsById, 
+    getHallChairsByIdHallConfig, 
+    hallsSeatsByIdHallConfig, 
     deleteHallSeats, 
     fetchAddHallSeats,
     clearNotifications,
     error,
     message
   } = useHallSeats();
+
+
+  console.log(hallsSeatsByIdHallConfig)
+
+
 
   const { seats: seatType } = useSeatType();
   
@@ -48,25 +56,25 @@ const HallConfig: FC = () => {
 
   const active = (hall: IHall) => {
     setActiveHall(hall)
-    getHallChairsById(hall.id)
+    getHallChairsByIdHallConfig(hall.id)
   };
 
   useEffect(() => {
-    if (halls.length > 0 && !activeHall) {
+    if (halls.length > 0 && !activeHallConfig) {
       setActiveHall(halls[0]);
-      getHallChairsById(halls[0].id);
+      getHallChairsByIdHallConfig(halls[0].id);
     }
   }, [halls]);
 
   useEffect(() => {
-    if (activeHall) {
-      getHallChairsById(activeHall.id);
+    if (activeHallConfig) {
+      getHallChairsByIdHallConfig(activeHallConfig.id);
     }
-  }, [activeHall]);
+  }, [activeHallConfig]);
   
-  const createHall = (activeHall: IHall, rows: number, seats: number) => {
+  const createHall = (activeHallConfig: IHall, rows: number, seats: number) => {
     const seat: IHallConfig[] = [];
-    const { id, hall_title } = activeHall
+    const { id, hall_title } = activeHallConfig
     let id_seat = 1;
 
     for (let i = 0; i < rows; i++) {
@@ -84,10 +92,10 @@ const HallConfig: FC = () => {
       }
     };
 
-    if (hallsSeatsById.length > 0) {
-      if (seat.length === hallsSeatsById.length && id === hallsSeatsById[0].hall_id) {
+    if (hallsSeatsByIdHallConfig.length > 0) {
+      if (seat.length === hallsSeatsByIdHallConfig.length && id === hallsSeatsByIdHallConfig[0].hall_id) {
         console.log('ДЛИНА И ИД РАВНЫ');
-      } else if (id === hallsSeatsById[0].hall_id && seat.length !== hallsSeatsById.length) {
+      } else if (id === hallsSeatsByIdHallConfig[0].hall_id && seat.length !== hallsSeatsByIdHallConfig.length) {
         console.log('ЗАЛ ПЕРЕЗАПИСАН');
         deleteHallSeats(id);
         addHallSeats(seat);
@@ -101,7 +109,7 @@ const HallConfig: FC = () => {
   }
 
   useEffect(()=> {
-    getHallChairsById(activeHall?.id ?? 0)
+    getHallChairsByIdHallConfig(activeHallConfig?.id ?? 0)
   },[newHall, fetchAddHallSeats ])
 
   const chairType = (type: string) => {
@@ -129,8 +137,8 @@ const HallConfig: FC = () => {
                   key={hall.id}
                   name={hall.hall_title}
                   hall={hall}
-                  activeHall={active}
-                  isActive={activeHall?.id === hall.id}
+                  // activeHall={active}
+                  isActive={activeHallConfig?.id === hall.id}
                 />
               ))
             }
@@ -150,11 +158,11 @@ const HallConfig: FC = () => {
                 }}
                 className="conf-step__input"
                 placeholder={
-                  hallsSeatsById.length === 0
+                  hallsSeatsByIdHallConfig.length === 0
                   ? String(rows)
-                  : String(Math.max(...hallsSeatsById.map(seat => seat.row_number)))
+                  : String(Math.max(...hallsSeatsByIdHallConfig.map(seat => seat.row_number)))
                 } 
-                disabled = { hallsSeatsById.length !== 0 } 
+                disabled = { hallsSeatsByIdHallConfig.length !== 0 } 
               />
             </label>
             <span className="multiplier">x</span>
@@ -167,11 +175,11 @@ const HallConfig: FC = () => {
                 }}
                 className="conf-step__input"
                 placeholder={
-                  hallsSeatsById.length === 0
+                  hallsSeatsByIdHallConfig.length === 0
                   ? String(seats)
-                  : String(hallsSeatsById.length/Math.max(...hallsSeatsById.map(seat => seat.row_number)))
+                  : String(hallsSeatsByIdHallConfig.length/Math.max(...hallsSeatsByIdHallConfig.map(seat => seat.row_number)))
                 } 
-                disabled = { hallsSeatsById.length !== 0 }
+                disabled = { hallsSeatsByIdHallConfig.length !== 0 }
               />
             </label>
           </div>
@@ -189,30 +197,30 @@ const HallConfig: FC = () => {
             <p className="conf-step__hint">Чтобы изменить вид кресла, нажмите по нему левой кнопкой мыши</p>
           </div>
 
-          { hallsSeatsById.length > 0
+          { hallsSeatsByIdHallConfig.length > 0
             ? <HallSeats 
-                rows={Math.max(...hallsSeatsById.map(seat => seat.row_number))} 
-                seats={hallsSeatsById.length/(Math.max(...hallsSeatsById.map(seat => seat.row_number)))} 
-                id={activeHall?.id || 0}
-                hall_title={activeHall?.hall_title || ''}
+                rows={Math.max(...hallsSeatsByIdHallConfig.map(seat => seat.row_number))} 
+                seats={hallsSeatsByIdHallConfig.length/(Math.max(...hallsSeatsByIdHallConfig.map(seat => seat.row_number)))} 
+                id={activeHallConfig?.id || 0}
+                hall_title={activeHallConfig?.hall_title || ''}
               />
-            : <HallSeats rows={rows} seats={seats} id={activeHall?.id || 0} hall_title={activeHall?.hall_title || ''} />
+            : <HallSeats rows={rows} seats={seats} id={activeHallConfig?.id || 0} hall_title={activeHallConfig?.hall_title || ''} />
           }
 
           <fieldset 
             className="conf-step__buttons text-center"
-            style={{ visibility: hallsSeatsById.length !== 0 ? 'hidden' : 'visible' }}
+            style={{ visibility: hallsSeatsByIdHallConfig.length !== 0 ? 'hidden' : 'visible' }}
           >
             {/* <button 
               className="conf-step__button conf-step__button-regular"
               disabled = { hallsSeatsById.length !== 0 }
             >Отмена</button> */}
             <input 
-              onClick={() => createHall(activeHall as IHallSeats, rows, seats)} 
+              onClick={() => createHall(activeHallConfig as IHallSeats, rows, seats)} 
               type="submit" 
               value="Сохранить" 
               className="conf-step__button conf-step__button-accent"
-              disabled = { hallsSeatsById.length !== 0 }
+              disabled = { hallsSeatsByIdHallConfig.length !== 0 }
             />
           </fieldset>
         </div>

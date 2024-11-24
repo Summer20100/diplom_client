@@ -20,7 +20,14 @@ export const HallSeats: FC<IHallSeats> = ({ rows, seats, id, hall_title }) => {
   const { halls, fetchDataHallSeats } = useHallStore()
   const { seats: seatTypes, fetchDataSeatType } = useSeatType()
 
-  const { addHallSeats, hallsSeats, getHallChairsById, hallsSeatsById, deleteHallSeats, fetchAddHallSeats } = useHallSeats()
+  const { 
+    addHallSeats, 
+    hallsSeats, 
+    getHallChairsByIdHallConfig, 
+    hallsSeatsByIdHallConfig, 
+    deleteHallSeats, 
+    fetchAddHallSeats 
+  } = useHallSeats()
   
   useEffect(() => {
     fetchDataHallSeats();
@@ -50,12 +57,12 @@ export const HallSeats: FC<IHallSeats> = ({ rows, seats, id, hall_title }) => {
   }
 
   useEffect(() => {
-    if (hallsSeatsById.length > 0) {
-      setNewHall(hallsSeatsById);
+    if (hallsSeatsByIdHallConfig.length > 0) {
+      setNewHall(hallsSeatsByIdHallConfig);
     } else {
       createHall(id, hall_title, rows, seats);
     }
-  }, [id, hall_title, rows, seats, hallsSeatsById])
+  }, [id, hall_title, rows, seats, hallsSeatsByIdHallConfig])
 
   const row = newHall.reduce((acc: { [key: number]: IHallChears[] }, seat) => {
     acc[seat.row_number || 1] = acc[seat.row_number || 1] || [];
