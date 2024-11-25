@@ -528,6 +528,7 @@ select {
   width: 80px;
   height: 42px;
   opacity: 0;
+  cursor: pointer;
 }
 
 .conf-step__selectors-box .conf-step__selector {

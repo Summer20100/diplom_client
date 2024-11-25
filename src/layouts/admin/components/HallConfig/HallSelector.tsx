@@ -7,19 +7,21 @@ interface IHallSelector {
   hall: IHallSeats;
   // activeHall: (hall: IHallSeats) => void;
   isActive: boolean;
+  onSelect: () => void;
 }
 
-export const HallSelector: FC<IHallSelector> = ({ name, hall, isActive } ) => {
+export const HallSelector: FC<IHallSelector> = ({ name, hall, isActive, onSelect  } ) => {
   const { setActiveHallConfig } = useHallStore();
   return (
     <li>
       <input 
-        type="radio" 
+        type="checkbox"
         onClick={()=>{
           // activeHall(hall),
-          setActiveHallConfig(hall)
+          // setActiveHallConfig(hall);
+          onSelect();
         }} 
-        className="conf-step__radio" 
+        className="conf-step__radio"
         name="chairs-hall" 
         value={ name }
         checked={ isActive }

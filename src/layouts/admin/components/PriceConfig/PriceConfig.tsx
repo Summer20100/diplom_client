@@ -17,7 +17,7 @@ interface IPrice {
 const PriceConfig: FC = () => {
   const { halls, activeHallPrice, setActiveHallPrice } = useHallStore();
 
-  console.log("activeHallPrice>>>", activeHallPrice)
+  // console.log("activeHallPrice>>>", activeHallPrice)
 
   const { seats } = useSeatType()
   const { 
@@ -76,6 +76,21 @@ const PriceConfig: FC = () => {
     }
   }, [price]);
 
+  const [activeHallIdPriceConfig, setActiveHallIdPriceConfig] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (halls.length > 0 && activeHallIdPriceConfig === null) {
+      const firstHall = halls[0];
+      setActiveHallIdPriceConfig(firstHall.id);
+      setActiveHallPrice(firstHall);
+    }
+  }, [halls, activeHallIdPriceConfig, setActiveHallPrice]);
+
+  const handleHallSelect = (hall: IHallSeats) => {
+    setActiveHallIdPriceConfig(hall.id);
+    setActiveHallPrice(hall);
+  };
+
   return (
     <section className="conf-step">
       <Header title={true} h2="Конфигурация цен" />
@@ -90,6 +105,7 @@ const PriceConfig: FC = () => {
                 hall={hall}
                 // activeHall={active}
                 isActive={activeHallPrice?.id === hall.id}
+                onSelect={() => handleHallSelect(hall)}
               />
             ))
           }

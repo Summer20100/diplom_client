@@ -23,7 +23,7 @@ interface IHallConfig {
 const HallConfig: FC = () => {
   const { halls, fetchDataHallSeats, activeHallConfig, activeHallPrice, setActiveHallConfig } = useHallStore();
 
-  console.log("activeHallConfig>>>", activeHallConfig)
+  // console.log("activeHallConfig>>>", activeHallConfig)
 
   const { 
     addHallSeats, 
@@ -38,7 +38,7 @@ const HallConfig: FC = () => {
   } = useHallSeats();
 
 
-  console.log(hallsSeatsByIdHallConfig)
+  // console.log(hallsSeatsByIdHallConfig)
 
 
 
@@ -124,6 +124,21 @@ const HallConfig: FC = () => {
     clearNotifications();
   };
 
+  const [activeHallIdHallConfig, setActiveHallIdHallConfig] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (halls.length > 0 && activeHallIdHallConfig === null) {
+      const firstHall = halls[0];
+      setActiveHallIdHallConfig(firstHall.id);
+      setActiveHallConfig(firstHall);
+    }
+  }, [halls, activeHallIdHallConfig, setActiveHallConfig]);
+
+  const handleHallSelect = (hall: IHallSeats) => {
+    setActiveHallIdHallConfig(hall.id);
+    setActiveHallConfig(hall);
+  };
+
   return (
     <>
       <section className="conf-step">
@@ -139,6 +154,7 @@ const HallConfig: FC = () => {
                   hall={hall}
                   // activeHall={active}
                   isActive={activeHallConfig?.id === hall.id}
+                  onSelect={() => handleHallSelect(hall)}
                 />
               ))
             }
